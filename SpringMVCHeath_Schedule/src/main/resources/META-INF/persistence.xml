@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
-    <!-- Define Persistence Unit -->
-    <persistence-unit name="my_persistence_unit">
-        
-    </persistence-unit>
+  <!-- Define Persistence Unit -->
+  <persistence-unit name="my_persistence_unit">
+    <class>com.trantheanh1301.pojo.Appointments</class>
+    <class>com.trantheanh1301.pojo.Doctoravailability</class>
+    <class>com.trantheanh1301.pojo.Payments</class>
+    <class>com.trantheanh1301.pojo.Doctorlicenses</class>
+    <class>com.trantheanh1301.pojo.Users</class>
+    <class>com.trantheanh1301.pojo.Healthrecords</class>
+    <class>com.trantheanh1301.pojo.Clinics</class>
+    <class>com.trantheanh1301.pojo.Specialties</class>
+    <class>com.trantheanh1301.pojo.Reviews</class>
+    <class>com.trantheanh1301.pojo.Testresults</class>
+    <class>com.trantheanh1301.pojo.Doctors</class>
+    <class>com.trantheanh1301.pojo.Roles</class>
+    <class>com.trantheanh1301.pojo.Invoices</class>
+    <class>com.trantheanh1301.pojo.Patients</class>
+  </persistence-unit>
 </persistence>
