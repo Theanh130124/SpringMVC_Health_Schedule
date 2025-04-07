@@ -4,12 +4,14 @@
  */
 package com.trantheanh1301.configs;
 
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+
 /**
  *
  * @author LAPTOP
  */
 
 
-public class SecurityWebApplicationInitializer {
+public class SecurityWebApplicationInitializer extends AbstractSecurityWebApplicationInitializer{
     
 }
