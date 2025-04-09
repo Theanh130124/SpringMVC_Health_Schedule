@@ -4,6 +4,7 @@
  */
 package com.trantheanh1301.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -114,10 +115,12 @@ public class User implements Serializable {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+    @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private Set<Healthrecord> healthrecordSet;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Doctor doctor;
+    @JsonIgnore
     @OneToMany(mappedBy = "verifiedByAdminId")
     private Set<Doctorlicense> doctorlicenseSet;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
