@@ -52,8 +52,8 @@ public class SpringSecurityConfigs {
             Exception {
         http.csrf(c -> c.disable()).authorizeHttpRequests(requests
                 -> requests.requestMatchers("/", "/home").authenticated()
-//                        .requestMatchers("/js/**").permitAll()
-                        .requestMatchers("/api/users").permitAll()
+                        .requestMatchers("/js/**").permitAll().requestMatchers("/css/**").permitAll().requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/api/users").permitAll().requestMatchers("/stats").authenticated()
                         .requestMatchers("/api/**").authenticated())
                 .formLogin(form -> form.loginPage("/login")
                 .loginProcessingUrl("/login")
