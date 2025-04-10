@@ -1,0 +1,71 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thống kê báo cáo</title>
+    <th:block th:replace="layout/base :: styles"></th:block>
+</head>
+<body>
+    <div th:replace="layout/base :: header"></div>
+    <section class="container mt-5">
+        <h2 class="mb-4 text-center">Thống kê báo cáo</h2>
+
+        <form method="get" th:action="@{/stats}" class="row g-3 mb-4">
+            <div class="col-md-3">
+                <label for="year" class="form-label">Năm</label>
+                <!--Phải truyền params['year']-->
+                <input type="number" class="form-control" id="year" name="year" th:value="${params['year']}">
+            </div>
+            <div class="col-md-3">
+                <label for="quarter" class="form-label">Quý</label>
+                <select class="form-select" id="quarter" name="quarter">
+                    <option th:selected="${params['quarter'] == null}" value="">-- Chọn quý --</option>
+                    <option value="1" th:selected="${params['quarter'] == '1'}">Quý 1</option>
+                    <option value="2" th:selected="${params['quarter'] == '2'}">Quý 2</option>
+                    <option value="3" th:selected="${params['quarter'] == '3'}">Quý 3</option>
+                    <option value="4" th:selected="${params['quarter'] == '4'}">Quý 4</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="month" class="form-label">Tháng</label>
+                <select class="form-select" id="month" name="month">
+                     <option th:selected="${params['month'] == null}" value="">-- Chọn tháng --</option>
+                    <th:block th:each="m : ${#numbers.sequence(1,12)}">
+                         <option th:value="${m}" th:selected="${params['month'] != null and params['month'] == m.toString()}">Tháng [[${m}]]</option>
+                    </th:block>
+                </select>
+            </div>
+            <div class="col-md-3 align-self-end">
+                <button type="submit" class="btn btn-primary w-100">Lọc</button>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Số lượt khám bệnh đã hoàn thành</th>
+                        <th>Tổng tiền (VNĐ)</th>
+                        <th>Năm</th>
+                        <th>Quý</th>
+                        <th>Tháng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="s : ${stats}" class="text-center">
+                        <td th:text="${s[0]}"></td>
+                        <td th:text="${#numbers.formatDecimal(s[1], 0, 'COMMA', 2, 'POINT')} + ' ₫'"></td>
+                        <td th:text="${s[2]}"></td>
+                        <td th:text="${s[3]}"></td>
+                        <td th:text="${s[4]}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(stats)}">
+                        <td colspan="5" class="text-center text-danger">Không có dữ liệu thống kê.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div th:replace="layout/base :: footer"></div>
+</body>
+</html>
