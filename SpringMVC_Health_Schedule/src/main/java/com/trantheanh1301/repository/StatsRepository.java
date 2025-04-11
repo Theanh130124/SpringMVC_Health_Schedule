@@ -15,8 +15,9 @@ import java.util.Map;
  * @author LAPTOP
  */
 public interface StatsRepository {
-    //lượt đã khám và loại bênh
-    List<Object[]> statsCountExaminedTotalAmount(Map <String,String> params);
+    //lượt đã khám và doanh thu và loại bệnh
+    public List<Object[]> statsCountExaminedTotalAmount(Map <String,String> params);
+    public List<Object[]> statsDiagnosedCountExamined(Map <String,String> params);
     void timePredicate(CriteriaBuilder builder , Root<?> root,List<Predicate> predicates,Map<String, String> params, String timeFieldName);
     
 }
