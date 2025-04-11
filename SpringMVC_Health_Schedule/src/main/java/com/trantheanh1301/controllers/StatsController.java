@@ -27,8 +27,10 @@ public class StatsController {
     public String stats(Model model ,  @RequestParam Map<String, String> params){
         
         List<Object[]> stats = statsService.statsCountExaminedTotalAmount(params);
+        List<Object[]> stats_diagnosis = statsService.statsDiagnosedCountExamined(params);
         
         model.addAttribute("stats",stats);
+        model.addAttribute("stats_diagnosis",stats_diagnosis);
         model.addAttribute("params",params);
         
         
