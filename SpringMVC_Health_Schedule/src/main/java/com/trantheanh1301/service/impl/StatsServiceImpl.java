@@ -34,4 +34,9 @@ public class StatsServiceImpl implements StatsService{
         statsRepository.timePredicate(builder, root, predicates, params, timeFieldName);
     }
 
+    @Override
+    public List<Object[]> statsDiagnosedCountExamined(Map<String, String> params) {
+      return statsRepository.statsDiagnosedCountExamined(params);
+    }
+
 }

@@ -39,8 +39,8 @@
             </div>
         </form>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+        <div class="table-responsive" >
+            <table class="table table-bordered table-striped" sec:authorize="hasAuthority('Admin')">
                 <thead class="table-dark text-center">
                     <tr>
                         <th>Số lượt khám bệnh đã hoàn thành</th>
@@ -51,14 +51,41 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="s : ${stats}" class="text-center">
-                        <td th:text="${s[0]}"></td>
-                        <td th:text="${#numbers.formatDecimal(s[1], 0, 'COMMA', 2, 'POINT')} + ' ₫'"></td>
-                        <td th:text="${s[2]}"></td>
-                        <td th:text="${s[3]}"></td>
-                        <td th:text="${s[4]}"></td>
+                    <tr th:each="s_a : ${stats_admin}" class="text-center">
+                        <td th:text="${s_a[0]}"></td>
+                        <td th:text="${#numbers.formatDecimal(s_a[1], 0, 'COMMA', 2, 'POINT')} + ' ₫'"></td>
+                        <td th:text="${s_a[2]}"></td>
+                        <td th:text="${s_a[3]}"></td>
+                        <td th:text="${s_a[4]}"></td>
                     </tr>
-                    <tr th:if="${#lists.isEmpty(stats)}">
+                    <tr th:if="${#lists.isEmpty(stats_admin)}">
+                        <td colspan="5" class="text-center text-danger">Không có dữ liệu thống kê.</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            
+            
+            
+             <table class="table table-bordered table-striped" sec:authorize="hasAuthority('Doctor')">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Số lượng bệnh nhân đã khám  </th>
+                        <th>Loại bệnh phổ biển</th>
+                        <th>Năm</th>
+                        <th>Quý</th>
+                        <th>Tháng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="s_d : ${stats_doctor}" class="text-center">
+                        <td th:text="${s_d[0]}"></td>
+                        <td th:text="${s_d[1]}"></td>
+                        <td th:text="${s_d[2]}"></td>
+                        <td th:text="${s_d[3]}"></td>
+                        <td th:text="${s_d[4]}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(stats_doctor)}">
                         <td colspan="5" class="text-center text-danger">Không có dữ liệu thống kê.</td>
                     </tr>
                 </tbody>
