@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService{
                 u.getUsername(), u.getPassword(), authorities);
     }
     
-    //
+    //Chưa hoàn thiện
     @Override
     public User register(Map<String, String> params, MultipartFile avatar) {
         User u = new User();

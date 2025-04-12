@@ -6,6 +6,7 @@ package com.trantheanh1301.repository.impl;
 
 import com.trantheanh1301.formatter.StatsFormatter;
 import com.trantheanh1301.pojo.Appointment;
+import com.trantheanh1301.pojo.Healthrecord;
 import com.trantheanh1301.pojo.Invoice;
 import com.trantheanh1301.repository.StatsRepository;
 import jakarta.persistence.Query;
@@ -50,12 +51,8 @@ public class StatsRepositoryImpl implements StatsRepository {
         CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
 
         Root<Appointment> rA = query.from(Appointment.class);
-        //join và invoice qua "invoice"
+        //join qua invoice qua "invoice"
         Join<Appointment, Invoice> joinInvoice = rA.join("invoice", JoinType.INNER);
-
-        Expression<Integer> yearExpr = builder.function("YEAR", Integer.class, rA.get("appointmentTime"));
-        Expression<Integer> monthExpr = builder.function("MONTH", Integer.class, rA.get("appointmentTime"));
-        Expression<Integer> quarterExpr = builder.function("QUARTER", Integer.class, rA.get("appointmentTime"));
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -76,6 +73,37 @@ public class StatsRepositoryImpl implements StatsRepository {
 
         query.where(predicates.toArray(Predicate[]::new));
         query.groupBy(year, quarter, month);
+        query.orderBy(builder.asc(year), builder.asc(month));
+        Query q = session.createQuery(query);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Object[]> statsDiagnosedCountExamined(Map<String, String> params) {
+        Session session = factory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+
+        Root<Appointment> rA = query.from(Appointment.class);
+        //join Để lấy chuẩn đoán bệnh -> loại bệnh (theo tháng năm) -> không join không lấy theo tháng nằm được (vì đang groupby theo thằng kia)
+        Join<Appointment, Invoice> joinHealthRecord = rA.join("healthrecordSet", JoinType.INNER);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        timePredicate(builder, rA, predicates, params, "appointmentTime");
+        Expression<Integer> year = builder.function("YEAR", Integer.class, rA.get("appointmentTime"));
+        Expression<Integer> month = builder.function("MONTH", Integer.class, rA.get("appointmentTime"));
+        Expression<Integer> quarter = builder.function("QUARTER", Integer.class, rA.get("appointmentTime"));
+
+        query.multiselect(
+                builder.count(rA.get("appointmentId")),
+                joinHealthRecord.get("diagnosis"),
+                year, quarter, month
+        );
+        predicates.add(builder.equal(rA.get("status"), "Completed"));
+        query.where(predicates.toArray(Predicate[]::new));
+        query.groupBy(year, quarter, month,joinHealthRecord.get("diagnosis"));
         query.orderBy(builder.asc(year), builder.asc(month));
         Query q = session.createQuery(query);
 
