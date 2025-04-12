@@ -53,7 +53,9 @@ public class SpringSecurityConfigs {
         http.csrf(c -> c.disable()).authorizeHttpRequests(requests
                 -> requests.requestMatchers("/", "/home").authenticated()
                         .requestMatchers("/js/**").permitAll().requestMatchers("/css/**").permitAll().requestMatchers("/images/**").permitAll()
-                        .requestMatchers("/api/users").permitAll().requestMatchers("/stats").authenticated()
+                        .requestMatchers("/stats").hasAnyAuthority("Admin", "Doctor")
+                        // thay vi hasRole và hasAnyRole thi này nó không gán ROLE_ 
+                        .requestMatchers("/api/users").permitAll()
                         .requestMatchers("/api/**").authenticated())
                 .formLogin(form -> form.loginPage("/login")
                 .loginProcessingUrl("/login")

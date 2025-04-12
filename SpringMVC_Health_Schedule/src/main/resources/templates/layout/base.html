@@ -16,14 +16,14 @@
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" th:href="@{/}">
-                  <img th:src="@{/images/logo.png}" alt="Logo hệ thống" class="img-fluid rounded-circle" style="width: 32px; height: 32px;">
+                    <img th:src="@{/images/logo.png}" alt="Logo hệ thống" class="img-fluid rounded-circle" style="width: 32px; height: 32px;">
                 </a>
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/}">Hệ thống đặt lịch khám trực tuyến</a>
                         </li>
-                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Doctor')">
                             <a class="nav-link" th:href="@{/stats}">Thống kê</a>
                         </li>
 
@@ -53,18 +53,18 @@
 
     </header>
     <footer th:fragment="footer">
-         <div class="bg-primary text-white py-4 mt-4">
-        <div class="container">
-         
-
-            <hr class="bg-white my-2">
+        <div class="bg-primary text-white py-4 mt-4">
+            <div class="container">
 
 
-            <div class="text-center">
-                <p class="mb-0">&copy; 2025 TrầnThếAnh HealthCare. All rights reserved.</p>
+                <hr class="bg-white my-2">
+
+
+                <div class="text-center">
+                    <p class="mb-0">&copy; 2025 TrầnThếAnh HealthCare. All rights reserved.</p>
+                </div>
             </div>
         </div>
-    </div>
     </footer>
 </body>
 </html>
