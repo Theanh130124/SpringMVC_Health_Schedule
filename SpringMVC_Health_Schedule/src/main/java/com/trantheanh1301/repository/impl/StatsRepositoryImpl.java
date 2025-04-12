@@ -103,7 +103,7 @@ public class StatsRepositoryImpl implements StatsRepository {
         );
         predicates.add(builder.equal(rA.get("status"), "Completed"));
         query.where(predicates.toArray(Predicate[]::new));
-        query.groupBy(year, quarter, month);
+        query.groupBy(year, quarter, month,joinHealthRecord.get("diagnosis"));
         query.orderBy(builder.asc(year), builder.asc(month));
         Query q = session.createQuery(query);
 
