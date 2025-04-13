@@ -27,6 +27,9 @@ public class ApiUserController {
     @Autowired
     private UserService userDetailsService;
     
+    
+    
+    //Try catch chỗ này cho nó hiện lỗi chi tiết là gì đỡ vào log check
     @PostMapping(path = "/users", consumes = MediaType.MULTIPART_FORM_DATA)
     public ResponseEntity<User> register(@RequestParam Map<String, String> params, 
             @RequestParam(value = "avatar") MultipartFile avatar) {

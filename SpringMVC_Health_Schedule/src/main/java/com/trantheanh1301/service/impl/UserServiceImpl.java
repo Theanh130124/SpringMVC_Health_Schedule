@@ -31,20 +31,21 @@ import org.springframework.web.multipart.MultipartFile;
  * @author LAPTOP
  */
 @Service("userDetailsService")
-public class UserServiceImpl implements UserService{
-    
+public class UserServiceImpl implements UserService {
+
     @Autowired
     private Cloudinary cloudinary;
     @Autowired
     private UserRepository userRepo;
-    
+
     @Autowired
     private BCryptPasswordEncoder passswordEncoder;
 
-     @Override
+    @Override
     public User getUserByUsername(String username) {
         return this.userRepo.getUserByUsername(username);
     }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User u = this.getUserByUsername(username);
@@ -54,14 +55,16 @@ public class UserServiceImpl implements UserService{
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(u.getRole()));
-        
+
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
     }
-    
-    //Chưa hoàn thiện
+
+    //Chưa hoàn thiện -> xem tạo user thì luôn cả bảng docter hoặc patient 
     @Override
     public User register(Map<String, String> params, MultipartFile avatar) {
+
+
         User u = new User();
         u.setFirstName(params.get("firstName"));
         u.setLastName(params.get("lastName"));
@@ -72,8 +75,6 @@ public class UserServiceImpl implements UserService{
         u.setAddress(params.get("address"));
         u.setGender(params.get("gender"));
         //birthday -> xử lý format sau 
-        
-       
 
         u.setRole(params.get("role"));
         if (!avatar.isEmpty()) {
@@ -85,13 +86,8 @@ public class UserServiceImpl implements UserService{
                 Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return this.userRepo.register(u);
     }
 
-
-    
-
-
-    
 }

@@ -12,3 +12,11 @@ main {
 footer {
     margin-top: auto; /* Đảm bảo footer luôn ở dưới */
 }
+
+.chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh; /* Điều chỉnh chiều cao nếu cần */
+            width: 80vw;  /* Điều chỉnh chiều rộng nếu cần */
+            margin-bottom: 2rem; /* Khoảng cách giữa các biểu đồ */
+        }

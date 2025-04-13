@@ -87,7 +87,7 @@ public class StatsRepositoryImpl implements StatsRepository {
 
         Root<Appointment> rA = query.from(Appointment.class);
         //join Để lấy chuẩn đoán bệnh -> loại bệnh (theo tháng năm) -> không join không lấy theo tháng nằm được (vì đang groupby theo thằng kia)
-        Join<Appointment, Invoice> joinHealthRecord = rA.join("healthrecordSet", JoinType.INNER);
+        Join<Appointment, Healthrecord> joinHealthRecord = rA.join("healthrecordSet", JoinType.INNER);
 
         List<Predicate> predicates = new ArrayList<>();
 
