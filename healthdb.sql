@@ -324,3 +324,25 @@ INSERT INTO Review (appointment_id, patient_id, doctor_id, rating, comment, revi
 
 -- Cập nhật lại average_rating cho BS Thư (doctor_id=3) trên bảng Doctor
 UPDATE Doctor SET average_rating = 5.00 WHERE doctor_id = 3;
+
+
+
+
+
+-- Update ngay 12/4 
+
+-- bo sung du lieu 
+
+SET @today = CURDATE();
+SET @next_monday = DATE_ADD(@today, INTERVAL (8 - DAYOFWEEK(@today)) % 7 DAY);
+
+INSERT INTO Appointment (patient_id, doctor_id, clinic_id, appointment_time, reason, status, consultation_type) VALUES
+(5, 2, 1, DATE_SUB(@next_monday, INTERVAL 3 DAY), 'Tái khám tim mạch', 'Completed', 'Offline');
+
+-- Thêm một hồ sơ sức khỏe tương ứng với lịch hẹn đã hoàn thành ở trên
+INSERT INTO HealthRecord (patient_id, appointment_id, user_id, record_date, symptoms, diagnosis, prescription, notes) VALUES
+(5, 6, 2, DATE(DATE_SUB(@next_monday, INTERVAL 3 DAY)), 'Khó thở nhẹ khi gắng sức, hồi hộp', 'Tăng huyết áp giai đoạn 1', 'Amlodipine 5mg 1 viên/ngày, theo dõi huyết áp tại nhà', 'Đo huyết áp 2 lần/ngày, sáng và tối.'); -- record_id = 3
+
+-- Thêm một kết quả xét nghiệm liên quan đến hồ sơ sức khỏe này (tùy chọn)
+INSERT INTO TestResult (patient_id, health_record_id, appointment_id, test_name, result_value, result_unit, result_date, notes, doctor_id) VALUES
+(5, 3, 6, 'Điện tâm đồ (ECG)', 'Nhịp xoang đều, không có dấu hiệu thiếu máu cơ tim', NULL, DATE_SUB(@next_monday, INTERVAL 2 DAY), 'Kết quả ECG bình thường.', 2); -- result_id = 2
