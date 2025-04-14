@@ -120,7 +120,8 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private Set<Healthrecord> healthrecordSet;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    //bat Eager de hien 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user" )
     private Doctor doctor;
     @JsonIgnore
     @OneToMany(mappedBy = "verifiedByAdminId")
