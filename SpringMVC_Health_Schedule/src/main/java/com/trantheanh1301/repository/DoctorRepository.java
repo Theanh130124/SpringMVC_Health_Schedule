@@ -4,15 +4,12 @@
  */
 package com.trantheanh1301.repository;
 
-import com.trantheanh1301.pojo.User;
+import com.trantheanh1301.pojo.Doctor;
 
 /**
  *
  * @author LAPTOP
  */
-public interface UserRepository  {
-    public User getUserByUsername(String username);
-    public User getUserByEmail(String email);
-    public User register(User u);
-    
+public interface DoctorRepository {
+    public Doctor register(Doctor u);
 }
