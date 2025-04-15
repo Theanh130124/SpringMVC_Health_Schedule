@@ -14,12 +14,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -27,7 +31,8 @@ import java.util.Date;
  * @author LAPTOP
  */
 @Entity
-@Table(name = "doctoravailability")
+@Table(name = "doctoravailability", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"doctor_id", "day_of_week", "start_time", "end_time"})})
 @NamedQueries({
     @NamedQuery(name = "Doctoravailability.findAll", query = "SELECT d FROM Doctoravailability d"),
     @NamedQuery(name = "Doctoravailability.findByAvailabilityId", query = "SELECT d FROM Doctoravailability d WHERE d.availabilityId = :availabilityId"),
@@ -42,21 +47,21 @@ public class Doctoravailability implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "availability_id")
+    @Column(name = "availability_id", nullable = false)
     private Integer availabilityId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 9)
-    @Column(name = "day_of_week")
+    @Column(name = "day_of_week", nullable = false, length = 9)
     private String dayOfWeek;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "start_time")
+    @Column(name = "start_time", nullable = false)
     @Temporal(TemporalType.TIME)
     private Date startTime;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "end_time")
+    @Column(name = "end_time", nullable = false)
     @Temporal(TemporalType.TIME)
     private Date endTime;
     @Column(name = "is_available")
@@ -64,7 +69,7 @@ public class Doctoravailability implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id")
+    @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)
     @ManyToOne(optional = false)
     private Doctor doctorId;
 
@@ -161,6 +166,14 @@ public class Doctoravailability implements Serializable {
     @Override
     public String toString() {
         return "com.trantheanh1301.pojo.Doctoravailability[ availabilityId=" + availabilityId + " ]";
+    }
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = Timestamp.from(Instant.now());
+        if (this.isAvailable == null) {
+             // **ĐÂY LÀ NƠI XỬ LÝ DEFAULT CHO isAvailable**
+            this.isAvailable = true; // Mặc định là có sẵn
+        }
     }
     
 }

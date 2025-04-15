@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
@@ -25,7 +26,8 @@ import java.util.Set;
  * @author LAPTOP
  */
 @Entity
-@Table(name = "specialty")
+@Table(name = "specialty", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"name"})})
 @NamedQueries({
     @NamedQuery(name = "Specialty.findAll", query = "SELECT s FROM Specialty s"),
     @NamedQuery(name = "Specialty.findBySpecialtyId", query = "SELECT s FROM Specialty s WHERE s.specialtyId = :specialtyId"),
@@ -36,16 +38,16 @@ public class Specialty implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "specialty_id")
+    @Column(name = "specialty_id", nullable = false)
     private Integer specialtyId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
     @Lob
     @Size(max = 65535)
-    @Column(name = "description")
+    @Column(name = "description", length = 65535)
     private String description;
     @ManyToMany(mappedBy = "specialtySet")
     private Set<Doctor> doctorSet;

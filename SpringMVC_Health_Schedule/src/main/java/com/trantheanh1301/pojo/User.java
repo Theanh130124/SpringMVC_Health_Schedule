@@ -17,12 +17,17 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
 
@@ -31,7 +36,10 @@ import java.util.Set;
  * @author LAPTOP
  */
 @Entity
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"email"}),
+    @UniqueConstraint(columnNames = {"phone_number"}),
+    @UniqueConstraint(columnNames = {"username"})})
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.findByUserId", query = "SELECT u FROM User u WHERE u.userId = :userId"),
@@ -54,60 +62,58 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private Integer userId;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, length = 255)
     private String email;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, length = 100)
     private String username;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    
-    @JsonIgnore
-    @Column(name = "password")
+    @Column(name = "password", nullable = false, length = 255)
     private String password;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
     @Basic(optional = false)
     @NotNull
     @Lob
     @Size(min = 1, max = 65535)
-    @Column(name = "address")
+    @Column(name = "address", nullable = false, length = 65535)
     private String address;
     @Column(name = "date_of_birth")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
     @Size(max = 6)
-    @Column(name = "gender")
+    @Column(name = "gender", length = 6)
     private String gender;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 7)
-    @Column(name = "role")
+    @Column(name = "role", nullable = false, length = 7)
     private String role;
     @Size(max = 255)
-    @Column(name = "avatar")
+    @Column(name = "avatar", length = 255)
     private String avatar;
     @Column(name = "is_active")
     private Boolean isActive;
@@ -120,8 +126,8 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private Set<Healthrecord> healthrecordSet;
-    //bat Eager de hien 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user" )
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Doctor doctor;
     @JsonIgnore
     @OneToMany(mappedBy = "verifiedByAdminId")
@@ -325,4 +331,23 @@ public class User implements Serializable {
         return "com.trantheanh1301.pojo.User[ userId=" + userId + " ]";
     }
     
+    @PrePersist
+    protected void onCreate() {
+        Timestamp now = Timestamp.from(Instant.now());
+        this.createdAt = now;
+        this.updatedAt = now;
+        if (this.isActive == null) {
+            this.isActive = true; // DEFAULT TRUE
+        }
+        if (this.avatar == null || this.avatar.isEmpty()) {
+            // **ĐÂY LÀ NƠI BẠN XỬ LÝ DEFAULT CHO avatar**
+            this.avatar = "https://res.cloudinary.com/dxiawzgnz/image/upload/v1744000840/qlrmknm7hfe81aplswy2.png";
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Timestamp.from(Instant.now()); // Tự động cập nhật timestamp khi update
+    }
+
 }
