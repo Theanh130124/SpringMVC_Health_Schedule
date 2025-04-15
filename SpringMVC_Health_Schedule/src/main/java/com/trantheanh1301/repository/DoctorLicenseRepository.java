@@ -4,13 +4,12 @@
  */
 package com.trantheanh1301.repository;
 
-import com.trantheanh1301.pojo.Doctor;
+import com.trantheanh1301.pojo.Doctorlicense;
 
 /**
  *
  * @author LAPTOP
  */
-public interface DoctorRepository {
-    public Doctor register(Doctor u);
-    public Doctor getDoctorById(int doctorId);
+public interface DoctorLicenseRepository {
+    public Doctorlicense register_license(Doctorlicense license);
 }

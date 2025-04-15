@@ -4,6 +4,7 @@
  */
 package com.trantheanh1301.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,12 +16,17 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -28,7 +34,8 @@ import java.util.Date;
  * @author LAPTOP
  */
 @Entity
-@Table(name = "doctorlicense")
+@Table(name = "doctorlicense", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"license_number"})})
 @NamedQueries({
     @NamedQuery(name = "Doctorlicense.findAll", query = "SELECT d FROM Doctorlicense d"),
     @NamedQuery(name = "Doctorlicense.findByLicenseId", query = "SELECT d FROM Doctorlicense d WHERE d.licenseId = :licenseId"),
@@ -46,21 +53,21 @@ public class Doctorlicense implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "license_id")
+    @Column(name = "license_id", nullable = false)
     private Integer licenseId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "license_number")
+    @Column(name = "license_number", nullable = false, length = 100)
     private String licenseNumber;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "issuing_authority")
+    @Column(name = "issuing_authority", nullable = false, length = 255)
     private String issuingAuthority;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "issue_date")
+    @Column(name = "issue_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date issueDate;
     @Column(name = "expiry_date")
@@ -68,7 +75,7 @@ public class Doctorlicense implements Serializable {
     private Date expiryDate;
     @Lob
     @Size(max = 65535)
-    @Column(name = "scope_description")
+    @Column(name = "scope_description", length = 65535)
     private String scopeDescription;
     @Column(name = "is_verified")
     private Boolean isVerified;
@@ -81,7 +88,9 @@ public class Doctorlicense implements Serializable {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
-    @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id")
+    @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)
+    //Muốn xemt thì bật Eager
+    @JsonIgnore
     @ManyToOne(optional = false)
     private Doctor doctorId;
     @JoinColumn(name = "verified_by_admin_id", referencedColumnName = "user_id")
@@ -223,4 +232,19 @@ public class Doctorlicense implements Serializable {
         return "com.trantheanh1301.pojo.Doctorlicense[ licenseId=" + licenseId + " ]";
     }
     
+     @PrePersist
+    protected void onCreate() {
+        Timestamp now = Timestamp.from(Instant.now());
+        this.createdAt = now;
+        this.updatedAt = now;
+        if (this.isVerified == null) {
+            // **ĐÂY LÀ NƠI XỬ LÝ DEFAULT CHO isVerified**
+            this.isVerified = false; // Mặc định là chưa xác thực
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Timestamp.from(Instant.now());
+    }
 }

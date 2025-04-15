@@ -17,6 +17,7 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -42,34 +43,34 @@ public class Doctor implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "doctor_id")
+    @Column(name = "doctor_id", nullable = false)
     private Integer doctorId;
     @Column(name = "years_experience")
     private Integer yearsExperience;
     @Lob
     @Size(max = 65535)
-    @Column(name = "bio")
+    @Column(name = "bio", length = 65535)
     private String bio;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "consultation_fee")
+    @Column(name = "consultation_fee", precision = 10, scale = 2)
     private BigDecimal consultationFee;
-    @Column(name = "average_rating")
+    @Column(name = "average_rating", precision = 3, scale = 2)
     private BigDecimal averageRating;
     @JoinTable(name = "doctor_specialty", joinColumns = {
-        @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id")}, inverseJoinColumns = {
-        @JoinColumn(name = "specialty_id", referencedColumnName = "specialty_id")})
+        @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)}, inverseJoinColumns = {
+        @JoinColumn(name = "specialty_id", referencedColumnName = "specialty_id", nullable = false)})
     @ManyToMany
     private Set<Specialty> specialtySet;
     @JoinTable(name = "doctor_clinic", joinColumns = {
-        @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id")}, inverseJoinColumns = {
-        @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id")})
+        @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)}, inverseJoinColumns = {
+        @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id", nullable = false)})
     @ManyToMany
     private Set<Clinic> clinicSet;
     @OneToMany(mappedBy = "doctorId")
     private Set<Testresult> testresultSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctorId")
     private Set<Appointment> appointmentSet;
-    @JoinColumn(name = "doctor_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "doctor_id", referencedColumnName = "user_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
     private User user;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctorId")
@@ -213,6 +214,20 @@ public class Doctor implements Serializable {
     @Override
     public String toString() {
         return "com.trantheanh1301.pojo.Doctor[ doctorId=" + doctorId + " ]";
+    }
+    @PrePersist
+    protected void initializeDefaults() {
+        // **ĐÂY LÀ NƠI XỬ LÝ DEFAULT CHO DOCTOR**
+        if (this.yearsExperience == null) {
+            this.yearsExperience = 0;
+        }
+        if (this.consultationFee == null) {
+            this.consultationFee = BigDecimal.ZERO;
+        }
+         if (this.averageRating == null) {
+            this.averageRating = BigDecimal.ZERO; // Rating ban đầu là 0
+        }
+        // bio có thể null
     }
     
 }

@@ -18,12 +18,16 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
 
@@ -49,33 +53,33 @@ public class Appointment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "appointment_id")
+    @Column(name = "appointment_id", nullable = false)
     private Integer appointmentId;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "appointment_time")
+    @Column(name = "appointment_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date appointmentTime;
     @Column(name = "duration_minutes")
     private Integer durationMinutes;
     @Lob
     @Size(max = 65535)
-    @Column(name = "reason")
+    @Column(name = "reason", length = 65535)
     private String reason;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 18)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false, length = 18)
     private String status;
     @Size(max = 7)
-    @Column(name = "consultation_type")
+    @Column(name = "consultation_type", length = 7)
     private String consultationType;
     @Size(max = 255)
-    @Column(name = "video_call_link")
+    @Column(name = "video_call_link", length = 255)
     private String videoCallLink;
     @Lob
     @Size(max = 65535)
-    @Column(name = "cancellation_reason")
+    @Column(name = "cancellation_reason", length = 65535)
     private String cancellationReason;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -90,10 +94,10 @@ public class Appointment implements Serializable {
     @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id")
     @ManyToOne
     private Clinic clinicId;
-    @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id")
+    @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)
     @ManyToOne(optional = false)
     private Doctor doctorId;
-    @JoinColumn(name = "patient_id", referencedColumnName = "patient_id")
+    @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     @ManyToOne(optional = false)
     private Patient patientId;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "appointmentId")
@@ -273,6 +277,28 @@ public class Appointment implements Serializable {
     @Override
     public String toString() {
         return "com.trantheanh1301.pojo.Appointment[ appointmentId=" + appointmentId + " ]";
+    }
+    
+    @PrePersist
+    protected void onCreate() {
+        Timestamp now = Timestamp.from(Instant.now());
+        this.createdAt = now;
+        this.updatedAt = now;
+        // **ĐÂY LÀ NƠI XỬ LÝ DEFAULT CHO APPOINTMENT**
+        if (this.durationMinutes == null) {
+            this.durationMinutes = 30; // Default 30 phút
+        }
+        if (this.status == null) {
+            this.status = "Scheduled"; // Default Scheduled
+        }
+        if (this.consultationType == null) {
+            this.consultationType = "Offline"; // Default Offline
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Timestamp.from(Instant.now());
     }
     
 }

@@ -16,13 +16,18 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
 
@@ -31,7 +36,8 @@ import java.util.Set;
  * @author LAPTOP
  */
 @Entity
-@Table(name = "invoice")
+@Table(name = "invoice", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"appointment_id"})})
 @NamedQueries({
     @NamedQuery(name = "Invoice.findAll", query = "SELECT i FROM Invoice i"),
     @NamedQuery(name = "Invoice.findByInvoiceId", query = "SELECT i FROM Invoice i WHERE i.invoiceId = :invoiceId"),
@@ -47,12 +53,12 @@ public class Invoice implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "invoice_id")
+    @Column(name = "invoice_id", nullable = false)
     private Integer invoiceId;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
     @Column(name = "issue_date")
     @Temporal(TemporalType.TIMESTAMP)
@@ -63,7 +69,7 @@ public class Invoice implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 9)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false, length = 9)
     private String status;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -73,7 +79,7 @@ public class Invoice implements Serializable {
     private Date updatedAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "invoiceId")
     private Set<Payment> paymentSet;
-    @JoinColumn(name = "appointment_id", referencedColumnName = "appointment_id")
+    @JoinColumn(name = "appointment_id", referencedColumnName = "appointment_id", nullable = false)
     @OneToOne(optional = false)
     private Appointment appointmentId;
 
@@ -185,6 +191,25 @@ public class Invoice implements Serializable {
     @Override
     public String toString() {
         return "com.trantheanh1301.pojo.Invoice[ invoiceId=" + invoiceId + " ]";
+    }
+    
+    @PrePersist
+    protected void onCreate() {
+        Timestamp now = Timestamp.from(Instant.now());
+        this.createdAt = now;
+        this.updatedAt = now;
+        // **ĐÂY LÀ NƠI XỬ LÝ DEFAULT CHO INVOICE**
+        if (this.issueDate == null) {
+            this.issueDate = now; // Mặc định ngày tạo là ngày hiện tại
+        }
+        if (this.status == null) {
+            this.status = "Pending"; // Mặc định là Pending
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Timestamp.from(Instant.now());
     }
     
 }
