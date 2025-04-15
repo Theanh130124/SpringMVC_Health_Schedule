@@ -4,9 +4,8 @@
  */
 package com.trantheanh1301.repository.impl;
 
-import com.trantheanh1301.pojo.Doctor;
-import com.trantheanh1301.repository.DoctorRepository;
-import jakarta.persistence.Query;
+import com.trantheanh1301.pojo.Doctorlicense;
+import com.trantheanh1301.repository.DoctorLicenseRepository;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -19,28 +18,19 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class DoctorRepositoryImpl implements DoctorRepository {
+public class DoctorLicenseRepositoryImpl implements DoctorLicenseRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
 
     @Override
-    public Doctor register(Doctor d) {
-        Session s = this.factory.getObject().getCurrentSession();
-        s.persist(d);
+    public Doctorlicense register_license(Doctorlicense license) {
+        Session s = factory.getObject().getCurrentSession();
+        s.persist(license);
 
-//khong co refesh
-        return d;
-    }
+//        s.refresh(license);  // refesh để khi tạo thì có thể hiện ra luôn
 
-    @Override
-    public Doctor getDoctorById(int doctorId) {
-        Session s = this.factory.getObject().getCurrentSession();
-        Query q = s.createNamedQuery("Doctor.findByDoctorId", Doctor.class);
-        q.setParameter("doctorId",doctorId );
-        return (Doctor) q.getSingleResult();
+        return license;
     }
-    
-    
 
 }

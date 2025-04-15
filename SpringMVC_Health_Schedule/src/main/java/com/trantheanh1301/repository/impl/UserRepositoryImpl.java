@@ -47,7 +47,7 @@ public class UserRepositoryImpl implements UserRepository {
         return u;
     }
 
-    //Dùng cho validate dữ liệu
+    //Dùng cho validate dữ liệu+
     @Override
     public User getUserByEmail(String email) {
         Session s = factory.getObject().getCurrentSession();

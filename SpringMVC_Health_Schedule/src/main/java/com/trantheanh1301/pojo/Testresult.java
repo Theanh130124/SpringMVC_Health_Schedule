@@ -15,12 +15,16 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -45,30 +49,30 @@ public class Testresult implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "result_id")
+    @Column(name = "result_id", nullable = false)
     private Integer resultId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
-    @Column(name = "test_name")
+    @Column(name = "test_name", nullable = false, length = 150)
     private String testName;
     @Size(max = 100)
-    @Column(name = "result_value")
+    @Column(name = "result_value", length = 100)
     private String resultValue;
     @Size(max = 50)
-    @Column(name = "result_unit")
+    @Column(name = "result_unit", length = 50)
     private String resultUnit;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "result_date")
+    @Column(name = "result_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date resultDate;
     @Lob
     @Size(max = 65535)
-    @Column(name = "notes")
+    @Column(name = "notes", length = 65535)
     private String notes;
     @Size(max = 255)
-    @Column(name = "attachment_url")
+    @Column(name = "attachment_url", length = 255)
     private String attachmentUrl;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -85,7 +89,7 @@ public class Testresult implements Serializable {
     @JoinColumn(name = "health_record_id", referencedColumnName = "record_id")
     @ManyToOne
     private Healthrecord healthRecordId;
-    @JoinColumn(name = "patient_id", referencedColumnName = "patient_id")
+    @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     @ManyToOne(optional = false)
     private Patient patientId;
 
@@ -229,6 +233,17 @@ public class Testresult implements Serializable {
     @Override
     public String toString() {
         return "com.trantheanh1301.pojo.Testresult[ resultId=" + resultId + " ]";
+    }
+    @PrePersist
+    protected void onCreate() {
+        Timestamp now = Timestamp.from(Instant.now());
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Timestamp.from(Instant.now());
     }
     
 }

@@ -16,12 +16,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -29,7 +33,8 @@ import java.util.Date;
  * @author LAPTOP
  */
 @Entity
-@Table(name = "review")
+@Table(name = "review", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"appointment_id"})})
 @NamedQueries({
     @NamedQuery(name = "Review.findAll", query = "SELECT r FROM Review r"),
     @NamedQuery(name = "Review.findByReviewId", query = "SELECT r FROM Review r WHERE r.reviewId = :reviewId"),
@@ -43,35 +48,35 @@ public class Review implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "review_id")
+    @Column(name = "review_id", nullable = false)
     private Integer reviewId;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "rating")
+    @Column(name = "rating", nullable = false)
     private short rating;
     @Lob
     @Size(max = 65535)
-    @Column(name = "comment")
+    @Column(name = "comment", length = 65535)
     private String comment;
     @Column(name = "review_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date reviewDate;
     @Lob
     @Size(max = 65535)
-    @Column(name = "doctor_response")
+    @Column(name = "doctor_response", length = 65535)
     private String doctorResponse;
     @Column(name = "response_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date responseDate;
     @Column(name = "is_visible")
     private Boolean isVisible;
-    @JoinColumn(name = "appointment_id", referencedColumnName = "appointment_id")
+    @JoinColumn(name = "appointment_id", referencedColumnName = "appointment_id", nullable = false)
     @OneToOne(optional = false)
     private Appointment appointmentId;
-    @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id")
+    @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)
     @ManyToOne(optional = false)
     private Doctor doctorId;
-    @JoinColumn(name = "patient_id", referencedColumnName = "patient_id")
+    @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     @ManyToOne(optional = false)
     private Patient patientId;
 
@@ -190,6 +195,17 @@ public class Review implements Serializable {
     @Override
     public String toString() {
         return "com.trantheanh1301.pojo.Review[ reviewId=" + reviewId + " ]";
+    }
+    
+    @PrePersist
+    protected void onCreate() {
+        // **ĐÂY LÀ NƠI XỬ LÝ DEFAULT CHO REVIEW**
+        if (this.reviewDate == null) {
+            this.reviewDate = Timestamp.from(Instant.now()); // Mặc định ngày review
+        }
+        if (this.isVisible == null) {
+            this.isVisible = true; // Mặc định là hiển thị
+        }
     }
     
 }
