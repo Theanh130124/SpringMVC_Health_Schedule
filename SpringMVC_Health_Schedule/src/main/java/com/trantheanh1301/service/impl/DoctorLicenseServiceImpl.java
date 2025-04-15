@@ -19,25 +19,21 @@ import org.springframework.stereotype.Service;
  *
  * @author LAPTOP
  */
-
-
 @Service
-public class DoctorLicenseServiceImpl implements DoctorLicenseService{
-    
-    
+public class DoctorLicenseServiceImpl implements DoctorLicenseService {
+
     @Autowired
     private DoctorLicenseRepository licenseRepo;
-    
+
     @Autowired
     private DoctorRepository doctorRepo;
 
     @Override
-    public Doctorlicense register_license(Map<String, String> params) {
-          
+    public Doctorlicense registerLicense(Map<String, String> params) {
+
         Integer doctorId = Integer.valueOf(params.get("doctorId"));
         Doctor doctor = doctorRepo.getDoctorById(doctorId);
-        if(doctor == null)
-        {
+        if (doctor == null) {
             throw new RuntimeException("Không tìm thấy bác sĩ!");
         }
         Doctorlicense license = new Doctorlicense();
@@ -48,11 +44,28 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService{
         license.setIssueDate(DateFormatter.parseDate(params.get("issuedDate")));
         license.setExpiryDate(DateFormatter.parseDate(params.get("expiryDate")));
         license.setScopeDescription(params.get("scopeDescription"));
-        licenseRepo.register_license(license);
+        licenseRepo.registerLicense(license);
         return license;
-        
+
     }
 
+    @Override
+    public Doctorlicense updateLicese(int id, Map<String, String> params) {
 
-    
+        Doctorlicense license = licenseRepo.getLicenById(id);
+        if (license == null) {
+            throw new RuntimeException("Không tìm thấy chứng chỉ hành nghề trên !");
+        }
+        //đã được admin duyệt rồi 
+        if (license.getIsVerified()) {
+            throw new RuntimeException("Giấy phép đã xét duyệt không thể chỉnh sửa!");
+        }
+        license.setLicenseNumber(params.get("licenseNumber"));
+        license.setIssuingAuthority(params.get("issuingAuthority"));
+        license.setIssueDate(DateFormatter.parseDate(params.get("issuedDate")));
+        license.setExpiryDate(DateFormatter.parseDate(params.get("expiryDate")));
+        license.setScopeDescription(params.get("scopeDescription"));
+        return licenseRepo.updateLicese(license);
+    }
+
 }
