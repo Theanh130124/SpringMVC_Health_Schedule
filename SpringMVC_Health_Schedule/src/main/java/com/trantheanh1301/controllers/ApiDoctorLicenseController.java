@@ -11,6 +11,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +29,7 @@ public class ApiDoctorLicenseController {
     @Autowired
     private DoctorLicenseService licenseService;
 
-    
+    //Chưa permission
     //Xem xóa sửa nửa , -> chỉ có current mới dc xem và , admin , (gửi rồi không đc sửa) -> nếu sửa thì phải cho admin duyệt nữa
     
     @PostMapping("/doctor_license")
@@ -35,7 +37,7 @@ public class ApiDoctorLicenseController {
     //@RequestBody thì raw -> json
     public ResponseEntity<?> createLicense(@RequestParam Map<String, String> params) {
         try {
-            Doctorlicense license = licenseService.register_license(params);
+            Doctorlicense license = licenseService.registerLicense(params);
             return new ResponseEntity<>(license, HttpStatus.CREATED);
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
@@ -43,5 +45,21 @@ public class ApiDoctorLicenseController {
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
+        
+        
+        //Permission ở đây ( Bác sĩ đó mới đc update -> dưới service
+    }
+    @PatchMapping("/doctor_license/{id}")
+    public ResponseEntity<?> updateLicense(@PathVariable int id , @RequestParam Map<String, String> params)
+    {
+        try{
+       Doctorlicense updated = licenseService.updateLicese(id, params);
+       return new ResponseEntity<>(updated,HttpStatus.OK);
+    }catch (Exception ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Đã xảy ra lỗi" + ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
     }
 }

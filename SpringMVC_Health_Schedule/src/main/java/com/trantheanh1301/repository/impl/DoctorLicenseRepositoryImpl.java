@@ -24,7 +24,7 @@ public class DoctorLicenseRepositoryImpl implements DoctorLicenseRepository {
     private LocalSessionFactoryBean factory;
 
     @Override
-    public Doctorlicense register_license(Doctorlicense license) {
+    public Doctorlicense registerLicense(Doctorlicense license) {
         Session s = factory.getObject().getCurrentSession();
         s.persist(license);
 
@@ -32,5 +32,22 @@ public class DoctorLicenseRepositoryImpl implements DoctorLicenseRepository {
 
         return license;
     }
+
+    @Override
+    public Doctorlicense updateLicese(Doctorlicense license) {
+        Session s = factory.getObject().getCurrentSession();
+        s.merge(license);
+        return license;
+       
+    }
+
+    @Override
+    public Doctorlicense getLicenById(int id) {
+      Session s = factory.getObject().getCurrentSession();
+      return s.get(Doctorlicense.class, id);
+    }
+    
+    
+    
 
 }

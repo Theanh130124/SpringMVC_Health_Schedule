@@ -12,5 +12,7 @@ import java.util.Map;
  * @author LAPTOP
  */
 public interface DoctorLicenseService {
-    Doctorlicense register_license(Map<String, String> params);
+    Doctorlicense registerLicense(Map<String, String> params);
+    Doctorlicense updateLicese(int id , Map<String,String> params);
+    
 }
