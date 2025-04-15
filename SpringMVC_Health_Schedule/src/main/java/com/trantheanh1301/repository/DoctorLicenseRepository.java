@@ -11,5 +11,7 @@ import com.trantheanh1301.pojo.Doctorlicense;
  * @author LAPTOP
  */
 public interface DoctorLicenseRepository {
-    public Doctorlicense register_license(Doctorlicense license);
+    public Doctorlicense registerLicense(Doctorlicense license);
+    public Doctorlicense updateLicese(Doctorlicense license);
+    public Doctorlicense getLicenById(int id);
 }
