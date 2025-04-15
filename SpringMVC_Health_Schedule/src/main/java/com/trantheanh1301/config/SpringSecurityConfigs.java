@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -48,6 +47,7 @@ public class SpringSecurityConfigs {
         return new HandlerMappingIntrospector();
     }
 
+            //Xem là mọi api đều được quyền 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
             Exception {
@@ -56,7 +56,8 @@ public class SpringSecurityConfigs {
                         .requestMatchers("/js/**").permitAll().requestMatchers("/css/**").permitAll().requestMatchers("/images/**").permitAll()
                         .requestMatchers("/stats").hasAnyAuthority("Admin", "Doctor")
                         // thay vi hasRole và hasAnyRole thi này nó không gán ROLE_ 
-                        .requestMatchers("/api/users").permitAll().requestMatchers("/api/doctor_license").permitAll()
+                        .requestMatchers("/api/users").permitAll().requestMatchers("/api/doctor_license/**").permitAll()
+                        
                         .requestMatchers("/api/**").authenticated())
                 .formLogin(form -> form.loginPage("/login")
                 .loginProcessingUrl("/login")
