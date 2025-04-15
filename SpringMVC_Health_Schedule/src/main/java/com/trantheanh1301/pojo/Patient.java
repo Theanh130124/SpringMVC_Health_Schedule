@@ -36,11 +36,11 @@ public class Patient implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "patient_id")
+    @Column(name = "patient_id", nullable = false)
     private Integer patientId;
     @Lob
     @Size(max = 65535)
-    @Column(name = "medical_history_summary")
+    @Column(name = "medical_history_summary", length = 65535)
     private String medicalHistorySummary;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
     private Set<Testresult> testresultSet;
@@ -48,7 +48,7 @@ public class Patient implements Serializable {
     private Set<Healthrecord> healthrecordSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
     private Set<Appointment> appointmentSet;
-    @JoinColumn(name = "patient_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "patient_id", referencedColumnName = "user_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
     private User user;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")

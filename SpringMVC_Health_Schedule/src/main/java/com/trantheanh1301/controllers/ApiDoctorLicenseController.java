@@ -4,9 +4,8 @@
  */
 package com.trantheanh1301.controllers;
 
-import com.trantheanh1301.pojo.User;
-import com.trantheanh1301.service.UserService;
-import jakarta.ws.rs.core.MediaType;
+import com.trantheanh1301.pojo.Doctorlicense;
+import com.trantheanh1301.service.DoctorLicenseService;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -24,24 +22,26 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping("/api")
-public class ApiUserController {
+public class ApiDoctorLicenseController {
 
     @Autowired
-    private UserService userDetailsService;
+    private DoctorLicenseService licenseService;
 
-    //Try catch chỗ này cho nó hiện lỗi chi tiết là gì đỡ vào log check
-    @PostMapping(path = "/users", consumes = MediaType.MULTIPART_FORM_DATA)
-    // trả ? để in đc error
-    public ResponseEntity<?> register(@RequestParam Map<String, String> params,
-            @RequestParam(value = "avatar") MultipartFile avatar) {
+    
+    //Xem xóa sửa nửa , -> chỉ có current mới dc xem và , admin , (gửi rồi không đc sửa) -> nếu sửa thì phải cho admin duyệt nữa
+    
+    @PostMapping("/doctor_license")
+    //@RequestParam  sẽ gửi application/x-www-form-urlencoded(form-data)
+    //@RequestBody thì raw -> json
+    public ResponseEntity<?> createLicense(@RequestParam Map<String, String> params) {
         try {
-            User u = this.userDetailsService.register(params, avatar);
-            return new ResponseEntity<>(u, HttpStatus.CREATED);
+            Doctorlicense license = licenseService.register_license(params);
+            return new ResponseEntity<>(license, HttpStatus.CREATED);
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Đã xảy ra lỗi" + ex.getMessage());
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
 
+        }
     }
 }

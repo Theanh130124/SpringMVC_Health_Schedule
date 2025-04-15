@@ -15,12 +15,16 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
 
@@ -44,24 +48,24 @@ public class Clinic implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "clinic_id")
+    @Column(name = "clinic_id", nullable = false)
     private Integer clinicId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 150)
     private String name;
     @Basic(optional = false)
     @NotNull
     @Lob
     @Size(min = 1, max = 65535)
-    @Column(name = "address")
+    @Column(name = "address", nullable = false, length = 65535)
     private String address;
     @Size(max = 20)
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
     @Size(max = 255)
-    @Column(name = "website")
+    @Column(name = "website", length = 255)
     private String website;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -182,6 +186,17 @@ public class Clinic implements Serializable {
     @Override
     public String toString() {
         return "com.trantheanh1301.pojo.Clinic[ clinicId=" + clinicId + " ]";
+    }
+    @PrePersist
+    protected void onCreate() {
+        Timestamp now = Timestamp.from(Instant.now());
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Timestamp.from(Instant.now());
     }
     
 }

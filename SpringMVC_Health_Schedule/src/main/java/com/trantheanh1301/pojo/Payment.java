@@ -15,13 +15,17 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -29,7 +33,8 @@ import java.util.Date;
  * @author LAPTOP
  */
 @Entity
-@Table(name = "payment")
+@Table(name = "payment", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"transaction_id"})})
 @NamedQueries({
     @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
     @NamedQuery(name = "Payment.findByPaymentId", query = "SELECT p FROM Payment p WHERE p.paymentId = :paymentId"),
@@ -44,34 +49,34 @@ public class Payment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "payment_id")
+    @Column(name = "payment_id", nullable = false)
     private Integer paymentId;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "amount_paid")
+    @Column(name = "amount_paid", nullable = false, precision = 10, scale = 2)
     private BigDecimal amountPaid;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 12)
-    @Column(name = "payment_method")
+    @Column(name = "payment_method", nullable = false, length = 12)
     private String paymentMethod;
     @Size(max = 255)
-    @Column(name = "transaction_id")
+    @Column(name = "transaction_id", length = 255)
     private String transactionId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 9)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false, length = 9)
     private String status;
     @Column(name = "payment_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date paymentDate;
     @Lob
     @Size(max = 65535)
-    @Column(name = "notes")
+    @Column(name = "notes", length = 65535)
     private String notes;
-    @JoinColumn(name = "invoice_id", referencedColumnName = "invoice_id")
+    @JoinColumn(name = "invoice_id", referencedColumnName = "invoice_id", nullable = false)
     @ManyToOne(optional = false)
     private Invoice invoiceId;
 
@@ -176,6 +181,16 @@ public class Payment implements Serializable {
     @Override
     public String toString() {
         return "com.trantheanh1301.pojo.Payment[ paymentId=" + paymentId + " ]";
+    }
+    @PrePersist
+    protected void onCreate() {
+        // **ĐÂY LÀ NƠI XỬ LÝ DEFAULT CHO PAYMENT**
+        if (this.paymentDate == null) {
+            this.paymentDate = Timestamp.from(Instant.now()); // Mặc định ngày thanh toán
+        }
+        if (this.status == null) {
+            this.status = "Pending"; // Mặc định là Pending
+        }
     }
     
 }
