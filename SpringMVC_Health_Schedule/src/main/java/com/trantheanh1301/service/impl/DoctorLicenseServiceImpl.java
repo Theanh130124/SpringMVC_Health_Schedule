@@ -60,11 +60,23 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
         if (license.getIsVerified()) {
             throw new RuntimeException("Giấy phép đã xét duyệt không thể chỉnh sửa!");
         }
-        license.setLicenseNumber(params.get("licenseNumber"));
-        license.setIssuingAuthority(params.get("issuingAuthority"));
-        license.setIssueDate(DateFormatter.parseDate(params.get("issuedDate")));
-        license.setExpiryDate(DateFormatter.parseDate(params.get("expiryDate")));
-        license.setScopeDescription(params.get("scopeDescription"));
+        if (params.containsKey("licenseNumber")) {
+            license.setLicenseNumber(params.get("licenseNumber"));
+        }
+
+        // Cập nhật các trường khác chỉ nếu có trong params
+        if (params.containsKey("issuingAuthority")) {
+            license.setIssuingAuthority(params.get("issuingAuthority"));
+        }
+        if (params.containsKey("issuedDate")) {
+            license.setIssueDate(DateFormatter.parseDate(params.get("issuedDate")));
+        }
+        if (params.containsKey("expiryDate")) {
+            license.setExpiryDate(DateFormatter.parseDate(params.get("expiryDate")));
+        }
+        if (params.containsKey("scopeDescription")) {
+            license.setScopeDescription(params.get("scopeDescription"));
+        }
         return licenseRepo.updateLicese(license);
     }
 
