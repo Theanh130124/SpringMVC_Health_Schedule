@@ -39,7 +39,7 @@ public class ApiUserController {
             return new ResponseEntity<>(u, HttpStatus.CREATED);
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
-            error.put("error", "Đã xảy ra lỗi" + ex.getMessage());
+            error.put("error", "Đã xảy ra lỗi " + ex.getMessage());
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
