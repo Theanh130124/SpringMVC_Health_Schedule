@@ -13,4 +13,5 @@ import com.trantheanh1301.pojo.Doctor;
 public interface DoctorRepository {
     public Doctor register(Doctor u);
     public Doctor getDoctorById(int doctorId);
+//    public void deleteDoctorbyId(int doctorId);
 }

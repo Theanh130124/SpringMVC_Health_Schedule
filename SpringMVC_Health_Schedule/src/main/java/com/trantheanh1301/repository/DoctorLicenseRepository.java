@@ -12,6 +12,7 @@ import com.trantheanh1301.pojo.Doctorlicense;
  */
 public interface DoctorLicenseRepository {
     public Doctorlicense registerLicense(Doctorlicense license);
-    public Doctorlicense updateLicese(Doctorlicense license);
-    public Doctorlicense getLicenById(int id);
+    public Doctorlicense updateLicense(Doctorlicense license);
+    public Doctorlicense getLicenseById(int id);
+    public void removeLicense(int id);
 }
