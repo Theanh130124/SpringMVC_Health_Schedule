@@ -88,6 +88,9 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+                    
+                    <!--Muốn truyền tham số trên endpoint thì phải cài cái này--> 
+                    <compilerArgument>-parameters</compilerArgument>
                 </configuration>
             </plugin>
             <plugin>
