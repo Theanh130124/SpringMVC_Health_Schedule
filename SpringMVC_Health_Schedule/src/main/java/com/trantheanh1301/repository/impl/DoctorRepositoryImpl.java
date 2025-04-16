@@ -40,6 +40,17 @@ public class DoctorRepositoryImpl implements DoctorRepository {
         q.setParameter("doctorId",doctorId );
         return (Doctor) q.getSingleResult();
     }
+
+//    @Override
+//    public void deleteDoctorbyId(int doctorId) {
+//        Session s = this.factory.getObject().getCurrentSession();
+//        Doctor doctor = s.get(Doctor.class, doctorId);
+//        if ( doctor != null){
+//            s.remove(doctor);
+//        }
+//        
+//        
+//    }
     
     
 

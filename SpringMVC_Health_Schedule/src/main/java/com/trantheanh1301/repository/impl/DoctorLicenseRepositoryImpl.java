@@ -29,25 +29,36 @@ public class DoctorLicenseRepositoryImpl implements DoctorLicenseRepository {
         s.persist(license);
 
 //        s.refresh(license);  // refesh để khi tạo thì có thể hiện ra luôn
-
         return license;
     }
 
+    
+    //Truyền vào 1 đối tượng đã persistent rồi 
     @Override
-    public Doctorlicense updateLicese(Doctorlicense license) {
+    public Doctorlicense updateLicense(Doctorlicense license) {
         Session s = factory.getObject().getCurrentSession();
         s.merge(license);
         return license;
-       
+
     }
 
     @Override
-    public Doctorlicense getLicenById(int id) {
-      Session s = factory.getObject().getCurrentSession();
-      return s.get(Doctorlicense.class, id);
+    public Doctorlicense getLicenseById(int id) {
+        Session s = factory.getObject().getCurrentSession();
+        return s.get(Doctorlicense.class, id);
     }
+
     
     
-    
+    //Vì này truyền id nên cần lấy license ở trạng thái persistent
+    @Override
+    public void removeLicense(int id) {
+        Session s = factory.getObject().getCurrentSession();
+        Doctorlicense license = s.get(Doctorlicense.class, id);
+
+        if (license != null) {
+            s.remove(license);
+        }
+    }
 
 }

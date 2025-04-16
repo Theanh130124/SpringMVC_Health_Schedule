@@ -13,6 +13,7 @@ import java.util.Map;
  */
 public interface DoctorLicenseService {
     Doctorlicense registerLicense(Map<String, String> params);
-    Doctorlicense updateLicese(int id , Map<String,String> params);
+    Doctorlicense updateLicense(int id , Map<String,String> params);
+    public void removeLicense(int id);
     
 }

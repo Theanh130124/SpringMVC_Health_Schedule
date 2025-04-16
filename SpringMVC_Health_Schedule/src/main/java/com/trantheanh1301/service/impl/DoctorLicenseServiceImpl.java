@@ -50,14 +50,20 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
     }
 
     @Override
-    public Doctorlicense updateLicese(int id, Map<String, String> params) {
+    public Doctorlicense updateLicense(int id, Map<String, String> params) {
 
-        Doctorlicense license = licenseRepo.getLicenById(id);
+        Doctorlicense license = licenseRepo.getLicenseById(id); // tới đây nó đã là persistent
         if (license == null) {
             throw new RuntimeException("Không tìm thấy chứng chỉ hành nghề trên !");
         }
-        //đã được admin duyệt rồi 
+        //đã được admin duyệt rồi -> chỉ có admin mới sửa được cái này
+
         if (license.getIsVerified()) {
+            
+            //if current_user.role() = admin {  license.setIsVerified(params.get("isVerified"));   }
+            //-> rồi từ user -> doctor -> doclicense -> nếu này false thì không cho đăng nhập . 
+                       
+
             throw new RuntimeException("Giấy phép đã xét duyệt không thể chỉnh sửa!");
         }
         if (params.containsKey("licenseNumber")) {
@@ -77,7 +83,13 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
         if (params.containsKey("scopeDescription")) {
             license.setScopeDescription(params.get("scopeDescription"));
         }
-        return licenseRepo.updateLicese(license);
+        return licenseRepo.updateLicense(license);
+    }
+
+    //Nhớ permission
+    @Override
+    public void removeLicense(int id) {
+        licenseRepo.removeLicense(id);
     }
 
 }
