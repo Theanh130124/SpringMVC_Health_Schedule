@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+  <!-- Define Persistence Unit -->
+  <persistence-unit name="my_persistence_unit">
+    <class>com.trantheanh1301.pojo.Doctor</class>
+    <class>com.trantheanh1301.pojo.Specialty</class>
+    <class>com.trantheanh1301.pojo.Doctoravailability</class>
+    <class>com.trantheanh1301.pojo.Appointment</class>
+    <class>com.trantheanh1301.pojo.Invoice</class>
+    <class>com.trantheanh1301.pojo.Payment</class>
+    <class>com.trantheanh1301.pojo.Testresult</class>
+    <class>com.trantheanh1301.pojo.Healthrecord</class>
+    <class>com.trantheanh1301.pojo.Review</class>
+    <class>com.trantheanh1301.pojo.Patient</class>
+    <class>com.trantheanh1301.pojo.Clinic</class>
+    <class>com.trantheanh1301.pojo.User</class>
+    <class>com.trantheanh1301.pojo.Doctorlicense</class>
+  </persistence-unit>
+</persistence>

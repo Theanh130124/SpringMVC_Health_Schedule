@@ -1,0 +1,22 @@
+html, body {
+    height: 100%; /* Chiều cao 100% để sử dụng flex đầy đủ */
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; /* Đẩy footer xuống nếu không có nhiều nội dung */
+}
+
+footer {
+    margin-top: auto; /* Đảm bảo footer luôn ở dưới */
+}
+
+.chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh; /* Điều chỉnh chiều cao nếu cần */
+            width: 80vw;  /* Điều chỉnh chiều rộng nếu cần */
+            margin-bottom: 2rem; /* Khoảng cách giữa các biểu đồ */
+        }
