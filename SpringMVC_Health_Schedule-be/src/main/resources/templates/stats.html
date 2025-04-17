@@ -1,0 +1,124 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Thống kê báo cáo</title>
+    <th:block th:replace="layout/base :: styles"></th:block>
+</head>
+<body>
+    <div th:replace="layout/base :: header"></div>
+    <section class="container mt-5">
+
+        <form method="get" th:action="@{/stats}" class="row g-3 mb-4">
+            <div class="col-md-3">
+                <label for="year" class="form-label">Năm</label>
+                <!--Phải truyền params['year']-->
+                <input type="number" class="form-control" id="year" name="year" th:value="${params['year']}">
+            </div>
+            <div class="col-md-3">
+                <label for="quarter" class="form-label">Quý</label>
+                <select class="form-select" id="quarter" name="quarter">
+                    <option th:selected="${params['quarter'] == null}" value="">-- Chọn quý --</option>
+                    <option value="1" th:selected="${params['quarter'] == '1'}">Quý 1</option>
+                    <option value="2" th:selected="${params['quarter'] == '2'}">Quý 2</option>
+                    <option value="3" th:selected="${params['quarter'] == '3'}">Quý 3</option>
+                    <option value="4" th:selected="${params['quarter'] == '4'}">Quý 4</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="month" class="form-label">Tháng</label>
+                <select class="form-select" id="month" name="month">
+                    <option th:selected="${params['month'] == null}" value="">-- Chọn tháng --</option>
+                    <th:block th:each="m : ${#numbers.sequence(1,12)}">
+                        <option th:value="${m}" th:selected="${params['month'] != null and params['month'] == m.toString()}">Tháng [[${m}]]</option>
+                    </th:block>
+                </select>
+            </div>
+            <div class="col-md-3 align-self-end">
+                <button type="submit" class="btn btn-primary w-100">Lọc</button>
+            </div>
+
+
+        </form>
+
+        <div sec:authorize="hasAuthority('Admin')" th:if="${not #lists.isEmpty(stats_admin)}">
+            <h3 class="text-center text-info">Thống kê Doanh Thu</h3>
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Số lượt khám bệnh đã hoàn thành</th>
+                            <th>Tổng tiền (VNĐ)</th>
+                            <th>Năm</th>
+                            <th>Quý</th>
+                            <th>Tháng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="s_a : ${stats_admin}" class="text-center">
+                            <td th:text="${s_a[0]}"></td>
+                            <td th:text="${#numbers.formatDecimal(s_a[1], 0, 'COMMA', 2, 'POINT')} + ' ₫'"></td>
+                            <td th:text="${s_a[2]}"></td>
+                            <td th:text="${s_a[3]}"></td>
+                            <td th:text="${s_a[4]}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div sec:authorize="hasAuthority('Admin')" class="chart-container">
+            <canvas id="adminStatsChart"></canvas>
+        </div>
+
+        <div sec:authorize="hasAuthority('Doctor')" th:if="${not #lists.isEmpty(stats_doctor)}">
+            <h3 class="text-center text-info">Thống kê Bệnh nhân & Bệnh phổ biến</h3>
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Tổng số bệnh nhân đã khám</th>
+                            <th>Loại bệnh phổ biến</th>
+                            <th>Năm</th>
+                            <th>Quý</th>
+                            <th>Tháng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:if="${not #lists.isEmpty(stats_doctor)}">
+                        <tr th:each="s_d : ${stats_doctor}" class="text-center">
+                            <td class="align-middle" th:text="${#lists.size(stats_doctor)}"></td>
+                            <td th:text="${s_d[1]}"></td> <td th:text="${s_d[2]}"></td> <td th:text="${s_d[3]}"></td> <td th:text="${s_d[4]}"></td> </tr>
+                    </th:block>
+
+                    <tr th:if="${#lists.isEmpty(stats_doctor)}">
+                        <td colspan="5" class="text-center">Không có dữ liệu thống kê bác sĩ.</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div sec:authorize="hasAuthority('Doctor')" class="chart-container">
+            <h4 class="text-center">Các loại bệnh phổ biến</h4>
+            <p class="text-center" th:if="${not #lists.isEmpty(stats_doctor)}">
+                <strong>Tổng số loại bệnh phổ biến:</strong> <span th:text="${#lists.size(stats_doctor)}"></span>
+            </p>
+            <canvas id="doctorStatsChart"></canvas>
+        </div>
+
+    </section>
+
+    <div th:replace="layout/base :: footer"></div>
+    <!--Chart js-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const adminStatsData = /*[[${stats_admin}]]*/ [];
+        const doctorStatsData = /*[[${stats_doctor}]]*/ [];
+        /*]]>*/
+    </script>
+    <script th:src="@{/js/stats.js}"></script>
+
+</body>
+</html>
