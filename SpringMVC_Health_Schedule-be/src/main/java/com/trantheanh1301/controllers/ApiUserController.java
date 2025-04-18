@@ -67,7 +67,7 @@ public class ApiUserController {
 
     }
 
-    //Từ token đưa ra thông tin người dùng -> decoded
+    //Là current -user
     @RequestMapping("/secure/profile")
     @ResponseBody
     public ResponseEntity<User> getProfile(Principal principal) {
