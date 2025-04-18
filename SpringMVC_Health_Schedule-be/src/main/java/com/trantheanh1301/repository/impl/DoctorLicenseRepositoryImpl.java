@@ -23,6 +23,9 @@ public class DoctorLicenseRepositoryImpl implements DoctorLicenseRepository {
     @Autowired
     private LocalSessionFactoryBean factory;
 
+    
+//Gom add với upadte thành 1
+    
     @Override
     public Doctorlicense registerLicense(Doctorlicense license) {
         Session s = factory.getObject().getCurrentSession();

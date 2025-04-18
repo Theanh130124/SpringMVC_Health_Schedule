@@ -33,13 +33,16 @@ com\trantheanh1301\controllers\StatsController.class
 com\trantheanh1301\controllers\ApiUserController.class
 com\trantheanh1301\formatter\DateFormatter.class
 com\trantheanh1301\springmvc_health_schedule\JakartaRestConfiguration.class
+com\trantheanh1301\service\impl\DoctorServiceImpl.class
 com\trantheanh1301\config\DispatcherServletInit.class
 com\trantheanh1301\config\SecurityWebApplicationInitializer.class
 com\trantheanh1301\pojo\Doctoravailability.class
 com\trantheanh1301\repository\UserRepository.class
 com\trantheanh1301\repository\impl\PatientRepositoryImpl.class
+com\trantheanh1301\service\DoctorService.class
 com\trantheanh1301\pojo\Specialty.class
 com\trantheanh1301\service\impl\DoctorLicenseServiceImpl.class
+com\trantheanh1301\controllers\ApiDoctorController.class
 com\trantheanh1301\service\UserService.class
 com\trantheanh1301\repository\impl\DoctorRepositoryImpl.class
 com\trantheanh1301\pojo\Healthrecord.class
