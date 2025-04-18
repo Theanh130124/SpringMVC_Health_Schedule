@@ -6,7 +6,6 @@ com\trantheanh1301\controllers\UserController.class
 com\trantheanh1301\repository\impl\DoctorLicenseRepositoryImpl.class
 com\trantheanh1301\config\ThymeleafConfig.class
 com\trantheanh1301\pojo\Clinic.class
-com\trantheanh1301\utils\JwtAuthenticationEntryPoint.class
 com\trantheanh1301\repository\impl\UserRepositoryImpl.class
 com\trantheanh1301\service\StatsService.class
 com\trantheanh1301\pojo\Payment.class
@@ -27,6 +26,7 @@ com\trantheanh1301\controllers\ApiDoctorLicenseController.class
 com\trantheanh1301\pojo\User.class
 com\trantheanh1301\pojo\Patient.class
 com\trantheanh1301\repository\PatientRepository.class
+com\trantheanh1301\config\JwtSecurityConfig.class
 com\trantheanh1301\repository\impl\StatsRepositoryImpl.class
 com\trantheanh1301\pojo\Doctorlicense.class
 com\trantheanh1301\controllers\StatsController.class
