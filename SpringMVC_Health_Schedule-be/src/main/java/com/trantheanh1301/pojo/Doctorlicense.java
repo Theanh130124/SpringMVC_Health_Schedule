@@ -93,6 +93,7 @@ public class Doctorlicense implements Serializable {
     @JsonIgnore
     @ManyToOne(optional = false)
     private Doctor doctorId;
+    @JsonIgnore
     @JoinColumn(name = "verified_by_admin_id", referencedColumnName = "user_id")
     @ManyToOne
     private User verifiedByAdminId;

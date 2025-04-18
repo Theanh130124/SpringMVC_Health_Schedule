@@ -28,7 +28,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
     "com.trantheanh1301.controllers",
     "com.trantheanh1301.repository",
     "com.trantheanh1301.service",
-    "com.trantheanh1301.utils"
+    "com.trantheanh1301.utils",
+    "com.trantheanh1301.filters"
 })
 public class WebAppContextConfigs implements WebMvcConfigurer {
 

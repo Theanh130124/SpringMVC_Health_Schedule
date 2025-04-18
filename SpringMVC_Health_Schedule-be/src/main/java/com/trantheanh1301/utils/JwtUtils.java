@@ -17,7 +17,9 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.util.Date;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JwtUtils {
 
     // SECRET nên được lưu bằng biến môi trường, -> nhứ sửa

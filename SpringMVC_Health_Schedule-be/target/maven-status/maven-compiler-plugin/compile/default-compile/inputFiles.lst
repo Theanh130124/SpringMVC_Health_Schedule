@@ -1,5 +1,6 @@
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\DispatcherServletInit.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\HibernateConfigs.java
+D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\JwtSecurityConfig.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\SecurityWebApplicationInitializer.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\SpringSecurityConfigs.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\ThymeleafConfig.java
@@ -43,5 +44,4 @@ D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\UserService.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\springmvc_health_schedule\JakartaRestConfiguration.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\springmvc_health_schedule\resources\JakartaEE11Resource.java
-D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\utils\JwtAuthenticationEntryPoint.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\utils\JwtUtils.java

@@ -7,12 +7,13 @@ package com.trantheanh1301.config;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.trantheanh1301.filters.JwtFilter;
-import com.trantheanh1301.utils.JwtAuthenticationEntryPoint;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
@@ -36,13 +37,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
     "com.trantheanh1301.controllers",
     "com.trantheanh1301.repository",
     "com.trantheanh1301.service",
-    "com.trantheanh1301.utils"
+    "com.trantheanh1301.utils",
+    "com.trantheanh1301.filters"
 })
+//thằng này chạy trc
+@Order(2)
 public class SpringSecurityConfigs {
 
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+
+    
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -57,17 +61,17 @@ public class SpringSecurityConfigs {
         return new HandlerMappingIntrospector();
     }
 
-    //Xem là mọi api đều được quyền 
+    //Xem là mọi api đều được quyền -> fix lại
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
             Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(c -> c.disable()).authorizeHttpRequests(requests
                 -> requests
                         .requestMatchers("/js/**").permitAll().requestMatchers("/css/**").permitAll().requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/login", "/logout").permitAll().requestMatchers("/api/login", "/api/users").permitAll().requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/", "/home").authenticated()
                         .requestMatchers("/stats").hasAnyAuthority("Admin", "Doctor").anyRequest().authenticated()// mọi thứ còn lại đều cần token 
-//        ).exceptionHandling(exception -> exception
-//                .authenticationEntryPoint(jwtAuthenticationEntryPoint) // 👉 xử lý lỗi 401 tại đây
-//        //  xử lý lỗi 401 tại đây thay vì trả ra 200ok mà vẫn bắt đăng nhập
+
         )
                 .formLogin(form -> form.loginPage("/login")
                 .loginProcessingUrl("/login")
