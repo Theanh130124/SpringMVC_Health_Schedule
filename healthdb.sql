@@ -158,7 +158,17 @@ CREATE TABLE TestResult (
     FOREIGN KEY (appointment_id) REFERENCES Appointment(appointment_id) ON DELETE SET NULL,
     FOREIGN KEY (doctor_id) REFERENCES Doctor(doctor_id) ON DELETE SET NULL
 );
-
+CREATE TABLE AvailableSlot (
+    slot_id INT AUTO_INCREMENT PRIMARY KEY,
+    doctor_id INT NOT NULL,
+    slot_date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    is_booked BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_slot (doctor_id, slot_date, start_time, end_time),
+    FOREIGN KEY (doctor_id) REFERENCES Doctor(doctor_id) ON DELETE CASCADE
+);
 -- Bảng DoctorAvailability: Lưu trữ giờ làm việc của bác sĩ (Giữ nguyên tên)
 CREATE TABLE DoctorAvailability (
     availability_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -328,9 +338,6 @@ UPDATE Doctor SET average_rating = 5.00 WHERE doctor_id = 3;
 
 
 
-
--- Update ngay 12/4 
-
 -- bo sung du lieu 
 
 SET @today = CURDATE();
@@ -346,3 +353,146 @@ INSERT INTO HealthRecord (patient_id, appointment_id, user_id, record_date, symp
 -- Thêm một kết quả xét nghiệm liên quan đến hồ sơ sức khỏe này (tùy chọn)
 INSERT INTO TestResult (patient_id, health_record_id, appointment_id, test_name, result_value, result_unit, result_date, notes, doctor_id) VALUES
 (5, 3, 6, 'Điện tâm đồ (ECG)', 'Nhịp xoang đều, không có dấu hiệu thiếu máu cơ tim', NULL, DATE_SUB(@next_monday, INTERVAL 2 DAY), 'Kết quả ECG bình thường.', 2); -- result_id = 2
+
+
+
+-- chay tesst
+SELECT
+    COUNT(a.appointment_id) AS so_luong_kham, -- Đếm số lượt khám
+    hr.diagnosis AS chan_doan,              -- Lấy thông tin chẩn đoán
+    YEAR(a.appointment_time) AS nam,        -- Lấy năm từ thời gian hẹn
+    QUARTER(a.appointment_time) AS quy,     -- Lấy quý từ thời gian hẹn
+    MONTH(a.appointment_time) AS thang      -- Lấy tháng từ thời gian hẹn
+FROM
+    Appointment a                           -- Từ bảng Appointment (lịch hẹn)
+INNER JOIN
+    HealthRecord hr ON a.appointment_id = hr.appointment_id -- Kết nối với HealthRecord qua appointment_id để lấy chẩn đoán
+WHERE
+    a.status = 'Completed'                  -- Chỉ lấy các lịch hẹn đã hoàn thành
+    -- AND YEAR(a.appointment_time) = [Your_Year_Param] -- Thêm điều kiện lọc theo năm (nếu có)
+    -- AND QUARTER(a.appointment_time) = [Your_Quarter_Param] -- Thêm điều kiện lọc theo quý (nếu có năm và quý)
+    -- AND MONTH(a.appointment_time) = [Your_Month_Param] -- Thêm điều kiện lọc theo tháng (nếu có năm và tháng, không có quý)
+    AND hr.diagnosis IS NOT NULL AND hr.diagnosis != '' -- Chỉ lấy các bản ghi có chẩn đoán
+GROUP BY
+    YEAR(a.appointment_time),               -- Nhóm theo năm
+    QUARTER(a.appointment_time),            -- Nhóm theo quý
+    MONTH(a.appointment_time),              -- Nhóm theo tháng
+    hr.diagnosis                            -- Nhóm theo chẩn đoán
+ORDER BY
+    nam ASC,                                -- Sắp xếp theo năm tăng dần
+    thang ASC;                              -- Sắp xếp theo tháng tăng dần
+
+
+
+SELECT
+    COUNT(DISTINCT a.patient_id) AS tong_so_benh_nhan, -- Đếm số lượng bệnh nhân duy nhất
+    YEAR(a.appointment_time) AS nam,
+    QUARTER(a.appointment_time) AS quy,
+    MONTH(a.appointment_time) AS thang
+FROM
+    Appointment a
+WHERE
+    a.status = 'Completed'
+    -- Thêm điều kiện lọc theo bác sĩ (nếu cần)
+    -- AND a.doctor_id = [Your_Doctor_ID]
+    -- Thêm điều kiện lọc theo thời gian (nếu cần)
+    -- AND YEAR(a.appointment_time) = [Your_Year_Param]
+    -- AND QUARTER(a.appointment_time) = [Your_Quarter_Param]
+    -- AND MONTH(a.appointment_time) = [Your_Month_Param]
+GROUP BY
+    YEAR(a.appointment_time),
+    QUARTER(a.appointment_time),
+    MONTH(a.appointment_time)
+ORDER BY
+    nam ASC,
+    thang ASC;
+    
+    
+    
+    
+    -- Tạo tự động slot trống 1 tuần
+    DELIMITER $$
+
+CREATE PROCEDURE GenerateAvailableSlots()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE doc_id INT;
+    DECLARE day ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
+    DECLARE s_time TIME;
+    DECLARE e_time TIME;
+
+    DECLARE cur CURSOR FOR
+        SELECT doctor_id, day_of_week, start_time, end_time
+        FROM DoctorAvailability
+        WHERE is_available = TRUE;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    SET @today = CURDATE();
+    SET @i = 0;
+
+    WHILE @i < 7 DO
+        SET @target_date = DATE_ADD(@today, INTERVAL @i DAY);
+        SET @target_dow = DAYNAME(@target_date); -- 'Monday', 'Tuesday',...
+
+        OPEN cur;
+
+        read_loop: LOOP
+            FETCH cur INTO doc_id, day, s_time, e_time;
+            IF done THEN
+                LEAVE read_loop;
+            END IF;
+
+            IF day = @target_dow THEN
+                SET @current_time = s_time;
+                WHILE ADDTIME(@current_time, '00:30:00') <= e_time DO
+                    SET @slot_start = @current_time;
+                    SET @slot_end = ADDTIME(@current_time, '00:30:00');
+
+                    -- Chèn nếu chưa tồn tại
+                    INSERT IGNORE INTO AvailableSlot (doctor_id, slot_date, start_time, end_time)
+                    VALUES (doc_id, @target_date, @slot_start, @slot_end);
+
+                    SET @current_time = @slot_end;
+                END WHILE;
+            END IF;
+        END LOOP;
+
+        CLOSE cur;
+
+        SET @i = @i + 1;
+        SET done = FALSE;
+    END WHILE;
+END $$
+
+DELIMITER ;GenerateAvailableSlots
+
+
+
+-- set event 
+
+SET GLOBAL event_scheduler = ON;
+
+-- chayj event 12h moi nay
+CREATE EVENT IF NOT EXISTS ev_generate_slots
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_TIMESTAMP + INTERVAL 1 DAY
+DO
+    CALL GenerateAvailableSlots();
+    
+    
+    -- show event
+    SHOW EVENTS;
+
+-- xoa event neu muon 
+
+
+-- DROP EVENT IF EXISTS ev_generate_slots;
+
+
+
+-- muon chay ngay cung dc
+
+
+CALL GenerateAvailableSlots();
+
