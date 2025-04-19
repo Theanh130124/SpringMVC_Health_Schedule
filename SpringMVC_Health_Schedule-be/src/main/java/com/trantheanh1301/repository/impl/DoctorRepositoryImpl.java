@@ -22,6 +22,7 @@ import java.util.Map;
 import org.hibernate.Session;
 import static org.hibernate.internal.util.StringHelper.root;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -32,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
  * @author LAPTOP
  */
 @Repository
+//Đọc config.properties
+@PropertySource("classpath:configs.properties")
 @Transactional
 public class DoctorRepositoryImpl implements DoctorRepository {
 
