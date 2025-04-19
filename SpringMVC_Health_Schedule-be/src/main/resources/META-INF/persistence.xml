@@ -15,5 +15,6 @@
     <class>com.trantheanh1301.pojo.Clinic</class>
     <class>com.trantheanh1301.pojo.User</class>
     <class>com.trantheanh1301.pojo.Doctorlicense</class>
+    <class>com.trantheanh1301.pojo.Availableslot</class>
   </persistence-unit>
 </persistence>
