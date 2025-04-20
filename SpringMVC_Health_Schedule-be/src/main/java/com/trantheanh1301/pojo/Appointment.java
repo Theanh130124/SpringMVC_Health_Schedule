@@ -4,6 +4,7 @@
  */
 package com.trantheanh1301.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -87,30 +88,33 @@ public class Appointment implements Serializable {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "appointmentId")
     private Set<Testresult> testresultSet;
+    @JsonIgnore
     @OneToMany(mappedBy = "appointmentId")
     private Set<Healthrecord> healthrecordSet;
     
-    
+    @JsonIgnore
     @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id")
     @ManyToOne
     private Clinic clinicId;
     
-    
+    @JsonIgnore
     @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)
     @ManyToOne(optional = false)
     private Doctor doctorId;
     
-    
+    @JsonIgnore
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     @ManyToOne(optional = false)
     private Patient patientId;
     
-    
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "appointmentId")
     private Review review;
-    
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "appointmentId")
     private Invoice invoice;
 
