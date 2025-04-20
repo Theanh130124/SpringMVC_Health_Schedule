@@ -1,27 +1,59 @@
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap"
+import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap"
 import { Link } from "react-router-dom"
+
+import "./Styles/Header.css";
 
 const Header = () => {
     return (
-        <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+        <Navbar collapseOnSelect expand="lg" variant="light" bg="light" className="custom-header">
             <Container>
-                <Navbar.Brand as={Link} to="/" >HealthCare</Navbar.Brand>
+                <Navbar.Brand as={Link} to="/" className="header-logo-link ">
+
+                    <h2 className="logo-title">
+                        <span className="logo-health">HEALTH</span>
+                        <span className="logo-care">CARE.</span>
+                    </h2>
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="me-auto">
-                        <Link to="/" class="nav-link">Trang chủ</Link>
-                        <Link to="/" class="nav-link">Tìm bác sĩ</Link>
-                        <NavDropdown title="Dropdown" id="collapsible-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">
-                                Another action
-                            </NavDropdown.Item>
+                    <Nav className="me-auto  header-menu text-center">
+                        <Link to="/booking" className="nav-link text-dark nav-item-with-subtext ms-4 ">Đặt khám
+                            <span>Đặt khám ngay</span></Link>
+
+
+                            <Link to="/review" className="nav-item-with-subtext nav-link ms-4 text-center">
+                            Xem đánh giá
+                            <span>Đánh giá về những bác sĩ</span>
+                        </Link>
+                            <NavDropdown
+                            title={
+                               
+                                <div className="ms-4 nav-item-with-subtext text-center">
+                                    Tìm bác sĩ
+                                    <span>Tìm ngay...</span>
+                                </div>
+                            }
+                            id="collapsible-nav-dropdown"
+                            className="nav-item-dropdown" 
+                         >
+                            {/* Tìm bác sĩ ở đây */}
+                            <NavDropdown.Item as={Link} to="/findDoctor">Tìm ngay...</NavDropdown.Item>
+                            
                         </NavDropdown>
+                        
+                       
                     </Nav>
-                    <Nav>
-                        <Link to="/login" class="nav-link">Đăng nhập</Link>
-                        <Link to="/register" class="nav-link">Đăng ký</Link>
+                    <Nav className="header-auth ">
+                        
+                         <Button variant="outline-success" as={Link} to="/register" className="me-2 sign-in-btn">
+                            Đăng ký
+                        </Button>
+                        <Button variant="primary" as={Link} to="/login" className="log-in-btn">
+                            Đăng nhập
+                        </Button>
+                      
                     </Nav>
+
                 </Navbar.Collapse>
             </Container>
         </Navbar>

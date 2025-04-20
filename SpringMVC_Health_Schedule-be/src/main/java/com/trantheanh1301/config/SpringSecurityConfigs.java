@@ -44,9 +44,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Order(2)
 public class SpringSecurityConfigs {
 
-
-
-    
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -66,10 +63,9 @@ public class SpringSecurityConfigs {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
             Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(c -> c.disable()).authorizeHttpRequests(requests
-                -> requests
+                -> requests.requestMatchers("/", "/home").authenticated()
+                        .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/js/**").permitAll().requestMatchers("/css/**").permitAll().requestMatchers("/images/**").permitAll()
-                        .requestMatchers("/login", "/logout").permitAll().requestMatchers("/api/login", "/api/users").permitAll().requestMatchers("/api/**").permitAll()
-                        .requestMatchers("/", "/home").authenticated()
                         .requestMatchers("/stats").hasAnyAuthority("Admin", "Doctor").anyRequest().authenticated()// mọi thứ còn lại đều cần token 
 
         )
