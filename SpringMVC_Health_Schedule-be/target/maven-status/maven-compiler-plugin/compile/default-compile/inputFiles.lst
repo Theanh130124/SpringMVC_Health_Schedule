@@ -1,6 +1,5 @@
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\DispatcherServletInit.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\HibernateConfigs.java
-D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\JwtSecurityConfig.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\SecurityWebApplicationInitializer.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\SpringSecurityConfigs.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\ThymeleafConfig.java

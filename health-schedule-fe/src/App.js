@@ -9,8 +9,10 @@ import Login from './component/Login';
 import { Container } from 'react-bootstrap';
 
 
+
 const App = () => {
   return (
+
     <BrowserRouter>
       <Header />
       <Container>
@@ -22,6 +24,7 @@ const App = () => {
       </Container>
       <Footer />
     </BrowserRouter>
+  
   )
 }
 

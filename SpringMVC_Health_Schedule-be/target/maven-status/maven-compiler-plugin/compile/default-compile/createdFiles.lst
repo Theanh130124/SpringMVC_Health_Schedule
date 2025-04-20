@@ -38,7 +38,6 @@ com\trantheanh1301\service\impl\DoctorAvailabilityServiceImpl.class
 com\trantheanh1301\pojo\Patient.class
 com\trantheanh1301\repository\PatientRepository.class
 com\trantheanh1301\repository\ClinicRepository.class
-com\trantheanh1301\config\JwtSecurityConfig.class
 com\trantheanh1301\repository\impl\StatsRepositoryImpl.class
 com\trantheanh1301\pojo\Doctorlicense.class
 com\trantheanh1301\controllers\StatsController.class
