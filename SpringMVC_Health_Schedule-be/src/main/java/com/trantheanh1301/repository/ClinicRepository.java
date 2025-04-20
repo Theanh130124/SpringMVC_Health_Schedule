@@ -4,12 +4,12 @@
  */
 package com.trantheanh1301.repository;
 
-import com.trantheanh1301.pojo.Appointment;
+import com.trantheanh1301.pojo.Clinic;
 
 /**
  *
  * @author LAPTOP
  */
-public interface AppointmentRepository {
-    public Appointment addOrUpdat(Appointment a);
+public interface ClinicRepository {
+    public Clinic getClinicById (int id);
 }
