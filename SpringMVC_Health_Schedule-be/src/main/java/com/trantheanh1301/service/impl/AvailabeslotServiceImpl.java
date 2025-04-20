@@ -4,9 +4,9 @@
  */
 package com.trantheanh1301.service.impl;
 
-import com.trantheanh1301.pojo.Doctoravailability;
-import com.trantheanh1301.repository.DoctorAvailabilityRepository;
-import com.trantheanh1301.service.DoctorAvailabilityService;
+import com.trantheanh1301.pojo.Availableslot;
+import com.trantheanh1301.repository.AvailabeslotRepository;
+import com.trantheanh1301.service.AvailabeslotService;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,15 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class DoctorAvailabilityServiceImpl implements DoctorAvailabilityService{
+public class AvailabeslotServiceImpl implements AvailabeslotService{
 
-    
     @Autowired
-    private DoctorAvailabilityRepository doctorAvailablityRepo;
+    private AvailabeslotRepository availableslotRepo;
     
-  
+    
+    @Override
+    public List<Availableslot> findSlot(Map<String, String> params) {
+      return availableslotRepo.findSlot(params);
+    }
+    
 }
