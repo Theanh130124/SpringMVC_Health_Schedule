@@ -5,6 +5,9 @@
 package com.trantheanh1301.repository;
 
 import com.trantheanh1301.pojo.Availableslot;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,5 +18,7 @@ import java.util.Map;
 public interface AvailabeslotRepository {
 
     public List<Availableslot> findSlot(Map<String, String> params);
+    public Availableslot getSlotbyDoctorId(int doctorId ,Date time);
+    public Availableslot addOrUpdate(Availableslot slot);
 
 }

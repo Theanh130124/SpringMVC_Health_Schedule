@@ -4,10 +4,13 @@
  */
 package com.trantheanh1301.service;
 
+import com.trantheanh1301.pojo.Appointment;
+import java.util.Map;
+
 /**
  *
  * @author LAPTOP
  */
 public interface AppointmentService {
-    
+    Appointment registerAppointment(Map<String,String> params);
 }

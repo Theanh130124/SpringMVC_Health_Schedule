@@ -5,6 +5,7 @@ D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\SpringSecurityConfigs.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\ThymeleafConfig.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\config\WebAppContextConfigs.java
+D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\controllers\ApiAppointmentController.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\controllers\ApiAvailableslotControllers.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\controllers\ApiDoctorAvailabilityController.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\controllers\ApiDoctorController.java
@@ -32,11 +33,13 @@ D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\pojo\User.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\AppointmentRepository.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\AvailabeslotRepository.java
+D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\ClinicRepository.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\DoctorAvailabilityRepository.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\DoctorLicenseRepository.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\DoctorRepository.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\impl\AppointmentRepositoryImpl.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\impl\AvailabeslotRepositoryImpl.java
+D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\impl\ClinicRepositoryImpl.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\impl\DoctorAvailabilityRepositoryImpl.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\impl\DoctorLicenseRepositoryImpl.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\repository\impl\DoctorRepositoryImpl.java
@@ -51,11 +54,13 @@ D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\DoctorAvailabilityService.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\DoctorLicenseService.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\DoctorService.java
+D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\EmailService.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\impl\AppointmentServiceImpl.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\impl\AvailabeslotServiceImpl.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\impl\DoctorAvailabilityServiceImpl.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\impl\DoctorLicenseServiceImpl.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\impl\DoctorServiceImpl.java
+D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\impl\EmailServiceImpl.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\impl\PatientServiceImpl.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\impl\StatsServiceImpl.java
 D:\SpringBoot\SpringMVC_Health_Schedule_BE\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\service\impl\UserServiceImpl.java

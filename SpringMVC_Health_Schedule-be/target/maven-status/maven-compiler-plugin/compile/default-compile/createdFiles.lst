@@ -1,4 +1,5 @@
 com\trantheanh1301\config\HibernateConfigs.class
+com\trantheanh1301\repository\impl\ClinicRepositoryImpl.class
 com\trantheanh1301\controllers\ApiDoctorAvailabilityController.class
 com\trantheanh1301\config\WebAppContextConfigs.class
 com\trantheanh1301\service\DoctorLicenseService.class
@@ -6,11 +7,13 @@ com\trantheanh1301\utils\JwtUtils.class
 com\trantheanh1301\controllers\UserController.class
 com\trantheanh1301\repository\impl\DoctorLicenseRepositoryImpl.class
 com\trantheanh1301\config\ThymeleafConfig.class
+com\trantheanh1301\controllers\ApiAppointmentController.class
 com\trantheanh1301\pojo\Clinic.class
 com\trantheanh1301\repository\impl\UserRepositoryImpl.class
 com\trantheanh1301\service\StatsService.class
 com\trantheanh1301\pojo\Payment.class
 com\trantheanh1301\controllers\IndexController.class
+com\trantheanh1301\service\impl\EmailServiceImpl$1.class
 com\trantheanh1301\repository\impl\AppointmentRepositoryImpl.class
 com\trantheanh1301\pojo\Appointment.class
 com\trantheanh1301\repository\DoctorAvailabilityRepository.class
@@ -34,6 +37,7 @@ com\trantheanh1301\repository\impl\DoctorAvailabilityRepositoryImpl.class
 com\trantheanh1301\service\impl\DoctorAvailabilityServiceImpl.class
 com\trantheanh1301\pojo\Patient.class
 com\trantheanh1301\repository\PatientRepository.class
+com\trantheanh1301\repository\ClinicRepository.class
 com\trantheanh1301\config\JwtSecurityConfig.class
 com\trantheanh1301\repository\impl\StatsRepositoryImpl.class
 com\trantheanh1301\pojo\Doctorlicense.class
@@ -47,6 +51,7 @@ com\trantheanh1301\config\DispatcherServletInit.class
 com\trantheanh1301\service\PatientService.class
 com\trantheanh1301\config\SecurityWebApplicationInitializer.class
 com\trantheanh1301\pojo\Doctoravailability.class
+com\trantheanh1301\service\EmailService.class
 com\trantheanh1301\controllers\ApiAvailableslotControllers.class
 com\trantheanh1301\repository\UserRepository.class
 com\trantheanh1301\repository\AppointmentRepository.class
@@ -64,4 +69,5 @@ com\trantheanh1301\repository\impl\DoctorRepositoryImpl.class
 com\trantheanh1301\pojo\Healthrecord.class
 com\trantheanh1301\config\SpringSecurityConfigs.class
 com\trantheanh1301\service\DoctorAvailabilityService.class
+com\trantheanh1301\service\impl\EmailServiceImpl.class
 com\trantheanh1301\formatter\StatsFormatter.class

@@ -4,8 +4,8 @@
  */
 package com.trantheanh1301.repository.impl;
 
-import com.trantheanh1301.pojo.Patient;
-import com.trantheanh1301.repository.PatientRepository;
+import com.trantheanh1301.pojo.Clinic;
+import com.trantheanh1301.repository.ClinicRepository;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -16,26 +16,19 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author LAPTOP
  */
+
 @Repository
 @Transactional
-public class PatientRepositoryImpl implements PatientRepository {
-
-    @Autowired
+public class ClinicRepositoryImpl implements ClinicRepository{
+    
+    
+    @Autowired 
     private LocalSessionFactoryBean factory;
 
     @Override
-    public Patient register(Patient p) {
-        Session s = this.factory.getObject().getCurrentSession();
-        s.persist(p);
-
-        return p;
-    }
-
-    @Override
-    public Patient getPatientbyId(int id) {
+    public Clinic getClinicById(int id) {
         Session s = factory.getObject().getCurrentSession();
-        return s.get(Patient.class, id);
-
+        return s.get(Clinic.class, id) ;
     }
-
+    
 }

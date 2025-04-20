@@ -7,6 +7,7 @@ package com.trantheanh1301.repository.impl;
 import com.trantheanh1301.pojo.Availableslot;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.repository.AvailabeslotRepository;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -15,6 +16,7 @@ import jakarta.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.hibernate.Session;
@@ -95,6 +97,47 @@ public class AvailabeslotRepositoryImpl implements AvailabeslotRepository {
 
         }
         return q.getResultList();
+    }
+//bên đặt lịch truyền cả ngày giờ hẹn
+
+    @Override
+    public Availableslot getSlotbyDoctorId(int doctorId, Date time) {
+        Session s = factory.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<Availableslot> query = builder.createQuery(Availableslot.class);
+        Root<Availableslot> rA = query.from(Availableslot.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        //Tìm cái lịch như này đã 
+        Doctor doctor = new Doctor();
+        doctor.setDoctorId(doctorId);
+        predicates.add(builder.equal(rA.get("doctorId"), doctor));
+        predicates.add(builder.lessThanOrEqualTo(rA.get("startTime"), time));
+        predicates.add(builder.greaterThanOrEqualTo(rA.get("endTime"), time));
+
+        predicates.add(builder.equal(rA.get("isBooked"), false));
+        query.select(rA).where(predicates.toArray(new Predicate[0]));
+
+        Query q = s.createQuery(query);
+
+        try {
+            return (Availableslot) q.getSingleResult(); // Trả về slot nếu có
+        } catch (NoResultException ex) {
+            return null; // Không có slot phù hợp
+        }
+
+    }
+
+    @Override
+    public Availableslot addOrUpdate(Availableslot slot) {
+        Session s = factory.getObject().getCurrentSession();
+        if(slot == null){
+            s.persist(slot);
+        }
+        else{
+            s.merge(slot);
+        }
+        return slot;
     }
 
 }

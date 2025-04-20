@@ -91,17 +91,26 @@ public class Appointment implements Serializable {
     private Set<Testresult> testresultSet;
     @OneToMany(mappedBy = "appointmentId")
     private Set<Healthrecord> healthrecordSet;
+    
+    
     @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id")
     @ManyToOne
     private Clinic clinicId;
+    
+    
     @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)
     @ManyToOne(optional = false)
     private Doctor doctorId;
+    
+    
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     @ManyToOne(optional = false)
     private Patient patientId;
+    
+    
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "appointmentId")
     private Review review;
+    
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "appointmentId")
     private Invoice invoice;
 
