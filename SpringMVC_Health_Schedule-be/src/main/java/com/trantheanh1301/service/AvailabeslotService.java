@@ -4,7 +4,7 @@
  */
 package com.trantheanh1301.service;
 
-import com.trantheanh1301.pojo.Doctoravailability;
+import com.trantheanh1301.pojo.Availableslot;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +12,6 @@ import java.util.Map;
  *
  * @author LAPTOP
  */
-public interface DoctorAvailabilityService {
-   
+public interface AvailabeslotService {
+    List<Availableslot> findSlot(Map<String, String> params);
 }

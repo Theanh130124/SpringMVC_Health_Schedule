@@ -14,5 +14,5 @@ import java.util.Map;
  * @author LAPTOP
  */
 public interface DoctorAvailabilityRepository {
-    public List<Doctoravailability> findAvailableTime(Map<String , String> params);
+  
 }

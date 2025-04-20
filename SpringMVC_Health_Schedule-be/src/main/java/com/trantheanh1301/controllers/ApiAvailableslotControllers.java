@@ -4,9 +4,8 @@
  */
 package com.trantheanh1301.controllers;
 
-import com.trantheanh1301.pojo.Doctor;
-import com.trantheanh1301.pojo.Doctoravailability;
-import com.trantheanh1301.service.DoctorAvailabilityService;
+import com.trantheanh1301.pojo.Availableslot;
+import com.trantheanh1301.service.AvailabeslotService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +23,21 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
-public class ApiDoctorAvailabilityController {
+public class ApiAvailableslotControllers {
 
     @Autowired
-    private DoctorAvailabilityService doctoravailabilityService;
+    private AvailabeslotService availabeSlotService;
+    
+    @GetMapping("/find_slot")
+    public ResponseEntity<?> getAvailabeSlot(@RequestParam Map<String, String> params) {
+        try {
+            List<Availableslot> listDoctor = availabeSlotService.findSlot(params);
+            return new ResponseEntity<>(listDoctor, HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Đã xảy ra lỗi" + ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
