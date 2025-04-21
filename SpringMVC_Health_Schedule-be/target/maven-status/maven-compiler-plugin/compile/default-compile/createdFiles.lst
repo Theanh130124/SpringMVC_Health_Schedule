@@ -1,4 +1,5 @@
 com\trantheanh1301\config\HibernateConfigs.class
+com\trantheanh1301\controllers\ApiReviewController.class
 com\trantheanh1301\repository\impl\ClinicRepositoryImpl.class
 com\trantheanh1301\controllers\ApiDoctorAvailabilityController.class
 com\trantheanh1301\config\WebAppContextConfigs.class
@@ -9,11 +10,14 @@ com\trantheanh1301\repository\impl\DoctorLicenseRepositoryImpl.class
 com\trantheanh1301\config\ThymeleafConfig.class
 com\trantheanh1301\controllers\ApiAppointmentController.class
 com\trantheanh1301\pojo\Clinic.class
+com\trantheanh1301\repository\impl\ReviewRepositoryImpl.class
 com\trantheanh1301\repository\impl\UserRepositoryImpl.class
+com\trantheanh1301\formatter\ErrorResponseFormatter.class
 com\trantheanh1301\service\StatsService.class
 com\trantheanh1301\pojo\Payment.class
 com\trantheanh1301\controllers\IndexController.class
 com\trantheanh1301\service\impl\EmailServiceImpl$1.class
+com\trantheanh1301\service\impl\ReviewServiceImpl.class
 com\trantheanh1301\repository\impl\AppointmentRepositoryImpl.class
 com\trantheanh1301\pojo\Appointment.class
 com\trantheanh1301\repository\DoctorAvailabilityRepository.class
@@ -33,6 +37,7 @@ com\trantheanh1301\service\impl\AvailabeslotServiceImpl.class
 com\trantheanh1301\pojo\Doctor.class
 com\trantheanh1301\controllers\ApiDoctorLicenseController.class
 com\trantheanh1301\pojo\User.class
+com\trantheanh1301\repository\ReviewRepository.class
 com\trantheanh1301\repository\impl\DoctorAvailabilityRepositoryImpl.class
 com\trantheanh1301\service\impl\DoctorAvailabilityServiceImpl.class
 com\trantheanh1301\pojo\Patient.class
@@ -51,6 +56,7 @@ com\trantheanh1301\service\PatientService.class
 com\trantheanh1301\config\SecurityWebApplicationInitializer.class
 com\trantheanh1301\pojo\Doctoravailability.class
 com\trantheanh1301\service\EmailService.class
+com\trantheanh1301\service\ReviewService.class
 com\trantheanh1301\controllers\ApiAvailableslotControllers.class
 com\trantheanh1301\repository\UserRepository.class
 com\trantheanh1301\repository\AppointmentRepository.class

@@ -12,4 +12,5 @@ import com.trantheanh1301.pojo.Appointment;
  */
 public interface AppointmentRepository {
     public Appointment addOrUpdat(Appointment a);
+    public Appointment getAppointmentById(int id);
 }
