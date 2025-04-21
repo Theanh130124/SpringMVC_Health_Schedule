@@ -8,6 +8,7 @@ admin.initializeApp({
   databaseURL : `https://${serviceAccount.project_id}.firebaseio.com`
 });
 
+//npm run serve
 
 const db = admin.firestore();
 
