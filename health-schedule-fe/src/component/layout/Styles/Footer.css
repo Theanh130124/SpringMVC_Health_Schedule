@@ -1,29 +1,9 @@
 /* Ví dụ file Footer.css */
-.site-footer {
-    background-color: #ffffff; /* Hoặc màu nền bạn muốn */
-    padding-top: 40px;
-    padding-bottom: 20px;
-    font-size: 14px;
-    border-top: 1px solid #e0e0e0;
-    font-family: 'Roboto', sans-serif;
-}
 
-.footer-col h5 {
-    font-size: 1rem;
-    font-weight: bold;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-}
 
-.footer-col p, .footer-nav .nav-link, .footer-bottom p {
-    color: #555; /* Màu chữ chính trong footer */
-    margin-bottom: 8px;
-}
 
-.footer-nav .nav-link {
-    padding: 0.2rem 0;
-    color: #555;
-}
+
+
 
 .footer-nav .nav-link:hover {
     color: #007bff; /* Màu khi hover */

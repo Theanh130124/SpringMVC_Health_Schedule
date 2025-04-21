@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { faFacebook, faYoutube, faLinkedin, faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 
+import "./Styles/Footer.css";
+
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -11,7 +13,7 @@ const Footer = () => {
 
     return (
         <footer className="site-footer mt-5">
-            <Container>
+            <Container  className="p-0">
                 <Row>
                     {/* Cột 1: Thông tin công ty */}
                     <Col xs={12} md={6} lg={3} className="footer-col d-flex flex-column">
