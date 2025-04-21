@@ -1,0 +1,75 @@
+.custom-row {
+    background: linear-gradient(135deg, #183e9f, #2a51b2);
+    border-radius: 0;
+    width: 100vw; /* sửa lại từ 100vx thành 100vw */
+    padding: 60px 20px; /* tăng khoảng cách để nội dung thoáng hơn */
+    height: auto; /* để nó tự điều chỉnh theo nội dung */
+  }
+  
+  .custom-form-control {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 8px 12px;
+    border-radius: 16px;
+    border: 2px solid #ccc;
+    font-size: 14px;
+  }
+  
+  .doctor-image {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    object-fit: cover;
+    margin-left: 20px;
+  }
+  
+  .home-text {
+    text-align: left;
+    padding: 20px;
+  }
+  
+  .home-text h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .home-text span {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #f0f0f0;
+  }
+  .custom-carousel {
+    margin-top: 40px;
+    max-width: 60px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .carousel-image {
+    width: 50%;
+    max-width: 60px; /* Điều chỉnh kích thước hình ảnh */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-wrapper {
+    position: relative;
+    display: block;
+  }
+  
+  .carousel-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(37, 35, 35, 0.5);
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  
