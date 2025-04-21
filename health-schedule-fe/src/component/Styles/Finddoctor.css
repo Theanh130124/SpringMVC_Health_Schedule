@@ -1,0 +1,50 @@
+.search-input {
+    border-radius: 20px;
+    padding: 10px 20px;
+    border: 1px solid #ced4da;
+    transition: 0.3s;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.1);
+}
+
+.search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.25);
+}
+
+/* Doctor Card */
+.card-doctor {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #ffffff;
+}
+
+.card-doctor:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Avatar Image */
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Card Body */
+.card-body-custom {
+    padding: 1rem;
+}
+
+/* Doctor Name */
+.card-title {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+/* Custom Row Spacing */
+.custom-row {
+    row-gap: 1.5rem;
+}

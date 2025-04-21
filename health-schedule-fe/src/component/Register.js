@@ -3,14 +3,10 @@ import { Spinner } from "react-bootstrap";
 
 const Register = () => {
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     return (
-        <>
-            {loading && <Spinner animation="border" role="status">
-                <span className="visually-hidden">Đang tải...</span>
-            </Spinner>}
-        </>
+       <></>
     )
 }
 

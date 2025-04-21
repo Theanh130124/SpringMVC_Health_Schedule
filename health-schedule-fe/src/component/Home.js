@@ -19,6 +19,7 @@ const Home = () => {
 
 
     return (
+        <>
         <Container fluid className="p-0">
             <Row className="align-items-center justify-content-center custom-row mt-5">
                 <Col xs={12} md={7} lg={6} className="home-text">
@@ -91,7 +92,9 @@ const Home = () => {
 
             </Row>
         </Container>
+        </>
     );
+    
 };
 
 

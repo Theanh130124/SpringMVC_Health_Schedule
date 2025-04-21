@@ -85,42 +85,33 @@ public class DoctorRepositoryImpl implements DoctorRepository {
 
         List<Predicate> predicates = new ArrayList<>();
         if (params != null) {
-            String doctorName = params.get("doctorName");
-            String specialtyName = params.get("specialtyName");
-            String clinicName = params.get("clinicName");
-            //Khi có truyền doctorName thì phép join này mới đc bật
-            if (doctorName != null && !doctorName.trim().isEmpty()) {
+            String keyword = params.get("keyword");
+
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                keyword = keyword.toLowerCase();
+
                 if (userJoin == null) {
                     userJoin = rD.join("user", JoinType.LEFT);
                 }
-
-                predicates.add(builder.or(
-                        builder.like(builder.lower(userJoin.get("firstName")), "%" + doctorName.toLowerCase() + "%"),
-                        builder.like(builder.lower(userJoin.get("lastName")), "%" + doctorName.toLowerCase() + "%")
-                ));
-            }
-
-            if (specialtyName != null && !specialtyName.trim().isEmpty()) {
                 if (specialtyJoin == null) {
                     specialtyJoin = rD.join("specialtySet", JoinType.LEFT);
                 }
-
-                predicates.add(builder.like(
-                        builder.lower(specialtyJoin.get("name")),
-                        "%" + specialtyName.toLowerCase() + "%"
-                ));
-            }
-
-            if (clinicName != null && !clinicName.trim().isEmpty()) {
                 if (clinicJoin == null) {
                     clinicJoin = rD.join("clinicSet", JoinType.LEFT);
                 }
+                String likePattern = String.format("%%%s%%", keyword);
 
-                predicates.add(builder.like(
-                        builder.lower(clinicJoin.get("name")),
-                        "%" + clinicName.toLowerCase() + "%"
-                ));
+                Predicate namePredicate = builder.or(
+                        builder.like(builder.lower(userJoin.get("firstName")), likePattern),
+                        builder.like(builder.lower(userJoin.get("lastName")),likePattern),
+                        builder.like(builder.lower(specialtyJoin.get("name")),likePattern),
+                        builder.like(builder.lower(clinicJoin.get("name")),likePattern)
+                );
+
+                predicates.add(namePredicate);
+                
             }
+          
         }
 
         query.select(rD).distinct(true);
@@ -146,5 +137,9 @@ public class DoctorRepositoryImpl implements DoctorRepository {
         }
         return q.getResultList();
     }
+    }
 
-}
+
+
+
+
