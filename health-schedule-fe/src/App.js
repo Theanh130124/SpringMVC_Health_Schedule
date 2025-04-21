@@ -15,7 +15,7 @@ const App = () => {
 
     <BrowserRouter>
       <Header />
-      <Container>
+      <Container fluid >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
