@@ -4,6 +4,7 @@
  */
 package com.trantheanh1301.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -78,6 +79,7 @@ public class Invoice implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "invoiceId")
+    @JsonIgnore
     private Set<Payment> paymentSet;
     @JoinColumn(name = "appointment_id", referencedColumnName = "appointment_id", nullable = false)
     @OneToOne(optional = false)
