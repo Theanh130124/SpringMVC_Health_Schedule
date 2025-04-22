@@ -5,7 +5,13 @@
     padding: 60px 20px; /* tăng khoảng cách để nội dung thoáng hơn */
     height: auto; /* để nó tự điều chỉnh theo nội dung */
   }
-  
+  .custom-row-primary {
+    background: linear-gradient(135deg, #9aabff, #d7e0ff);
+    border-radius: 0;
+    width: 100vw; /* sửa lại từ 100vx thành 100vw */
+    padding: 60px 20px; /* tăng khoảng cách để nội dung thoáng hơn */
+    height: auto; /* để nó tự điều chỉnh theo nội dung */
+  }
   .custom-form-control {
     max-width: 700px;
     margin: 0 auto;
@@ -71,5 +77,15 @@
     text-align: center;
     padding: 10px;
   }
+
+  //Cho phần Register
+
+  .registration-container {
+    max-width: 450px; /* Giới hạn chiều rộng */
+    margin: 0 auto; /* Căn giữa */
+    border-radius: 10px; /* Góc bo tròn */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+    background-color: #f8f9fa; /* Nền sáng */
+}
   
   

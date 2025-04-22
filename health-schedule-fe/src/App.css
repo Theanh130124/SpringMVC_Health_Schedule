@@ -1,0 +1,27 @@
+/* CSS cho Alert */
+.alert {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInOut 5s forwards;
+  }
+  
+  /* Animation để Alert mở dần và biến mất */
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    10% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    90% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+  
