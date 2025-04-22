@@ -35,5 +35,10 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
 
         return a;
     }
+    
+    public Appointment getAppointmentById(int id){
+        Session s = factory.getObject().getCurrentSession();
+        return s.get(Appointment.class, id);
+    }
 
 }

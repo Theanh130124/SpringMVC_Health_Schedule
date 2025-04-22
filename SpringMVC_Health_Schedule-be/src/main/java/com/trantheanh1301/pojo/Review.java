@@ -4,6 +4,7 @@
  */
 package com.trantheanh1301.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -72,12 +73,15 @@ public class Review implements Serializable {
     private Boolean isVisible;
     @JoinColumn(name = "appointment_id", referencedColumnName = "appointment_id", nullable = false)
     @OneToOne(optional = false)
+    @JsonIgnore
     private Appointment appointmentId;
     @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Doctor doctorId;
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Patient patientId;
 
     public Review() {
