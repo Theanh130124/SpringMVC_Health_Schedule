@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 /**
  *
@@ -60,11 +61,14 @@ public class SpringSecurityConfigs {
 
     //Xem là mọi api đều được quyền -> fix lại
     @Bean
+    
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
             Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(c -> c.disable()).authorizeHttpRequests(requests
                 -> requests.requestMatchers("/", "/home").authenticated()
-                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/users").permitAll() // cho đăng ký
+                        .requestMatchers("/api/doctor").permitAll()//Cho tìm kiếm bác sĩ ngoài trang chủ 
                         .requestMatchers("/js/**").permitAll().requestMatchers("/css/**").permitAll().requestMatchers("/images/**").permitAll()
                         .requestMatchers("/stats").hasAnyAuthority("Admin", "Doctor").anyRequest().authenticated()// mọi thứ còn lại đều cần token 
 
@@ -90,6 +94,12 @@ public class SpringSecurityConfigs {
                         "secure", true));
         return cloudinary;
     }
+    
+//        @Bean
+//    @Order(0)
+//    public StandardServletMultipartResolver multipartResolver() {
+//        return new StandardServletMultipartResolver();
+//    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

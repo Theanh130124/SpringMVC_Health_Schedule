@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Alert, Button, Col, Container, Form, Image, Row, Spinner } from "react-bootstrap";
+// FloatingLabel form nhập vào thì placeholder sẽ lên trên
+import { Alert, Button, Col, Container, FloatingLabel, Form, Image, Row, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Apis, { endpoint } from "../configs/Apis";
 import MySpinner from "./layout/MySpinner";
@@ -92,6 +93,7 @@ const Register = () => {
     }, [msg]);
     return (
         <>
+            {/* Check validate -> làm thêm con mắt xem pass */}
             <Container fluid className="p-0">
                 <Row className="justify-content-center custom-row-primary mt-4">
                     <Col lg={6} md={4} sm={12} >
@@ -104,21 +106,56 @@ const Register = () => {
                             <h1 className="text-center text-success mb-4">ĐĂNG KÝ</h1>
                             {msg && <Alert variant="danger">{msg}</Alert>}
                             <Form onSubmit={register}>
-                                {info.map(i => (
-                                    i.type === "select" ? (
-                                        <Form.Select key={i.field} className="mt-3" value={user[i.field] || ''} required
-                                            onChange={e => setState(e.target.value, i.field)}>
-                                            <option value="">-- {i.title} --</option>
-                                            {i.options.map(opt => (
-                                                <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                            ))}
-                                        </Form.Select>
-                                    ) : (
-                                        <Form.Control key={i.field} className="mt-3" type={i.type} placeholder={i.title} required
-                                            value={user[i.field] || ''} onChange={e => setState(e.target.value, i.field)} />
-                                    )
-                                ))}
-                                <Form.Control ref={avatar} className="mt-3" type="file" placeholder="Ảnh đại diện" required />
+                                <Row>
+                                    {/* Cột đầu tiên */}
+                                    <Col lg={6} md={6} sm={12}>
+                                        {info.slice(0, Math.ceil(info.length / 2)).map((i, index) => (
+                                            <div key={i.field} className="mb-3">
+                                                {i.type === "select" ? (
+                                                    <Form.Select value={user[i.field] || ''} required
+                                                        onChange={e => setState(e.target.value, i.field)}>
+                                                        <option value="">-- {i.title} --</option>
+                                                        {i.options.map(opt => (
+                                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                                        ))}
+                                                    </Form.Select>
+                                                ) : (
+                                                    <FloatingLabel controlId={`floating-${i.field}`} label={i.title}>
+                                                        <Form.Control type={i.type} placeholder={i.title} required
+                                                            value={user[i.field] || ''} onChange={e => setState(e.target.value, i.field)} />
+                                                    </FloatingLabel>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </Col>
+
+                                    {/* Cột thứ hai */}
+                                    <Col lg={6} md={6} sm={12}>
+                                        {info.slice(Math.ceil(info.length / 2)).map((i, index) => (
+                                            <div key={i.field} className="mb-3">
+                                                {i.type === "select" ? (
+                                                    <Form.Select value={user[i.field] || ''} required
+                                                        onChange={e => setState(e.target.value, i.field)}>
+                                                        <option value="">-- {i.title} --</option>
+                                                        {i.options.map(opt => (
+                                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                                        ))}
+                                                    </Form.Select>
+                                                ) : (
+                                                    <FloatingLabel controlId={`floating-${i.field}`} label={i.title}>
+                                                        <Form.Control type={i.type} placeholder={i.title} required
+                                                            value={user[i.field] || ''} onChange={e => setState(e.target.value, i.field)} />
+                                                    </FloatingLabel>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col lg={12} className="mb-3">
+                                        <Form.Control ref={avatar} type="file" placeholder="Ảnh đại diện" required />
+                                    </Col>
+                                </Row>
                                 <Button type="submit" variant="success" className="mt-3 w-100" disabled={loading}>
                                     {loading ? <MySpinner /> : "Đăng ký"}
                                 </Button>

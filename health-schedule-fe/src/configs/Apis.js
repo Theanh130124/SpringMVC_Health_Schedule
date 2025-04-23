@@ -1,5 +1,5 @@
 import axios from "axios"
-import { cookies } from "react-cookie"
+import cookie from 'react-cookies'
 
 const BASE_URL = 'http://localhost:8080/SpringMVC_Health_Schedule/api/'
 
@@ -9,10 +9,23 @@ export const endpoint = {
     'doctor_license': '/doctor_license',
     'doctor': '/doctor',
     'register':'/users',
-    'current_user':'/secure/profile'
+    'current_user':'/secure/profile',
+    'login':'/login',
    
 }
 
+
+
+
+export const authApis = () => {
+    return axios.create({
+        baseURL: BASE_URL,
+        headers: {
+            'Authorization' : `Bearer ${cookie.load('token')}`,
+            'Content-Type': 'application/json'  
+        }
+    })
+}
 
 
 export default axios.create({
