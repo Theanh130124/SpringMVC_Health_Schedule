@@ -5,7 +5,13 @@
     padding: 60px 20px; /* tăng khoảng cách để nội dung thoáng hơn */
     height: auto; /* để nó tự điều chỉnh theo nội dung */
   }
-  
+  .custom-row-primary {
+    background: linear-gradient(135deg, #9aabff, #d7e0ff);
+    border-radius: 0;
+    width: 100vw; /* sửa lại từ 100vx thành 100vw */
+    padding: 60px 20px; /* tăng khoảng cách để nội dung thoáng hơn */
+    height: auto; /* để nó tự điều chỉnh theo nội dung */
+  }
   .custom-form-control {
     max-width: 700px;
     margin: 0 auto;
@@ -71,5 +77,7 @@
     text-align: center;
     padding: 10px;
   }
+
+
   
   

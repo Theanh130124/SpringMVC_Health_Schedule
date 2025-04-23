@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 
 
 import { FontAwesomeIcon  } from "@fortawesome/react-fontawesome";
+import MySpinner from "./layout/MySpinner";
 
 const Finddoctor = () => {
 
@@ -104,9 +105,7 @@ const Finddoctor = () => {
 
                 {loading && !q.get('keyword') && (
                     <div className="text-center mt-4">
-                        <Spinner animation="border" role="status">
-                            <span className="visually-hidden">Đang tải...</span>
-                        </Spinner>
+                        <MySpinner/>
                     </div>
                 )}
             </Container>
