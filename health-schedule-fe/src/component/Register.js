@@ -96,34 +96,36 @@ const Register = () => {
                 <Row className="justify-content-center custom-row-primary mt-4">
                     <Col lg={6} md={4} sm={12} >
                         <Image src="/assets/images/login-banner.png" alt="banner" className="mt-5 ms-3" />
+                        <p className="text-center mt-3 text-muted me-5" style={{ fontSize: "1.5rem", color: "#007bff", fontWeight: "bold" }}>" Đội ngũ bác sĩ tận tâm với bệnh nhân, luôn sẵn sàng hỗ trợ bạn trong hành trình chăm sóc sức khỏe."</p>
+
                     </Col>
                     <Col lg={5} md={6} sm={12}>
-                    <Container className="p-3 shadow rounded bg-light me-5">
-                        <h1 className="text-center text-success mb-4">ĐĂNG KÝ</h1>
-                        {msg && <Alert variant="danger">{msg}</Alert>}
-                        <Form onSubmit={register}>
-                            {info.map(i => (
-                                i.type === "select" ? (
-                                    <Form.Select key={i.field} className="mt-3" value={user[i.field] || ''} required
-                                        onChange={e => setState(e.target.value, i.field)}>
-                                        <option value="">-- {i.title} --</option>
-                                        {i.options.map(opt => (
-                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                        ))}
-                                    </Form.Select>
-                                ) : (
-                                    <Form.Control key={i.field} className="mt-3" type={i.type} placeholder={i.title} required
-                                        value={user[i.field] || ''} onChange={e => setState(e.target.value, i.field)} />
-                                )
-                            ))}
-                            <Form.Control ref={avatar} className="mt-3" type="file" placeholder="Ảnh đại diện" required />
-                            <Button type="submit" variant="success" className="mt-3 w-100" disabled={loading}>
-                                {loading ? <MySpinner /> : "Đăng ký"}
-                            </Button>
-                        </Form>
+                        <Container className="p-3 shadow rounded bg-light me-5">
+                            <h1 className="text-center text-success mb-4">ĐĂNG KÝ</h1>
+                            {msg && <Alert variant="danger">{msg}</Alert>}
+                            <Form onSubmit={register}>
+                                {info.map(i => (
+                                    i.type === "select" ? (
+                                        <Form.Select key={i.field} className="mt-3" value={user[i.field] || ''} required
+                                            onChange={e => setState(e.target.value, i.field)}>
+                                            <option value="">-- {i.title} --</option>
+                                            {i.options.map(opt => (
+                                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                            ))}
+                                        </Form.Select>
+                                    ) : (
+                                        <Form.Control key={i.field} className="mt-3" type={i.type} placeholder={i.title} required
+                                            value={user[i.field] || ''} onChange={e => setState(e.target.value, i.field)} />
+                                    )
+                                ))}
+                                <Form.Control ref={avatar} className="mt-3" type="file" placeholder="Ảnh đại diện" required />
+                                <Button type="submit" variant="success" className="mt-3 w-100" disabled={loading}>
+                                    {loading ? <MySpinner /> : "Đăng ký"}
+                                </Button>
+                            </Form>
                         </Container>
                     </Col>
-                    
+
 
                 </Row>
             </Container>
