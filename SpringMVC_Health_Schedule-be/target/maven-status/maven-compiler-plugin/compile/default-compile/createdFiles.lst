@@ -8,6 +8,7 @@ com\trantheanh1301\pojo\Payment.class
 com\trantheanh1301\repository\impl\AppointmentRepositoryImpl.class
 com\trantheanh1301\pojo\Appointment.class
 com\trantheanh1301\service\impl\UserServiceImpl.class
+com\trantheanh1301\repository\impl\PaymentRepositoryImpl.class
 com\trantheanh1301\service\AppointmentService.class
 com\trantheanh1301\repository\DoctorRepository.class
 com\trantheanh1301\service\impl\PatientServiceImpl.class
@@ -17,6 +18,7 @@ com\trantheanh1301\controllers\ApiDoctorLicenseController.class
 com\trantheanh1301\service\impl\InvoiceServiceImpl.class
 com\trantheanh1301\controllers\ApiInvoiceController.class
 com\trantheanh1301\repository\InvoiceRepository.class
+com\trantheanh1301\repository\PaymentRepository.class
 com\trantheanh1301\repository\ClinicRepository.class
 com\trantheanh1301\pojo\Doctorlicense.class
 com\trantheanh1301\controllers\StatsController.class
