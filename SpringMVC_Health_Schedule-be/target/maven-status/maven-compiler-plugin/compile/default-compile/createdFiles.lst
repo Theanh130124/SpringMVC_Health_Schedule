@@ -4,6 +4,7 @@ com\trantheanh1301\repository\impl\DoctorLicenseRepositoryImpl.class
 com\trantheanh1301\controllers\ApiAppointmentController.class
 com\trantheanh1301\pojo\Clinic.class
 com\trantheanh1301\repository\impl\ReviewRepositoryImpl.class
+com\trantheanh1301\controllers\VNPayController.class
 com\trantheanh1301\pojo\Payment.class
 com\trantheanh1301\repository\impl\AppointmentRepositoryImpl.class
 com\trantheanh1301\pojo\Appointment.class
@@ -37,6 +38,7 @@ com\trantheanh1301\pojo\Healthrecord.class
 com\trantheanh1301\config\SpringSecurityConfigs.class
 com\trantheanh1301\config\HibernateConfigs.class
 com\trantheanh1301\controllers\ApiReviewController.class
+com\trantheanh1301\utils\VNPayUtils.class
 com\trantheanh1301\controllers\ApiDoctorAvailabilityController.class
 com\trantheanh1301\config\WebAppContextConfigs.class
 com\trantheanh1301\service\DoctorLicenseService.class
@@ -64,6 +66,7 @@ com\trantheanh1301\service\impl\DoctorAvailabilityServiceImpl.class
 com\trantheanh1301\pojo\Patient.class
 com\trantheanh1301\repository\PatientRepository.class
 com\trantheanh1301\repository\impl\StatsRepositoryImpl.class
+com\trantheanh1301\config\VNPayConfigs.class
 com\trantheanh1301\controllers\ApiUserController.class
 com\trantheanh1301\formatter\DateFormatter.class
 com\trantheanh1301\service\impl\DoctorServiceImpl.class

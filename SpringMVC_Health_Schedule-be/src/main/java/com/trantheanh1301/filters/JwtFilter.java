@@ -18,10 +18,10 @@ public class JwtFilter implements Filter {
 
     // Danh sách các API không cần JWT
     private static final List<String> WHITELIST = Arrays.asList(
-        "/api/login",
-        "/api/users",  //đăng ký tài khoản bệnh nhân
-        "/api/doctor"//tìm kiếm bác sĩ ở ngoài trang chủ
-       
+            "/api/login",       // Đăng nhập
+            "/api/users",       // Đăng ký tài khoản bệnh nhân
+            "/api/doctor",      // Tìm kiếm bác sĩ ngoài trang chủ
+            "/api/payment/"     // Tất cả các endpoint dưới /api/payment
     );
 
     @Override
@@ -32,10 +32,14 @@ public class JwtFilter implements Filter {
         String requestURI = httpRequest.getRequestURI();
         String contextPath = httpRequest.getContextPath();
 
+        // Cắt bỏ contextPath để lấy đường dẫn chính xác
         String path = requestURI.substring(contextPath.length());
 
-        // Nếu là API và KHÔNG thuộc whitelist -> cần JWT
-        if (path.startsWith("/api") && !WHITELIST.contains(path)) {
+        // Log ra URL để kiểm tra
+        System.out.println("Request Path: " + path);
+
+        // Kiểm tra xem API có yêu cầu JWT không (không phải trong whitelist)
+        if (path.startsWith("/api") && !isInWhitelist(path)) {
             String header = httpRequest.getHeader("Authorization");
 
             if (header == null || !header.startsWith("Bearer ")) {
@@ -43,7 +47,7 @@ public class JwtFilter implements Filter {
                 return;
             }
 
-            String token = header.substring(7);
+            String token = header.substring(7); // Loại bỏ "Bearer " và lấy token
             try {
                 String username = JwtUtils.validateTokenAndGetUsername(token);
                 if (username != null) {
@@ -63,5 +67,16 @@ public class JwtFilter implements Filter {
 
         // Nếu nằm trong whitelist hoặc không phải /api
         chain.doFilter(request, response);
+    }
+
+    // Kiểm tra xem URL có phải là một trong các endpoint không yêu cầu JWT
+    private boolean isInWhitelist(String path) {
+        for (String whitePath : WHITELIST) {
+            // Kiểm tra nếu đường dẫn chứa "/api/payment/" hoặc các endpoint whitelist khác
+            if (path.contains(whitePath)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
