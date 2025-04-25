@@ -4,10 +4,12 @@
  */
 package com.trantheanh1301.repository;
 
+import com.trantheanh1301.pojo.Payment;
+
 /**
  *
  * @author LAPTOP
  */
-public interface PaymentRepository {
-    
+public interface PaymentRepository {    
+    public Payment addPayment(Payment payment);
 }
