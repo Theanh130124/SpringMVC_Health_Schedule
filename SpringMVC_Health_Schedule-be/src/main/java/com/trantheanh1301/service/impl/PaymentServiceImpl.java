@@ -4,7 +4,6 @@
  */
 package com.trantheanh1301.service.impl;
 
-import com.trantheanh1301.pojo.Invoice;
 import com.trantheanh1301.pojo.Payment;
 import com.trantheanh1301.repository.InvoiceRepository;
 import com.trantheanh1301.repository.PaymentRepository;
@@ -31,13 +30,25 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment addPayment(Map<String, String> params) {
 
         Payment payment = new Payment();
-
         payment.setInvoiceId(invoiceRepository.getInvoiceById(Integer.valueOf(params.get("invoiceId"))));
-        payment.setAmountPaid(new BigDecimal(params.get("amountPaid")));
+        payment.setAmountPaid(new BigDecimal(params.get("amount")));
         payment.setPaymentMethod(params.get("paymentMethod"));
         payment.setTransactionId(params.get("transactionId"));
         payment.setNotes(params.get("notes"));
-       
+        
         return this.paymentRepository.addPayment(payment);
+    }
+
+    @Override
+    public Payment updatePayment(int id ,Map<String, String> params) {    
+        Payment payment = this.getPaymentById(id);
+        payment.setStatus(params.get("status"));
+        payment.setTransactionId(params.get("transactionId"));       
+        return this.paymentRepository.updatePayment(payment);
+    }
+
+    @Override
+    public Payment getPaymentById(int id) {
+        return this.paymentRepository.getPaymentById(id);
     }
 }

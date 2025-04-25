@@ -13,4 +13,7 @@ import java.util.Map;
  */
 public interface PaymentService {
     public Payment addPayment(Map<String,String> params);
+    public Payment updatePayment(int id, Map<String,String>params);
+    public Payment getPaymentById(int id);
+    
 }

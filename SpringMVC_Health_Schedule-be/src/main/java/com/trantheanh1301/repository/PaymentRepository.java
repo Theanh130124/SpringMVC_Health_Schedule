@@ -12,4 +12,6 @@ import com.trantheanh1301.pojo.Payment;
  */
 public interface PaymentRepository {    
     public Payment addPayment(Payment payment);
+    public Payment updatePayment(Payment payment);
+    public Payment getPaymentById(int id);
 }
