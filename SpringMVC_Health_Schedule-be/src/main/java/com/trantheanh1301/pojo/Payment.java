@@ -4,6 +4,7 @@
  */
 package com.trantheanh1301.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -78,6 +79,7 @@ public class Payment implements Serializable {
     private String notes;
     @JoinColumn(name = "invoice_id", referencedColumnName = "invoice_id", nullable = false)
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Invoice invoiceId;
 
     public Payment() {

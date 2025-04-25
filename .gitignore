@@ -25,3 +25,4 @@ replay_pid*
 /SpringMVCHeath_Schedule/target/
 /SpringMVC_Health_Schedule/target/
 health-schedule-fe/functions/configs/serviceAccountKey.json
+/SpringMVC_Health_Schedule-be/target/

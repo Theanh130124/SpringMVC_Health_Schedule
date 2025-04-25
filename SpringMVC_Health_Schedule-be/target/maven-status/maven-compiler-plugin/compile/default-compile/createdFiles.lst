@@ -21,6 +21,7 @@ com\trantheanh1301\controllers\ApiInvoiceController.class
 com\trantheanh1301\repository\InvoiceRepository.class
 com\trantheanh1301\repository\PaymentRepository.class
 com\trantheanh1301\repository\ClinicRepository.class
+com\trantheanh1301\service\impl\PaymentServiceImpl.class
 com\trantheanh1301\pojo\Doctorlicense.class
 com\trantheanh1301\controllers\StatsController.class
 com\trantheanh1301\pojo\Availableslot.class
@@ -73,6 +74,7 @@ com\trantheanh1301\service\impl\DoctorServiceImpl.class
 com\trantheanh1301\service\PatientService.class
 com\trantheanh1301\config\SecurityWebApplicationInitializer.class
 com\trantheanh1301\service\EmailService.class
+com\trantheanh1301\controllers\PaymentController.class
 com\trantheanh1301\controllers\ApiAvailableslotControllers.class
 com\trantheanh1301\repository\impl\InvoiceRepositoryImpl.class
 com\trantheanh1301\repository\AppointmentRepository.class
@@ -82,6 +84,7 @@ com\trantheanh1301\repository\AvailabeslotRepository.class
 com\trantheanh1301\service\InvoiceService.class
 com\trantheanh1301\service\impl\AppointmentServiceImpl.class
 com\trantheanh1301\service\UserService.class
+com\trantheanh1301\service\PaymentService.class
 com\trantheanh1301\repository\impl\DoctorRepositoryImpl.class
 com\trantheanh1301\service\DoctorAvailabilityService.class
 com\trantheanh1301\service\impl\EmailServiceImpl.class

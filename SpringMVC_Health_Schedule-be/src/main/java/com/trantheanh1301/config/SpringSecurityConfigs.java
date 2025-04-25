@@ -65,6 +65,7 @@ public class SpringSecurityConfigs {
                         .requestMatchers("/api/users").permitAll() // cho đăng ký
                         .requestMatchers("/api/doctor").permitAll()//Cho tìm kiếm bác sĩ ngoài trang chủ 
                         .requestMatchers("/api/payment/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()//Cho phep tat ca api
                         .requestMatchers("/js/**").permitAll().requestMatchers("/css/**").permitAll().requestMatchers("/images/**").permitAll()
                         .requestMatchers("/stats").hasAnyAuthority("Admin", "Doctor").anyRequest().authenticated()// mọi thứ còn lại đều cần token 
 
