@@ -22,7 +22,6 @@ export const authApis = () => {
         baseURL: BASE_URL,
         headers: {
             'Authorization' : `Bearer ${cookie.load('token')}`,
-            'Content-Type': 'application/json'  
         }
     })
 }

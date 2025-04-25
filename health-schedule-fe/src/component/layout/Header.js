@@ -2,8 +2,19 @@ import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
 import "./Styles/Header.css";
+import { useContext } from "react";
+import { MyDipatcherContext, MyUserContext } from "../../configs/MyContexts";
 
 const Header = () => {
+
+
+    const user = useContext(MyUserContext);
+    const dispatch = useContext(MyDipatcherContext);
+
+
+
+
+
     return (
         <Navbar collapseOnSelect expand="lg" variant="light" bg="light" className="custom-header">
             <Container className="p-0">
@@ -41,15 +52,25 @@ const Header = () => {
 
 
                     </Nav>
+
                     <Nav className="header-auth ">
 
-                        <Button variant="outline-success" as={Link} to="/register" className="me-2 sign-in-btn">
-                            Đăng ký
-                        </Button>
-                        <Button variant="primary" as={Link} to="/login" className="log-in-btn">
-                            Đăng nhập
-                        </Button>
-
+                        {user === null ? <>
+                            <Button variant="outline-success" as={Link} to="/register" className="me-2 sign-in-btn">
+                                Đăng ký
+                            </Button>
+                            <Button variant="primary" as={Link} to="/login" className="log-in-btn">
+                                Đăng nhập
+                            </Button>
+                        </> : <>
+                            <Link to="/" className="nav-link text-danger">
+                                <img src={user.avatar} width="40" className="rounded-circle" />
+                                Chào {user.username}!
+                            </Link>
+                            <Button variant="danger" onClick={() => dispatch({ "type": "logout" })} as={Link} to="/login" >
+                                Đăng xuất
+                            </Button>
+                        </>}
                     </Nav>
 
                 </Navbar.Collapse>
