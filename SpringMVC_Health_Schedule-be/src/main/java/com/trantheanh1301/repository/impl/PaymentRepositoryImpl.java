@@ -6,6 +6,7 @@ package com.trantheanh1301.repository.impl;
 
 import com.trantheanh1301.pojo.Payment;
 import com.trantheanh1301.repository.PaymentRepository;
+import jakarta.persistence.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -29,6 +30,22 @@ public class PaymentRepositoryImpl implements PaymentRepository{
         s.persist(payment);
         s.refresh(payment);
         return payment;
+    }
+
+    @Override
+    public Payment updatePayment(Payment payment) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.merge(payment);
+        s.refresh(payment);
+        return payment;
+    }
+
+    @Override
+    public Payment getPaymentById(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createNamedQuery("Payment.findByPaymentId", Payment.class);
+        q.setParameter("paymentId", id);
+        return (Payment) q.getSingleResult();
     }
     
 }
