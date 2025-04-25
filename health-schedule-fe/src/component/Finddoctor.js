@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Alert, Button, Card, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import Apis, { endpoint } from "../configs/Apis";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 
 import { FontAwesomeIcon  } from "@fortawesome/react-fontawesome";
@@ -77,11 +77,11 @@ const Finddoctor = () => {
                     </Col>
                 </Row>
 
-
+{/* CSS cho đều lại card */}
                 <Row className="justify-content-center g-4  mt-4">
                     {doctors.length === 0 && <Alert variant="info" className="m-2 text-center">Không tìm thấy bác sĩ nào!</Alert>}
                     {doctors.map(d => (
-                        <Col key={d.doctorId} xs={12} sm={6} md={4} lg={3} className="d-flex justify-content-center mb-3">
+                        <Col key={d.doctorId} xs={12} sm={6} md={4} lg={2} className="d-flex justify-content-center mb-3">
                             <Card className="card-doctor shadow-sm">
                                 <Card.Img variant="top" src={d.user.avatar} className="card-img-top " />
                                 <Card.Body className="card-body-custom">
@@ -92,7 +92,7 @@ const Finddoctor = () => {
                                         </Card.Text>
                                     </div>
                                     <div className="d-grid gap-1 mt-2">
-                                        <Button variant="primary" size="sm">Đặt lịch</Button>
+                                        <Button variant="primary" as={Link} to="/calendar" size="sm">Xem lịch trống</Button>
                                         <Button variant="danger" size="sm">Xem đánh giá</Button>
                                     </div>
                                 </Card.Body>

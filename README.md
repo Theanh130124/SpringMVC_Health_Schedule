@@ -236,3 +236,15 @@ Admin : tta1301 - 123456
 
 
 <h2>User UI</h2>
+
+
+-- DOCKER
+
+
+Cd ve docker file
+
+docker build -t springmvc-health-tomcat11 .
+
+
+
+docker run -d -p 8080:8080 --name health_schedule_app springmvc-health-tomcat11

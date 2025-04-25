@@ -11,6 +11,7 @@ export const endpoint = {
     'register':'/users',
     'current_user':'/secure/profile',
     'login':'/login',
+    'findDoctor': '/find_slot',
    
 }
 

@@ -28,7 +28,7 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto  header-menu text-center">
-                        <Link to="/booking" className="nav-link text-dark nav-item-with-subtext ms-4 ">Đặt khám
+                        <Link to="/calendar" className="nav-link text-dark nav-item-with-subtext ms-4 ">Xem lịch trống
                             <span>Đặt khám ngay</span></Link>
 
 
