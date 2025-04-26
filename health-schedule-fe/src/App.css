@@ -28,4 +28,72 @@
   } */ 
 
 
-  
+  /* Đặt chiều cao cố định cho phần tiêu đề và nội dung */
+.card-title {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  min-height: 2.5rem; /* Đảm bảo tiêu đề có chiều cao cố định */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-text {
+  font-size: 0.85rem;
+  min-height: 3rem; /* Đảm bảo nội dung bio có chiều cao cố định */
+  overflow: hidden; /* Ẩn nội dung tràn */
+  text-overflow: ellipsis; /* Thêm dấu "..." nếu nội dung quá dài */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Hiển thị tối đa 3 dòng */
+  -webkit-box-orient: vertical;
+}
+
+/* Đảm bảo chiều cao đồng đều cho toàn bộ card */
+.card-doctor {
+  height: 100%;
+  min-height: 350px; /* Đặt chiều cao tối thiểu */
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body-custom {
+  flex: 1; /* Chiếm phần không gian còn lại */
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body-custom > div:first-child {
+  flex: 1; /* Phần này sẽ chiếm không gian có sẵn */
+}
+
+/* Đặt kích thước cố định cho hình ảnh trong card */
+.card-img-top {
+    width: 100%; /* Đảm bảo hình ảnh chiếm toàn bộ chiều rộng card */
+    height: 150px; /* Chiều cao cố định */
+    object-fit: contain; /* Cắt hình ảnh để vừa khung mà không bị méo */
+    border-radius: 5px; /* Tùy chọn: bo góc hình ảnh */
+    background-color: #f8f9fa; /* Thêm màu nền để lấp đầy khoảng trống */
+}
+
+
+
+
+
+
+/* Tùy chỉnh nền và khoảng cách */
+.container-custom {
+    background-color: #f5f5f5; /* Màu nền nhẹ */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.calendar-title {
+    font-weight: bold;
+    font-size: 2.5rem; /* cỡ chữ lớn */
+    text-align: center;
+    color: #0d6efd; /* màu xanh đậm Bootstrap */
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

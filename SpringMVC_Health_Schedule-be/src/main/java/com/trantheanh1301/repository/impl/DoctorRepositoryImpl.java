@@ -125,7 +125,7 @@ public class DoctorRepositoryImpl implements DoctorRepository {
 
             String page = params.get("page");
             if (page != null && !page.isEmpty()) {
-                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE_DOCTOR"));
                 int p = Integer.parseInt(page);
                 int start = (p - 1) * pageSize;
 

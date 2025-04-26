@@ -122,7 +122,10 @@ public class UserServiceImpl implements UserService {
             doctor.setConsultationFee(new BigDecimal(params.get("consultationFee")));
             doctor.setAverageRating(new BigDecimal(params.get("averageRating")));
             Doctor saveDoctor = this.doctorRepo.register(doctor); // Lưa bảng doctor
+            //Riêng bác sĩ sẽ khóa lại để cung cấp chứng chỉ hành nghề admin duyệt
+            u.setIsActive(Boolean.FALSE);
             u.setDoctor(saveDoctor);
+
         }
         if (role.equals("Patient")) {
             Patient patient = new Patient();
@@ -130,8 +133,6 @@ public class UserServiceImpl implements UserService {
             patient.setMedicalHistorySummary(params.get("medicalHistory"));
             Patient savedPatient = this.patientRepo.register(patient); // Lưu vào bảng Patient
             u.setPatient(savedPatient);  //Cho no tra ra ca thong tin nay
-            
-            
 
         }
 

@@ -18,6 +18,7 @@ import { MyDipatcherContext, MyUserContext } from './configs/MyContexts';
 import cookie from 'react-cookies'
 import Booking from './component/Booking';
 import Calendar from './component/Calendar';
+import UploadLicense from './component/UploadLicense';
 
 
 
@@ -44,6 +45,7 @@ const App = () => {
           <Container fluid >
             <MyToaster />
             <Routes>
+              <Route path="/uploadLicense" element={<UploadLicense />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/booking" element={<Booking />} />
               <Route path="/" element={<Home />} />

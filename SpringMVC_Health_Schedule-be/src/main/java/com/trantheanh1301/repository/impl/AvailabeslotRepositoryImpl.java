@@ -41,7 +41,7 @@ public class AvailabeslotRepositoryImpl implements AvailabeslotRepository {
 
     @Autowired
     private Environment env;
-
+//Fix chi hien lich trong tu ngay hien tai den ve sau -> order by decs
     @Override
     public List<Availableslot> findSlot(Map<String, String> params) {
         Session s = factory.getObject().getCurrentSession();
@@ -86,7 +86,7 @@ public class AvailabeslotRepositoryImpl implements AvailabeslotRepository {
 
             String page = params.get("page");
             if (page != null && !page.isEmpty()) {
-                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE_DOCTOR"));
                 int p = Integer.parseInt(page);
                 int start = (p - 1) * pageSize;
 

@@ -38,6 +38,14 @@ const Login = () => {
             //Luu lai cookie 
             cookie.save('user', u.data);
             console.info(u.data);
+            //Cung cấp chứng chỉ
+            if( u.data.role === "Doctor" && !u.data.isActive) {
+                nav("/uploadLicense");
+                //gửi này bên form kia
+                // setMsg("Tài khoản chưa được kích hoạt. Vui lòng cung cấp chứng chỉ hành nghề cho admin để kích hoạt tài khoản!");
+                return; // dùng luôn
+
+            }
 
             dispatch({
                 "type": "login",

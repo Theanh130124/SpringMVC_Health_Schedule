@@ -43,10 +43,12 @@ const Calendar = () => {
     }, [page]);
 
 
-// Chỉnh PAGE_SIZE LẠI 1 TRANG 8 DOCTOR
+
     return (
-        <Container fluid className="p-0">
-            <Row className="justify-content-center g-4 custom-row mt-5">
+        <Container fluid className="p-0 container-custom">
+
+
+            <Row className="g-4 custom-row mt-5">
                 <Col md={4} lg={4} xs={12}>
                     <Form.Group>
                         <Form.Label>Chọn ngày</Form.Label>
@@ -67,15 +69,26 @@ const Calendar = () => {
                         />
                     </Form.Group>
                 </Col>
-                <Col md={4} lg={4} xs={12}>
-                    <Button variant="primary" onClick={loadSlots}>
+                <Col md={4} lg={4} xs={12} >
+
+
+
+                    <Button variant="primary" className="search-button mt-4" onClick={loadSlots}>
                         Tìm kiếm
                     </Button>
+
+
+                </Col>
+
+
+            </Row>
+            <Row className="justify-content-center g-4 mt-5">
+                <Col xs="auto">
+                    <h1 className="calendar-title">Chọn lịch trống</h1>
                 </Col>
             </Row>
 
-            
-{/* CSS cho đều lại card */}
+
             <Row className="justify-content-center g-4  mt-5">
                 {loading && (
                     <div className="text-center">
@@ -91,12 +104,12 @@ const Calendar = () => {
                     <Col key={slot.slotId} md={4} lg={2} className="mb-3">
                         <Card>
                             <Card.Img variant="top" src={slot.doctorId.user.avatar} />
-                            <Card.Body>
+                            <Card.Body className="card-body-custom">
                                 <Card.Title>
                                     {slot.doctorId.user.firstName} {slot.doctorId.user.lastName}
                                 </Card.Title>
-                                <Card.Text>
-                                    <strong>Thời gian:</strong> {slot.startTime} - {slot.endTime}
+                                <Card.Text className="card-text">
+                                    <strong >Thời gian</strong> {slot.startTime} - {slot.endTime}
                                     <br />
                                     <strong>Ngày:</strong> {new Date(slot.slotDate).toLocaleDateString()}
                                     <br />
