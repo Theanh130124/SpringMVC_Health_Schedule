@@ -7,9 +7,13 @@ package com.trantheanh1301.service.impl;
 import com.trantheanh1301.formatter.DateFormatter;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.pojo.Doctorlicense;
+import com.trantheanh1301.pojo.User;
 import com.trantheanh1301.repository.DoctorLicenseRepository;
 import com.trantheanh1301.repository.DoctorRepository;
+import com.trantheanh1301.repository.UserRepository;
 import com.trantheanh1301.service.DoctorLicenseService;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +25,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DoctorLicenseServiceImpl implements DoctorLicenseService {
+    
+    
+    @Autowired
+    private UserRepository userRepo;
 
     @Autowired
     private DoctorLicenseRepository licenseRepo;
@@ -52,6 +60,12 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
     @Override
     public Doctorlicense updateLicense(int id, Map<String, String> params) {
 
+        Integer adminId = Integer.valueOf(params.get("adminId"));
+        User admin = userRepo.getAdminbyRoleId(adminId);
+        if (admin == null) {
+            throw new RuntimeException("Không tìm thấy quản trị viên!");
+        }
+
         Doctorlicense license = licenseRepo.getLicenseById(id); // tới đây nó đã là persistent
         if (license == null) {
             throw new RuntimeException("Không tìm thấy chứng chỉ hành nghề trên !");
@@ -59,11 +73,9 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
         //đã được admin duyệt rồi -> chỉ có admin mới sửa được cái này
 
         if (license.getIsVerified()) {
-            
+
             //if current_user.role() = admin {  license.setIsVerified(params.get("isVerified"));   }
             //-> rồi từ user -> doctor -> doclicense -> nếu này false thì không cho đăng nhập . 
-                       
-
             throw new RuntimeException("Giấy phép đã xét duyệt không thể chỉnh sửa!");
         }
         if (params.containsKey("licenseNumber")) {
@@ -82,6 +94,20 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
         }
         if (params.containsKey("scopeDescription")) {
             license.setScopeDescription(params.get("scopeDescription"));
+        }
+
+        //Cập nhật trạng thái ở đây
+        if (params.containsKey("isVerified")) {
+            license.setIsVerified(Boolean.valueOf(params.get("isVerified")));
+            license.setVerificationDate(new Date());
+            license.setVerifiedByAdminId(admin);
+            // Sau khi duyệt thì phải trả trạng thái hoạt động cho doctor
+            
+            User doctor =  license.getDoctorId().getUser();
+            doctor.setIsActive(Boolean.TRUE);
+            userRepo.updateUser(doctor);
+            
+
         }
         return licenseRepo.updateLicense(license);
     }

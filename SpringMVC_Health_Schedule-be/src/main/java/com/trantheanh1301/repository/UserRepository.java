@@ -15,5 +15,8 @@ public interface UserRepository  {
     public User getUserByEmail(String email);
     public User register(User u);
     public boolean authenticated(String username , String password);
+    public User getAdminbyRoleId(int adminId);
+    public User updateUser(User u);
+    public User getUserbyId(int id);
     
 }

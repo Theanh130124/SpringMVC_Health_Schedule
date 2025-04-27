@@ -36,7 +36,7 @@ public class DoctorLicenseRepositoryImpl implements DoctorLicenseRepository {
     }
 
     
-    //Truyền vào 1 đối tượng đã persistent rồi 
+    //Truyền vào 1 đối tượng đã persistent rồi -> admin duyệt 
     @Override
     public Doctorlicense updateLicense(Doctorlicense license) {
         Session s = factory.getObject().getCurrentSession();

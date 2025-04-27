@@ -7,6 +7,11 @@ package com.trantheanh1301.repository.impl;
 import com.trantheanh1301.pojo.User;
 import com.trantheanh1301.repository.UserRepository;
 import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +67,48 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getAdminbyRoleId(int adminId) {
+        Session s = factory.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<User> query = builder.createQuery(User.class);
+
+        Root<User> rU = query.from(User.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(builder.equal(rU.get("id"), adminId));
+        predicates.add(builder.equal(rU.get("role"), "Admin"));
+
+        query.select(rU).where(builder.and(predicates.toArray(new Predicate[0])));
+
+        Query q = s.createQuery(query);
+        return (User) q.getSingleResult();
+
+    }
+
+    @Override
     public boolean authenticated(String username, String password) {
         User u = this.getUserByUsername(username);
         return this.passwordEncoder.matches(password, u.getPassword());
     }
 
+    
+    
+    @Override
+    public User updateUser(User u) {
+        Session s = factory.getObject().getCurrentSession();
+
+        s.merge(u);
+        return u;
+
+}
+    //dùng truyền id trong license vào để cập nhật trạng thại tài khoản doctor
+
+    @Override
+    public User getUserbyId(int id) {
+         Session s = factory.getObject().getCurrentSession();
+         return s.get(User.class, id);
+    }
+    
+    
 }
