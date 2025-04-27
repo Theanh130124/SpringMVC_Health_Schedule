@@ -20,6 +20,7 @@ const Login = () => {
 
     ]
 
+    //Cập nhật value vào field vào user 
     const setState = (value, field) => {
         setUser({ ...user, [field]: value })
     }
@@ -31,15 +32,24 @@ const Login = () => {
             let res = await Apis.post(endpoint['login'], {
                 ...user
             });
-           
+
             cookie.save('token', res.data.token);
 
             let u = await authApis().get(endpoint['current_user']);
             //Luu lai cookie 
             cookie.save('user', u.data);
             console.info(u.data);
+
+
+
+            dispatch({
+                "type": "login",
+                "payload": u.data
+            });
             //Cung cấp chứng chỉ
-            if( u.data.role === "Doctor" && !u.data.isActive) {
+
+            if (u.data.role === "Doctor" && !u.data.isActive) {
+                sessionStorage.setItem("doctorId", u.data.userId);
                 nav("/uploadLicense");
                 //gửi này bên form kia
                 // setMsg("Tài khoản chưa được kích hoạt. Vui lòng cung cấp chứng chỉ hành nghề cho admin để kích hoạt tài khoản!");
@@ -47,12 +57,9 @@ const Login = () => {
 
             }
 
-            dispatch({
-                "type": "login",
-                "payload": u.data
-            });
             nav("/");
         } catch (ex) {
+            setMsg("Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng kiểm tra lại.");
             console.error(ex);
         } finally {
             setLoading(false);
@@ -74,7 +81,7 @@ const Login = () => {
                         {info.map(f => <FloatingLabel key={f.field} controlId="floatingInput" label={f.label} className="mb-3">
                             <Form.Control type={f.type} placeholder={f.label} required value={user[f.field]} onChange={e => setState(e.target.value, f.field)} />
                         </FloatingLabel>)}
-                        {loading ===true ? <MySpinner /> : <Button type="submit" variant="success" className="mt-1 mb-1">Đăng nhập</Button>}
+                        {loading === true ? <MySpinner /> : <Button type="submit" variant="success" className="mt-1 mb-1">Đăng nhập</Button>}
                     </Form>
                 </Col>
             </Row>

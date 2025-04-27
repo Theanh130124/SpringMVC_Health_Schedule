@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
             doctor.setConsultationFee(new BigDecimal(params.get("consultationFee")));
             doctor.setAverageRating(new BigDecimal(params.get("averageRating")));
             Doctor saveDoctor = this.doctorRepo.register(doctor); // Lưa bảng doctor
-            //Riêng bác sĩ sẽ khóa lại để cung cấp chứng chỉ hành nghề admin duyệt
+            //Riêng bác sĩ sẽ khóa lại để cung cấp chứng chỉ hành nghề admin duyệt -> thì sẽ bật này lên lại
             u.setIsActive(Boolean.FALSE);
             u.setDoctor(saveDoctor);
 

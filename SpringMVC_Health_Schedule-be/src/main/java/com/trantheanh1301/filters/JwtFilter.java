@@ -77,7 +77,7 @@ public class JwtFilter implements Filter {
     private boolean isInWhitelist(String path) {
         for (String whitePath : WHITELIST) {
             // Kiểm tra nếu đường dẫn chứa "/api/payment/" hoặc các endpoint whitelist khác
-            if (path.contains(whitePath)) {
+            if (path.equals(whitePath)) {
                 return true;
             }
         }

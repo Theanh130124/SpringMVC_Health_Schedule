@@ -3,10 +3,11 @@ import Apis, { endpoint } from "../configs/Apis";
 import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { load } from "react-cookies";
 import MySpinner from "./layout/MySpinner";
+import { Link } from "react-router-dom";
 
 const Calendar = () => {
 
-
+// Nhớ làm xem thêm
     const [loading, setLoading] = useState(false);
     const [slots, setSlots] = useState([]);
     const [page, setPage] = useState(1);
@@ -115,7 +116,7 @@ const Calendar = () => {
                                     <br />
                                     <strong>Chuyên môn:</strong> {slot.doctorId.bio}
                                 </Card.Text>
-                                <Button variant="success">Đặt lịch</Button>
+                                <Button as={Link} to="/booking" variant="success">Đặt lịch</Button>
                             </Card.Body>
                         </Card>
                     </Col>

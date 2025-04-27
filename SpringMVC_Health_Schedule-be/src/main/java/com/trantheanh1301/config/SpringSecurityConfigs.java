@@ -7,6 +7,7 @@ package com.trantheanh1301.config;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.trantheanh1301.filters.JwtFilter;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -59,12 +61,10 @@ public class SpringSecurityConfigs {
     
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
             Exception {
+        //Muốn chứng thực bằng jwt thì chỉ permit api bên này (còn muốn cho không jwt và form luôn thì bỏ trong cả 2 )
         http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(c -> c.disable()).authorizeHttpRequests(requests
                 -> requests.requestMatchers("/", "/home").authenticated()
-                        .requestMatchers("/api/login").permitAll()
-                        .requestMatchers("/api/users").permitAll() // cho đăng ký
-                        .requestMatchers("/api/doctor").permitAll()//Cho tìm kiếm bác sĩ ngoài trang chủ 
-                        .requestMatchers("/api/find_slot").permitAll()
+                        .requestMatchers("/api/**").permitAll() // nhưng thằng muốn không dùng jwt thì bỏ bên jwtfilter
                         .requestMatchers("/js/**").permitAll().requestMatchers("/css/**").permitAll().requestMatchers("/images/**").permitAll()
                         .requestMatchers("/stats").hasAnyAuthority("Admin", "Doctor").anyRequest().authenticated()// mọi thứ còn lại đều cần token 
 

@@ -9,7 +9,7 @@ import MySpinner from "./layout/MySpinner";
 
 const Finddoctor = () => {
 
-
+// Nhớ làm xem thêm
     const [loading, setLoading] = useState(false);
     const [doctors, setDoctors] = useState([]);
     const [page, setPage] = useState(1);
@@ -86,13 +86,14 @@ const Finddoctor = () => {
                                 <Card.Img variant="top" src={d.user.avatar} className="card-img-top " />
                                 <Card.Body className="card-body-custom">
                                     <div>
-                                        <Card.Title className="card-title">{`${d.user.firstName} ${d.user.lastName}`.split(' ').slice(0, 4).join(' ')}
+                                        <Card.Title className="card-title"> Bác sĩ : {`${d.user.firstName} ${d.user.lastName}`.split(' ').slice(0, 4).join(' ')}
                                             {`${d.user.firstName} ${d.user.lastName}`.split(' ').length > 4 && '...'}</Card.Title>
                                         <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
-                                        {d.bio ? (d.bio.length > 50 ? d.bio.slice(0, 50) + "..." : d.bio) : "Không có mô tả"}
+                                       Chuyên khoa:  {d.bio ? (d.bio.length > 50 ? d.bio.slice(0, 50) + "..." : d.bio) : "Không có mô tả"}
                                         </Card.Text>
                                     </div>
                                     <div className="d-grid gap-1 mt-2">
+                                        {/* Xem lịch trống là tìm lịch trống theo id doctor đó */}
                                         <Button variant="primary" as={Link} to="/calendar" size="sm">Xem lịch trống</Button>
                                         <Button variant="danger" size="sm">Xem đánh giá</Button>
                                     </div>
