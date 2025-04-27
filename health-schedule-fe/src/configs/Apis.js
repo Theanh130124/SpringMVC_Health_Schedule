@@ -12,6 +12,7 @@ export const endpoint = {
     'current_user':'/secure/profile',
     'login':'/login',
     'findDoctor': '/find_slot',
+    
    
 }
 
@@ -23,6 +24,8 @@ export const authApis = () => {
         baseURL: BASE_URL,
         headers: {
             'Authorization' : `Bearer ${cookie.load('token')}`,
+            //Bổ sung để lưu raw
+            'Content-Type' : 'application/x-www-form-urlencoded'
         }
     })
 }

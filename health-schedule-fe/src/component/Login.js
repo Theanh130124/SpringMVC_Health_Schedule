@@ -33,29 +33,33 @@ const Login = () => {
                 ...user
             });
 
-            cookie.save('token', res.data.token);
+            cookie.save('token', res.data.token); 
 
             let u = await authApis().get(endpoint['current_user']);
-            //Luu lai cookie 
-            cookie.save('user', u.data);
+            
             console.info(u.data);
 
 
 
-            dispatch({
-                "type": "login",
-                "payload": u.data
-            });
             //Cung cấp chứng chỉ
 
             if (u.data.role === "Doctor" && !u.data.isActive) {
-                sessionStorage.setItem("doctorId", u.data.userId);
+                sessionStorage.setItem("doctorId", u.data.userId); // không lưu user vì sẽ hiện header 
                 nav("/uploadLicense");
                 //gửi này bên form kia
                 // setMsg("Tài khoản chưa được kích hoạt. Vui lòng cung cấp chứng chỉ hành nghề cho admin để kích hoạt tài khoản!");
                 return; // dùng luôn
 
             }
+
+            //Luu lai cookie chỉ khi bác sĩ đã  đc duyệt 
+            cookie.save('user', u.data);
+
+            //bác sĩ chưa đăng nhập không lưu context
+            dispatch({
+                "type": "login",
+                "payload": u.data
+            });
 
             nav("/");
         } catch (ex) {

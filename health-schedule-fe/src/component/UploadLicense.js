@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Apis, { authApis, endpoint } from "../configs/Apis";
 import { Alert, Button, Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
 import MySpinner from "./layout/MySpinner";
+import cookie from 'react-cookies'
 
 const UploadLicense = () => {
 // Nên thêm hình ảnh chứng chỉ
@@ -33,6 +34,7 @@ const UploadLicense = () => {
     const upload = async (e) => {
         e.preventDefault();
         try {
+            //Bên kia đã lưu token vào cookie
             setLoading(true);
             let res = await authApis().post(endpoint['doctor_license']
                 , {
@@ -43,11 +45,12 @@ const UploadLicense = () => {
             );
             setMsg("Chứng chỉ hành nghề đã gửi thành công , vui lòng chờ duyệt!");
             sessionStorage.removeItem("doctorId");
+            cookie.remove('token');
             nav("/login");
         } catch (ex) {
 
             console.error(ex);
-            setMsg("Có lỗi xảy ra. Vui lòng thử lại!");
+            setMsg(`Có lỗi xảy ra. Vui lòng thử lại! ${ex}`);
         }
         finally {
             setLoading(false);
