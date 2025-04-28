@@ -5,12 +5,15 @@
 package com.trantheanh1301.repository;
 
 import com.trantheanh1301.pojo.Appointment;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author LAPTOP
  */
 public interface AppointmentRepository {
-    public Appointment addOrUpdat(Appointment a);
+    public Appointment addOrUpdate(Appointment a);
     public Appointment getAppointmentById(int id);
+    public List<Appointment> getListAppointment(Map<String,String> params);
 }

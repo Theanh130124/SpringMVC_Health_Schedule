@@ -5,6 +5,7 @@
 package com.trantheanh1301.service;
 
 import com.trantheanh1301.pojo.Appointment;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,4 +14,5 @@ import java.util.Map;
  */
 public interface AppointmentService {
     Appointment registerAppointment(Map<String,String> params);
+    List<Appointment> getListAppointment(Map<String,String> params);
 }

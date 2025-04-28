@@ -37,10 +37,10 @@ public class LicenseController {
     }
     
     
-    
+    //Duyệt
     @RequestMapping("/license/{licenseId}")
     public String updateLicense(Model model, @PathVariable(value="licenseId") int id, @RequestParam Map<String, String> params, @AuthenticationPrincipal User user) {
-
+        
         licenseService.updateLicense(id, params);
         return "redirect:/license";
     }

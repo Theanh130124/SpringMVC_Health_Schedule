@@ -18,6 +18,7 @@ import com.trantheanh1301.service.AppointmentService;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,7 +91,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setConsultationType(params.get("type"));
         
         //Cập nhật lịch khám
-        appointmentRepo.addOrUpdat(appointment);
+        appointmentRepo.addOrUpdate(appointment);
        
         
         emailService.sendAppointmentConfirmation(patient.getUser().getEmail(),
@@ -99,6 +100,11 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointment.getAppointmentTime().toString());
         
         return appointment;
+    }
+
+    @Override
+    public List<Appointment> getListAppointment(Map<String, String> params) {
+      return appointmentRepo.getListAppointment(params);
     }
 
 }

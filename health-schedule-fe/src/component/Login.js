@@ -63,7 +63,6 @@ const Login = () => {
 
             nav("/");
         } catch (ex) {
-            setMsg("Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng kiểm tra lại.");
             console.error(ex);
         } finally {
             setLoading(false);

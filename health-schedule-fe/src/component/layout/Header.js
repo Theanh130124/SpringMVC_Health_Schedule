@@ -36,6 +36,19 @@ const Header = () => {
                             Xem đánh giá
                             <span>Đánh giá về những bác sĩ</span>
                         </Link>
+
+                        {user !== null ? <>
+                            <Link to="/appointment" className="nav-item-with-subtext nav-link ms-4 text-center">
+
+                                Lịch hẹn của bạn
+                                <span>Xem lại</span>
+
+                            </Link>
+                        </> :
+                            <></>
+                        }
+
+
                         <NavDropdown
                             title={
                                 <div className="nav-item-with-subtext">

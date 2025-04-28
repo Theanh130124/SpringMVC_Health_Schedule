@@ -19,7 +19,7 @@
                             <th>Cơ quan cấp:</th>
                             <th>Chuyên môn:</th>
                             <th>Trạng thái xét duyệt</th>
-
+                            <th></th>>
                         </tr>
                     </thead>
 
@@ -33,8 +33,9 @@
                             <td th:text="${l.scopeDescription}"></td>
                             <td th:text="${l.isVerified}"></td>
                             <td>
-                                <!--Duyệt chứng chỉ-->
-                                <a th:href="@{'/license/' + ${license.licenseId}}" class="btn btn-info">&#128296;</a>
+                                <!--Duyệt chứng chỉ cần isVerified và  adminId của templates-->
+                               
+                                <a th:href="@{'/license/' + ${l.licenseId}}" class="btn btn-info">Duyệt chứng chỉ hành nghề &#128296;</a>
                             </td>
                         </tr>
 

@@ -19,7 +19,9 @@ import cookie from 'react-cookies'
 import Booking from './component/Booking';
 import Calendar from './component/Calendar';
 import UploadLicense from './component/UploadLicense';
-import callVideo from './webrtc/callvideo';
+import Appointment from './component/Appointment';
+import CallVideo from './component/CallVideo';
+
 
 
 
@@ -46,7 +48,9 @@ const App = () => {
           <Container fluid >
             <MyToaster />
             <Routes>
-              <Route path="/callvideo" element={<callVideo/>} />
+
+              <Route path="/appointment" element={<Appointment />} />
+              <Route path="/callvideo" element={<CallVideo/>} />
               <Route path="/uploadLicense" element={<UploadLicense />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/booking" element={<Booking />} />

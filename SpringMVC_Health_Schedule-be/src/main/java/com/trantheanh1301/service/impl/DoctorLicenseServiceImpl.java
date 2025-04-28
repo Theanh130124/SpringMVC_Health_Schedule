@@ -97,7 +97,7 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
             license.setScopeDescription(params.get("scopeDescription"));
         }
 
-        //Cập nhật trạng thái ở đây
+        //Cập nhật trạng thái ở đây -> admin làm
         if (params.containsKey("isVerified")) {
             license.setIsVerified(Boolean.valueOf(params.get("isVerified")));
             license.setVerificationDate(new Date());
