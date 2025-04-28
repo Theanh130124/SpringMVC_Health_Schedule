@@ -50,7 +50,7 @@ public class ApiDoctorLicenseController {
     }
 
     
-    //Admin có thể xác nhận giấy phép hành nghề ở đây
+    //Bác sĩ sửa thông tin chứng chỉ hành nghề
     @PatchMapping("/doctor_license/{id}")
     public ResponseEntity<?> updateLicense(@PathVariable int id, @RequestParam Map<String, String> params) {
         try {

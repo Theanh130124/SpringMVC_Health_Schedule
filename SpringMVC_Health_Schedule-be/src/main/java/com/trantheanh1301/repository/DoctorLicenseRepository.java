@@ -5,6 +5,8 @@
 package com.trantheanh1301.repository;
 
 import com.trantheanh1301.pojo.Doctorlicense;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -15,4 +17,5 @@ public interface DoctorLicenseRepository {
     public Doctorlicense updateLicense(Doctorlicense license);
     public Doctorlicense getLicenseById(int id);
     public void removeLicense(int id);
+    public List<Doctorlicense> loadLicense(Map<String,String> params);
 }

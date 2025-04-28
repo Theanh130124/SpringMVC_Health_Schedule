@@ -1,0 +1,52 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Xét duyệt chứng chỉ hành nghề</title>
+    <th:block th:replace="layout/base :: styles"></th:block>
+</head>
+<body>
+    <div th:replace="layout/base :: header"></div>
+    <section class="container mt-5">
+        <h2>Danh sách chứng chỉ hành nghề chưa được xét duyệt</h2>
+        <form method="get" th:action="@{/license}" class="row g-3 mb-4">
+            <div class="mb-3 mt-3 table-responsive">
+                <table class="table-striped table">
+                    <thead>
+                        <tr >
+                            <th>Mã số chứng chỉ:</th>
+                            <th>Ngày cấp:</th>
+                            <th>Ngày hết hạn:</th>
+                            <th>Cơ quan cấp:</th>
+                            <th>Chuyên môn:</th>
+                            <th>Trạng thái xét duyệt</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr  th:each="l : ${license}">
+
+                            <td th:text="${l.licenseNumber}"></td>
+                            <td th:text="${l.issueDate}"></td>
+                            <td th:text="${l.expiryDate}"></td>
+                            <td th:text="${l.issuingAuthority}"></td>
+                            <td th:text="${l.scopeDescription}"></td>
+                            <td th:text="${l.isVerified}"></td>
+                            <td>
+                                <!--Duyệt chứng chỉ-->
+                                <a th:href="@{'/license/' + ${license.licenseId}}" class="btn btn-info">&#128296;</a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </form>
+    </section>
+    <div th:replace="layout/base :: footer"></div>
+
+</body>
+
+
+</html>

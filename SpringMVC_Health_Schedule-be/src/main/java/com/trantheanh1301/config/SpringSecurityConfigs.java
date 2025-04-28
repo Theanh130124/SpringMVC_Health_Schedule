@@ -66,7 +66,7 @@ public class SpringSecurityConfigs {
                 -> requests.requestMatchers("/", "/home").authenticated()
                         .requestMatchers("/api/**").permitAll() // nhưng thằng muốn không dùng jwt thì bỏ bên jwtfilter
                         .requestMatchers("/js/**").permitAll().requestMatchers("/css/**").permitAll().requestMatchers("/images/**").permitAll()
-                        .requestMatchers("/stats").hasAnyAuthority("Admin", "Doctor").anyRequest().authenticated()// mọi thứ còn lại đều cần token 
+                        .requestMatchers("/stats").hasAnyAuthority("Admin", "Doctor").requestMatchers("/license").hasAuthority("Admin").anyRequest().authenticated()// mọi thứ còn lại đều cần token 
 
         )
                 .formLogin(form -> form.loginPage("/login")

@@ -1,4 +1,5 @@
 com\trantheanh1301\repository\impl\ClinicRepositoryImpl.class
+com\trantheanh1301\controllers\LicenseController.class
 com\trantheanh1301\controllers\UserController.class
 com\trantheanh1301\repository\impl\DoctorLicenseRepositoryImpl.class
 com\trantheanh1301\controllers\ApiAppointmentController.class

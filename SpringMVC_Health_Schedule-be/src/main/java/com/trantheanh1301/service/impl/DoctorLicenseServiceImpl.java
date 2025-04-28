@@ -14,6 +14,7 @@ import com.trantheanh1301.repository.UserRepository;
 import com.trantheanh1301.service.DoctorLicenseService;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -116,6 +117,16 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
     @Override
     public void removeLicense(int id) {
         licenseRepo.removeLicense(id);
+    }
+
+    @Override
+    public Doctorlicense getLicenseById(int id) {
+        return licenseRepo.getLicenseById(id);
+    }
+
+    @Override
+    public List<Doctorlicense> loadLicense(Map<String,String> params) {
+        return licenseRepo.loadLicense(params);
     }
 
 }

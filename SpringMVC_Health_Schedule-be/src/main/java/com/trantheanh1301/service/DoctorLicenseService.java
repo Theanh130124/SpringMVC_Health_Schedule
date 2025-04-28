@@ -5,6 +5,7 @@
 package com.trantheanh1301.service;
 
 import com.trantheanh1301.pojo.Doctorlicense;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,6 +15,8 @@ import java.util.Map;
 public interface DoctorLicenseService {
     Doctorlicense registerLicense(Map<String, String> params);
     Doctorlicense updateLicense(int id , Map<String,String> params);
+    public Doctorlicense getLicenseById(int id);
     public void removeLicense(int id);
+    public List<Doctorlicense> loadLicense(Map<String,String> params);
     
 }
