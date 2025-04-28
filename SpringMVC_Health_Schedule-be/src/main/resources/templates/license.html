@@ -2,31 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Xét duyệt chứng chỉ hành nghề</title>
-    <th:block th:replace="layout/base :: styles"></th:block>
-</head>
-<body>
-    <div th:replace="layout/base :: header"></div>
-    <section class="container mt-5">
-        <h2>Danh sách chứng chỉ hành nghề chưa được xét duyệt</h2>
-        <form method="get" th:action="@{/license}" class="row g-3 mb-4">
+        <th:block th:replace="layout/base :: styles"></th:block>
+    </head>
+    <body>
+        <div th:replace="layout/base :: header"></div>
+
+        <section class="container mt-5">
+            <h2>Danh sách chứng chỉ hành nghề chưa được xét duyệt</h2>
+
+            <!-- Hiển thị thông báo thành công -->
+            <div th:if="${successMessage}" class="alert alert-success">
+                <p th:text="${successMessage}"></p>
+            </div>
+
+            <!-- Hiển thị thông báo thất bại -->
+            <div th:if="${errorMessage}" class="alert alert-danger">
+                <p th:text="${errorMessage}"></p>
+            </div>
+
             <div class="mb-3 mt-3 table-responsive">
                 <table class="table-striped table">
                     <thead>
-                        <tr >
+                        <tr>
                             <th>Mã số chứng chỉ:</th>
                             <th>Ngày cấp:</th>
                             <th>Ngày hết hạn:</th>
                             <th>Cơ quan cấp:</th>
                             <th>Chuyên môn:</th>
                             <th>Trạng thái xét duyệt</th>
-                            <th></th>>
+                            <th></th>
                         </tr>
                     </thead>
-                    
 
                     <tbody>
-                        <tr  th:each="l : ${license}">
-
+                        <tr th:each="l : ${license}">
                             <td th:text="${l.licenseNumber}"></td>
                             <td th:text="${l.issueDate}"></td>
                             <td th:text="${l.expiryDate}"></td>
@@ -34,21 +43,17 @@
                             <td th:text="${l.scopeDescription}"></td>
                             <td th:text="${l.isVerified}"></td>
                             <td>
-                                <!--Duyệt chứng chỉ cần isVerified và  adminId của templates-->
-                               
-                                <a th:href="@{'/license/' + ${l.licenseId}}" class="btn btn-info">Duyệt chứng chỉ hành nghề &#128296;</a>
+                                <form th:action="@{'/license/' + ${l.licenseId}}" method="post" style="display:inline;">
+                                    <input type="hidden" name="isVerified" value="true" />
+                                    <button type="submit" class="btn btn-success">Duyệt chứng chỉ hành nghề &#128296;</button>
+                                </form>
                             </td>
                         </tr>
-
                     </tbody>
                 </table>
             </div>
+        </section>
 
-        </form>
-    </section>
-    <div th:replace="layout/base :: footer"></div>
-
-</body>
-
-
+        <div th:replace="layout/base :: footer"></div>
+    </body>
 </html>

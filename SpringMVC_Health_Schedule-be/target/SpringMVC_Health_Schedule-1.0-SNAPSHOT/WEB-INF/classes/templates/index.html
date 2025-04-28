@@ -7,15 +7,14 @@
 <body>
     <div th:replace="layout/base :: header"></div>
 
+    <section class="container mt-5">
+        <h1 class="text-center mb-4">Chào Mừng Đến Với Hệ Thống Quản Trị</h1>
 
-        <section class="container">
-            <form th:action="@{/}">
-
-
-
-
-
-        </section>
+        <!-- Thông báo nếu người dùng đã đăng nhập -->
+        <div th:if="${currentUser != null}" class="alert alert-success text-center">
+            <strong>Xin chào, <span th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}"></span>!</strong>
+        </div>
+    </section>
 
 
     <div th:replace="layout/base :: footer"></div>

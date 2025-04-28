@@ -85,6 +85,7 @@ public class DoctorLicenseRepositoryImpl implements DoctorLicenseRepository {
     public Doctorlicense updateLicense(Doctorlicense license) {
         Session s = factory.getObject().getCurrentSession();
         s.merge(license);
+        s.flush();
         return license;
 
     }
