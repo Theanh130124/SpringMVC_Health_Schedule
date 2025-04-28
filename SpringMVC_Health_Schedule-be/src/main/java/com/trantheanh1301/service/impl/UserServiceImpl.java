@@ -78,11 +78,12 @@ public class UserServiceImpl implements UserService {
 
         String username = params.get("username");
         String email = params.get("email");
-        if (this.userRepo.getUserByUsername(username) != null || username.isEmpty()) {
-            throw new RuntimeException("Tên đăng nhập đã tồn tại!");
+        if (username == null || username.isEmpty() || this.userRepo.getUserByUsername(username) != null) {
+            throw new RuntimeException("Tên đăng nhập đã tồn tại hoặc không hợp lệ!");
         }
-        if (this.userRepo.getUserByEmail(email) != null || email.isEmpty()) {
-            throw new RuntimeException("Email đã tồn tại!");
+
+        if (email == null || email.isEmpty() || this.userRepo.getUserByEmail(email) != null) {
+            throw new RuntimeException("Email đã tồn tại hoặc không hợp lệ!");
         }
 
         User u = new User();
@@ -99,7 +100,7 @@ public class UserServiceImpl implements UserService {
         u.setGender(params.get("gender"));
         u.setDateOfBirth(DateFormatter.parseDate(params.get("birthday")));
 
-        if (!avatar.isEmpty()) {
+        if (!avatar.isEmpty() && avatar != null) {
             try {
                 Map res = cloudinary.uploader().upload(avatar.getBytes(),
                         ObjectUtils.asMap("resource_type", "auto"));

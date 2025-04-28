@@ -56,14 +56,18 @@ const Register = () => {
 
         if (user.password !== user.confirm) {
             setMsg("Mật khẩu không khớp");
-        } else {
+        }
+       
+        
+        else {
             let form = new FormData();
             for (let key in user) {
                 if (key !== 'confirm')
                     form.append(key, user[key]);
             }
-
-            form.append("avatar", avatar.current.files[0]);
+            if (avatar.current && avatar.current.files && avatar.current.files.length > 0) {
+                form.append("avatar", avatar.current.files[0]);
+            }
             try {
                 setLoading(true);
                 await Apis.post(endpoint['register'], form, {

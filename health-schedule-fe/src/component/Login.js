@@ -33,10 +33,10 @@ const Login = () => {
                 ...user
             });
 
-            cookie.save('token', res.data.token); 
+            cookie.save('token', res.data.token);
 
             let u = await authApis().get(endpoint['current_user']);
-            
+
             console.info(u.data);
 
 
@@ -82,7 +82,8 @@ const Login = () => {
 
                         {/* required: Bắt buộc phải nhập trước khi submit. value theo từng field onChange set dữ liệu mới*/}
                         {info.map(f => <FloatingLabel key={f.field} controlId="floatingInput" label={f.label} className="mb-3">
-                            <Form.Control type={f.type} placeholder={f.label} required value={user[f.field]} onChange={e => setState(e.target.value, f.field)} />
+                            <Form.Control type={f.type} placeholder={f.label} required vvalue={user[f.field] || ""}
+                                onChange={e => setState(e.target.value, f.field)} />
                         </FloatingLabel>)}
                         {loading === true ? <MySpinner /> : <Button type="submit" variant="success" className="mt-1 mb-1">Đăng nhập</Button>}
                     </Form>

@@ -42,19 +42,31 @@ public class Patient implements Serializable {
     @Lob
     @Size(max = 65535)
     @Column(name = "medical_history_summary", length = 65535)
+
     private String medicalHistorySummary;
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
+
     private Set<Testresult> testresultSet;
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
     private Set<Healthrecord> healthrecordSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
+
     @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
+
     private Set<Appointment> appointmentSet;
+    
+    @JsonIgnore
     @JoinColumn(name = "patient_id", referencedColumnName = "user_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
     private User user;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
+
     @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
+
     private Set<Review> reviewSet;
 
     public Patient() {
@@ -144,5 +156,5 @@ public class Patient implements Serializable {
     public String toString() {
         return "com.trantheanh1301.pojo.Patient[ patientId=" + patientId + " ]";
     }
-    
+
 }
