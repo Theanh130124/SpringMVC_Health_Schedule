@@ -1,18 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Apis, { endpoint } from "../configs/Apis";
 import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { load } from "react-cookies";
 import MySpinner from "./layout/MySpinner";
-import { Link } from "react-router-dom";
+import { Link, unstable_HistoryRouter, useNavigate } from "react-router-dom";
+import { MyUserContext } from "../configs/MyContexts";
+
+import { useHistory } from 'react-router-dom';
+import toast from "react-hot-toast";
 
 const Calendar = () => {
 
-// Nhớ làm xem thêm
+    // Nhớ làm xem thêm
     const [loading, setLoading] = useState(false);
     const [slots, setSlots] = useState([]);
     const [page, setPage] = useState(1);
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
+
+
+    const nav = useNavigate();
+    const user = useContext(MyUserContext);
+
+
 
     const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "";
     const formattedTime = time ? `${time}:00` : "";
@@ -40,9 +50,21 @@ const Calendar = () => {
     };
 
     useEffect(() => {
+
+
         loadSlots();
     }, [page]);
 
+
+    //Xử lý riêng k bỏ vào useEffect(() 
+    const handleBookingClick = () => {
+        if (user === null) {
+            toast.error("Vui lòng đăng nhập để đặt lịch khám!");
+            nav("/login");
+        } else if (user.role === 'Patient') {
+            nav("/booking");
+        }
+    };
 
 
     return (
@@ -116,7 +138,11 @@ const Calendar = () => {
                                     <br />
                                     <strong>Chuyên môn:</strong> {slot.doctorId.bio}
                                 </Card.Text>
-                                <Button as={Link} to="/booking" variant="success">Đặt lịch</Button>
+
+
+                                <Button variant="success" onClick={handleBookingClick}>
+                                    Đặt lịch
+                                </Button>
                             </Card.Body>
                         </Card>
                     </Col>

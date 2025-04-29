@@ -28,9 +28,10 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto  header-menu text-center">
-                        <Link to="/calendar" className="nav-link text-dark nav-item-with-subtext ms-4 ">Xem lịch trống
-                            <span>Đặt khám ngay</span></Link>
-
+                        {user === null || user.role === "Patient" ? <>
+                            <Link to="/calendar" className="nav-link text-dark nav-item-with-subtext ms-4 ">Xem lịch trống
+                                <span>Đặt khám ngay</span></Link>
+                        </> : <></>}
 
                         <Link to="/review" className="nav-item-with-subtext nav-link ms-4 text-center">
                             Xem đánh giá
