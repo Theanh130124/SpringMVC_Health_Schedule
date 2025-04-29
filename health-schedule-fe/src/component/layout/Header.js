@@ -33,6 +33,8 @@ const Header = () => {
                                 <span>Đặt khám ngay</span></Link>
                         </> : <></>}
 
+
+
                         <Link to="/review" className="nav-item-with-subtext nav-link ms-4 text-center">
                             Xem đánh giá
                             <span>Đánh giá về những bác sĩ</span>
@@ -50,20 +52,21 @@ const Header = () => {
                         }
 
 
-                        <NavDropdown
-                            title={
-                                <div className="nav-item-with-subtext">
-                                    Tìm bác sĩ
-                                    <span>Tìm ngay...</span>
-                                </div>
-                            }
-                            id="collapsible-nav-dropdown"
-                            className="nav-item-dropdown ms-4"
-                        >
-                            {/* Tìm bác sĩ ở đây */}
-                            <NavDropdown.Item as={Link} to="/findDoctor">Tìm ngay...</NavDropdown.Item>
-                        </NavDropdown>
-
+                        {user === null || user.role === "Patient" ? <>
+                            <NavDropdown
+                                title={
+                                    <div className="nav-item-with-subtext">
+                                        Tìm bác sĩ
+                                        <span>Tìm ngay...</span>
+                                    </div>
+                                }
+                                id="collapsible-nav-dropdown"
+                                className="nav-item-dropdown ms-4"
+                            >
+                                {/* Tìm bác sĩ ở đây */}
+                                <NavDropdown.Item as={Link} to="/findDoctor">Tìm ngay...</NavDropdown.Item>
+                            </NavDropdown>
+                        </> : <></>}
 
                     </Nav>
 

@@ -6,14 +6,16 @@ import { Link, useSearchParams } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MySpinner from "./layout/MySpinner";
+import RatingIcon from "../utils/RattingIcon";
 
 const Finddoctor = () => {
 
-// Nhớ làm xem thêm
+    // Nhớ làm xem thêm
     const [loading, setLoading] = useState(false);
     const [doctors, setDoctors] = useState([]);
     const [page, setPage] = useState(1);
     const [q, setQ] = useSearchParams();
+    const [hasMore, setHasMore] = useState(true);
 
     const [keyword, setKeyword] = useState("");
 
@@ -32,7 +34,6 @@ const Finddoctor = () => {
         try {
 
             let keyword = q.get('keyword')
-            //Chưa tìm chưa load
             if (!keyword || keyword.trim() === "") {
                 setDoctors([]);
                 return;
@@ -42,8 +43,15 @@ const Finddoctor = () => {
             let url = `${endpoint['doctor']}?page=${page}&keyword=${keyword}`;
             let res = await Apis.get(url);
 
-
-            setDoctors(res.data);
+            if (page === 1) {
+                setDoctors(res.data);
+            }
+            else {
+                setDoctors(prev => [...prev, ...res.data]);
+            }
+            if (res.data.length < 8) {
+                setHasMore(false);
+            }
 
         } catch (ex) {
             console.error(ex);
@@ -54,6 +62,14 @@ const Finddoctor = () => {
 
     }
 
+
+
+    useEffect(() => {
+        setPage(1);
+        setHasMore(true);
+        setDoctors([]);
+
+    }, [q]);
 
 
     useEffect(() => {
@@ -77,7 +93,7 @@ const Finddoctor = () => {
                     </Col>
                 </Row>
 
-                {/* CSS cho đều lại card  thêm phí khám nữa*/ }
+
                 <Row className="justify-content-center g-4  mt-4">
                     {doctors.length === 0 && <Alert variant="info" className="m-2 text-center">Không tìm thấy bác sĩ nào!</Alert>}
                     {doctors.map(d => (
@@ -89,13 +105,24 @@ const Finddoctor = () => {
                                         <Card.Title className="card-title"> Bác sĩ : {`${d.user.firstName} ${d.user.lastName}`.split(' ').slice(0, 4).join(' ')}
                                             {`${d.user.firstName} ${d.user.lastName}`.split(' ').length > 4 && '...'}</Card.Title>
                                         <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
-                                       Chuyên khoa:  {d.bio ? (d.bio.length > 50 ? d.bio.slice(0, 50) + "..." : d.bio) : "Không có mô tả"}
+                                            Chuyên khoa:  {d.bio ? (d.bio.length > 50 ? d.bio.slice(0, 50) + "..." : d.bio) : "Không có mô tả"}
                                         </Card.Text>
+                                        <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
+                                            Đánh giá : {d.averageRating} <RatingIcon rating={d.averageRating} />
+                                        </Card.Text>
+
+                                        <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
+                                            Phí khám:  {d.consultationFee.toLocaleString('vi-VN')} VNĐ
+                                        </Card.Text>
+
+
+
+
                                     </div>
                                     <div className="d-grid gap-1 mt-2">
                                         {/* Xem lịch trống là tìm lịch trống theo id doctor đó */}
                                         <Button variant="primary" as={Link} to="/calendar" size="sm">Xem lịch trống</Button>
-                                        <Button variant="danger" size="sm">Xem đánh giá</Button>
+                                        <Button variant="danger" as={Link} to="/review" size="sm">Xem đánh giá</Button>
                                     </div>
                                 </Card.Body>
                             </Card>
@@ -110,6 +137,18 @@ const Finddoctor = () => {
                         <MySpinner />
                     </div>
                 )}
+
+                {/* Xem thêm */}
+
+                <Row className="justify-content-center align-items-center g-4 mb-4 mt-4">
+                    {hasMore && doctors.length > 0 && !loading && (
+                        <Col md={1} lg={1} xs={1}>
+                            <Button variant="info" onClick={() => setPage(prev => prev + 1)} > Xem thêm</Button>
+                        </Col>
+                    )}
+                </Row>
+                <Row className="g-4 mb-4 mt-4"></Row>
+
             </Container>
         </>
     );

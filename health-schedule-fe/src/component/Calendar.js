@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import Apis, { endpoint } from "../configs/Apis";
 import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { load } from "react-cookies";
@@ -11,13 +11,13 @@ import toast from "react-hot-toast";
 
 const Calendar = () => {
 
-    // Nhớ làm xem thêm
+    
     const [loading, setLoading] = useState(false);
     const [slots, setSlots] = useState([]);
     const [page, setPage] = useState(1);
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
-
+    const [hasMore, setHasMore] = useState(true);
 
     const nav = useNavigate();
     const user = useContext(MyUserContext);
@@ -40,14 +40,31 @@ const Calendar = () => {
                 url += `&startTime=${formattedTime}`;
             }
             const res = await Apis.get(url);
-
-            setSlots(res.data);
+            if (page === 1) {
+                setSlots(res.data);
+            }
+            else {
+                setSlots(prev => [...prev, ...res.data]);
+            }
+            //1 trang 8 bác sĩ
+            if (res.data.length < 8) {
+                setHasMore(false);
+            }
         } catch (ex) {
             console.error(ex);
         } finally {
             setLoading(false);
         }
     };
+
+
+    useEffect(() => {
+        setPage(1);
+        setHasMore(true);
+        setSlots([]);
+
+    }, [date, time]);
+
 
     useEffect(() => {
 
@@ -147,7 +164,22 @@ const Calendar = () => {
                         </Card>
                     </Col>
                 ))}
+
             </Row>
+
+
+            {/* Xem thêm */}
+
+            <Row className="justify-content-center align-items-center g-4 mb-4 mt-4">
+                {hasMore && slots.length > 0 && !loading && (
+                    <Col md={1} lg={1} xs={1}>
+                        <Button variant="info" onClick={() => setPage(prev => prev + 1)} > Xem thêm</Button>
+                    </Col>
+                )}
+            </Row>
+            <Row className="g-4 mb-4 mt-4"></Row>
+
+
         </Container>
     );
 }
