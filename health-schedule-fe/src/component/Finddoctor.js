@@ -77,7 +77,7 @@ const Finddoctor = () => {
                     </Col>
                 </Row>
 
-                {/* CSS cho đều lại card */}
+                {/* CSS cho đều lại card  thêm phí khám nữa*/ }
                 <Row className="justify-content-center g-4  mt-4">
                     {doctors.length === 0 && <Alert variant="info" className="m-2 text-center">Không tìm thấy bác sĩ nào!</Alert>}
                     {doctors.map(d => (

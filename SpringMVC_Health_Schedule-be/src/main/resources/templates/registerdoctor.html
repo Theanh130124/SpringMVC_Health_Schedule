@@ -1,1 +1,113 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Đăng ký bác sĩ</title>
+    <th:block th:replace="layout/base :: styles"></th:block>
+</head>
+<body>
+    <div th:replace="layout/header :: header"></div>
 
+    <section class="container mt-5">
+        <h1 class="text-center mb-4"> Tạo tài khoản cho bác sĩ</h1>
+        <!-- Hiển thị thông báo thành công -->
+        <div th:if="${successMessage}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
+        </div>
+
+        <!-- Hiển thị thông báo thất bại -->
+        <div th:if="${errorMessage}" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <form th:action="@{/registerdoctor}" method="post" enctype="multipart/form-data" class="row g-3">
+
+
+
+            <div class="col-md-6">
+                <label for="firstName" class="form-label">Họ và tên lót</label>
+                <input type="text" class="form-control" name="firstName" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="lastName" class="form-label">Tên</label>
+                <input type="text" class="form-control" name="lastName" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="username" class="form-label">Tên đăng nhập</label>
+                <input type="text" class="form-control" name="username" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="password" class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" name="password" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="phone" class="form-label">Số điện thoại</label>
+                <input type="text" class="form-control" name="phone" required>
+            </div>
+
+            <div class="col-md-12">
+                <label for="address" class="form-label">Địa chỉ</label>
+                <input type="text" class="form-control" name="address">
+            </div>
+
+            <div class="col-md-6">
+                <label for="gender" class="form-label">Giới tính</label>
+                <select class="form-select" name="gender" required>
+                    <option value="Male">Nam</option>
+                    <option value="Female">Nữ</option>
+                    <option value="Other">Khác</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="birthday" class="form-label">Ngày sinh</label>
+                <input type="date" class="form-control" name="birthday" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="yearsExperience" class="form-label">Số năm kinh nghiệm</label>
+                <input type="number" class="form-control" name="yearsExperience" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="consultationFee" class="form-label">Phí khám</label>
+                <input type="number" class="form-control" name="consultationFee" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="averageRating" class="form-label">Điểm đánh giá trung bình</label>
+                <input type="number" step="0.1" class="form-control" name="averageRating" value="0.0" required>
+            </div>
+
+            <div class="col-md-12">
+                <label for="bio" class="form-label">Giới thiệu bản thân</label>
+                <textarea class="form-control" name="bio" rows="3" required></textarea>
+            </div>
+            <div class="col-md-12">
+                <label for="avatar" class="form-label">Ảnh đại diện</label>
+                <input type="file" class="form-control" name="avatar" accept="image/*">
+            </div>
+
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary">Đăng ký</button>
+            </div>
+
+        </form>
+
+
+    </section>
+
+
+    <div th:replace="layout/footer :: footer"></div>
+
+
+</body>
+</html>

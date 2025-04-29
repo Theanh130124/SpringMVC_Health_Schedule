@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -38,7 +39,7 @@ public class LicenseController {
 
     //Duyệt  -> nhớ phải có  s.flush();
 @PostMapping("/license/{licenseId}")
-public String updateLicense(Model model,
+public String updateLicense(RedirectAttributes redirectAttrs,
         @PathVariable(value = "licenseId") int id,
         @RequestParam Map<String, String> params,
         @AuthenticationPrincipal User user, HttpSession session) {
@@ -48,19 +49,20 @@ public String updateLicense(Model model,
     if (adminId != null) {
         params.put("adminId", String.valueOf(adminId)); 
     } else {
-        model.addAttribute("error", "Không tìm thấy thông tin admin!");
-        return "error"; 
+        redirectAttrs.addFlashAttribute("errorMessage", "Không tìm thấy thông tin admin!");
+        return "redirect:/error";  // Redirect đến trang lỗi nếu không tìm thấy admin
     }
 
     Doctorlicense updatedLicense = licenseService.updateLicense(id, params);
 
     if (updatedLicense != null) {
-        model.addAttribute("successMessage", "Chứng chỉ hành nghề đã được duyệt thành công!");
+        redirectAttrs.addFlashAttribute("successMessage", "Chứng chỉ hành nghề đã được duyệt thành công!");
     } else {
-        model.addAttribute("errorMessage", "Duyệt chứng chỉ hành nghề thất bại. Vui lòng thử lại.");
+        redirectAttrs.addFlashAttribute("errorMessage", "Duyệt chứng chỉ hành nghề thất bại. Vui lòng thử lại.");
     }
 
     return "redirect:/license";  
 }
+
 
 }
