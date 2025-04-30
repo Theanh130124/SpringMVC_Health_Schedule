@@ -1,6 +1,8 @@
 # Spring_Health_Schedule
 Bài tập lớn PTHTWEB
 
+
+<h2>Lưu ý Tomcat11 nữa chỉ giải nén rồi qua server gọi thôi (không có run)</h2>
 <h2>Yêu cầu như sau</h2>
 
 <h2>Features</h2>
