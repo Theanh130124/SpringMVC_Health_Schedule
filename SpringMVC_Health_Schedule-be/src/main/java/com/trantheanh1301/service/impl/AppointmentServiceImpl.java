@@ -107,4 +107,9 @@ public class AppointmentServiceImpl implements AppointmentService {
       return appointmentRepo.getListAppointment(params);
     }
 
+    @Override
+    public Appointment getAppointmentById(int id) {
+        return this.appointmentRepo.getAppointmentById(id);
+    }
+
 }
