@@ -12,4 +12,5 @@ import com.trantheanh1301.pojo.Patient;
  */
 public interface PatientService {
     public Patient register(Patient u);
+    public Patient getPatientById(int id);
 }

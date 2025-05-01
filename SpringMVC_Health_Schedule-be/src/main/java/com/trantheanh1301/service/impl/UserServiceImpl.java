@@ -145,4 +145,9 @@ public class UserServiceImpl implements UserService {
         return this.userRepo.authenticated(username, password);
     }
 
+    @Override
+    public User getUserById(int id) {
+        return this.userRepo.getUserbyId(id);
+    }
+
 }
