@@ -95,18 +95,35 @@ const Finddoctor = () => {
 
 
                 <Row className="justify-content-center g-4  mt-4">
+
+                {loading && !q.get('keyword') && (
+                    <div className="text-center mt-4">
+                        <MySpinner />
+                    </div>
+                )}
                     {doctors.length === 0 && <Alert variant="info" className="m-2 text-center">Không tìm thấy bác sĩ nào!</Alert>}
                     {doctors.map(d => (
                         <Col key={d.doctorId} xs={12} sm={6} md={4} lg={3} >
                             <Card className="card-doctor shadow-sm">
-                                <Card.Img variant="top" src={d.user.avatar} className="card-img-top " />
+                                <Card.Img variant="top" src={d.userDTO.avatar} className="card-img-top " />
                                 <Card.Body className="card-body-custom">
                                     <div>
-                                        <Card.Title className="card-title"> Bác sĩ : {`${d.user.firstName} ${d.user.lastName}`.split(' ').slice(0, 4).join(' ')}
-                                            {`${d.user.firstName} ${d.user.lastName}`.split(' ').length > 4 && '...'}</Card.Title>
-                                        <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
-                                            Chuyên khoa:  {d.bio ? (d.bio.length > 50 ? d.bio.slice(0, 50) + "..." : d.bio) : "Không có mô tả"}
+                                        <Card.Title className="card-title"> Bác sĩ : {`${d.userDTO.firstName} ${d.userDTO.lastName}`.split(' ').slice(0, 4).join(' ')}
+                                            {`${d.userDTO.firstName} ${d.userDTO.lastName}`.split(' ').length > 4 && '...'}</Card.Title>
+                                       
+                                       {/*  */}
+
+                                       {d.specialties.map( s => (<Card.Text key={s.specialtyId} className="card-text" style={{ fontSize: '0.85rem' }}>
+                                            Chuyên khoa: {s.name}
+                                        </Card.Text> ))}
+                                        
+
+                                        
+                                        {d.clinics.map( c => (<Card.Text key={c.clinicId} className="card-text" style={{ fontSize: '0.85rem' }}>
+                                            Bệnh viên: {c.name} <br />
+                                            Địa chỉ: {c.address}
                                         </Card.Text>
+                                        ))}
                                         <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
                                             Đánh giá : {d.averageRating} <RatingIcon rating={d.averageRating} />
                                         </Card.Text>
@@ -132,11 +149,7 @@ const Finddoctor = () => {
                     ))}
                 </Row>
 
-                {loading && !q.get('keyword') && (
-                    <div className="text-center mt-4">
-                        <MySpinner />
-                    </div>
-                )}
+
 
                 {/* Xem thêm */}
 

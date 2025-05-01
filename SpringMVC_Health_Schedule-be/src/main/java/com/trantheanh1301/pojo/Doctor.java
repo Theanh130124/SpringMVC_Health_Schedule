@@ -6,6 +6,7 @@
 package com.trantheanh1301.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -61,44 +62,42 @@ public class Doctor implements Serializable {
     @JoinTable(name = "doctor_specialty", joinColumns = {
         @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "specialty_id", referencedColumnName = "specialty_id", nullable = false)})
+
+    
+    //Chiều được serializer
+    
     @JsonIgnore
     @ManyToMany
     private Set<Specialty> specialtySet;
     @JoinTable(name = "doctor_clinic", joinColumns = {
         @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id", nullable = false)})
-    
-    
+
     @JsonIgnore
     @ManyToMany
     private Set<Clinic> clinicSet;
-    
-    
+
     @JsonIgnore
     @OneToMany(mappedBy = "doctorId")
     private Set<Testresult> testresultSet;
-    
-    
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctorId")
     private Set<Appointment> appointmentSet;
-    
-    
+
     @JoinColumn(name = "doctor_id", referencedColumnName = "user_id", nullable = false, insertable = false, updatable = false)
-    
+
     @OneToOne(optional = false)
     private User user;
-    
-    
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctorId")
     private Set<Doctoravailability> doctoravailabilitySet;
-    
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctorId")
     private Set<Doctorlicense> doctorlicenseSet;
-    
-    
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctorId")
     private Set<Review> reviewSet;
@@ -238,6 +237,7 @@ public class Doctor implements Serializable {
     public String toString() {
         return "com.trantheanh1301.pojo.Doctor[ doctorId=" + doctorId + " ]";
     }
+
     @PrePersist
     protected void initializeDefaults() {
         // **ĐÂY LÀ NƠI XỬ LÝ DEFAULT CHO DOCTOR**
@@ -247,10 +247,10 @@ public class Doctor implements Serializable {
         if (this.consultationFee == null) {
             this.consultationFee = BigDecimal.ZERO;
         }
-         if (this.averageRating == null) {
+        if (this.averageRating == null) {
             this.averageRating = BigDecimal.ZERO; // Rating ban đầu là 0
         }
         // bio có thể null
     }
-    
+
 }

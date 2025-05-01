@@ -4,6 +4,9 @@
  */
 package com.trantheanh1301.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -73,8 +76,15 @@ public class Clinic implements Serializable {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+    
+    
+    
+
     @ManyToMany(mappedBy = "clinicSet")
     private Set<Doctor> doctorSet;
+    
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "clinicId")
     private Set<Appointment> appointmentSet;
 

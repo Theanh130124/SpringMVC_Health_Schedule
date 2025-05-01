@@ -1,8 +1,10 @@
+com\trantheanh1301\mapperdto\SpeciatlyMapper.class
 com\trantheanh1301\repository\impl\ClinicRepositoryImpl.class
 com\trantheanh1301\controllers\DoctorController.class
 com\trantheanh1301\controllers\LicenseController.class
 com\trantheanh1301\controllers\UserController.class
 com\trantheanh1301\repository\impl\DoctorLicenseRepositoryImpl.class
+com\trantheanh1301\dto\SpecialtyDTO.class
 com\trantheanh1301\controllers\ApiAppointmentController.class
 com\trantheanh1301\pojo\Clinic.class
 com\trantheanh1301\repository\impl\ReviewRepositoryImpl.class
@@ -10,6 +12,7 @@ com\trantheanh1301\controllers\VNPayController.class
 com\trantheanh1301\pojo\Payment.class
 com\trantheanh1301\repository\impl\AppointmentRepositoryImpl.class
 com\trantheanh1301\pojo\Appointment.class
+com\trantheanh1301\mapperdto\DoctorlicenseMapper.class
 com\trantheanh1301\service\impl\UserServiceImpl.class
 com\trantheanh1301\repository\impl\PaymentRepositoryImpl.class
 com\trantheanh1301\service\AppointmentService.class
@@ -18,8 +21,10 @@ com\trantheanh1301\service\impl\PatientServiceImpl.class
 com\trantheanh1301\filters\JwtFilter.class
 com\trantheanh1301\pojo\Doctor.class
 com\trantheanh1301\controllers\ApiDoctorLicenseController.class
+com\trantheanh1301\dto\DoctorDTO.class
 com\trantheanh1301\service\impl\InvoiceServiceImpl.class
 com\trantheanh1301\controllers\ApiInvoiceController.class
+com\trantheanh1301\dto\UserDTO.class
 com\trantheanh1301\repository\InvoiceRepository.class
 com\trantheanh1301\repository\PaymentRepository.class
 com\trantheanh1301\repository\ClinicRepository.class
@@ -32,6 +37,7 @@ com\trantheanh1301\config\DispatcherServletInit.class
 com\trantheanh1301\pojo\Doctoravailability.class
 com\trantheanh1301\service\ReviewService.class
 com\trantheanh1301\repository\UserRepository.class
+com\trantheanh1301\dto\DoctorlicenseDTO.class
 com\trantheanh1301\repository\impl\PatientRepositoryImpl.class
 com\trantheanh1301\service\DoctorService.class
 com\trantheanh1301\service\impl\DoctorLicenseServiceImpl.class
@@ -55,6 +61,7 @@ com\trantheanh1301\service\impl\EmailServiceImpl$1.class
 com\trantheanh1301\service\impl\ReviewServiceImpl.class
 com\trantheanh1301\repository\DoctorAvailabilityRepository.class
 com\trantheanh1301\repository\DoctorLicenseRepository.class
+com\trantheanh1301\dto\ClinicDTO.class
 com\trantheanh1301\pojo\Testresult.class
 com\trantheanh1301\pojo\Review.class
 com\trantheanh1301\repository\StatsRepository.class
@@ -64,6 +71,7 @@ com\trantheanh1301\springmvc_health_schedule\resources\JakartaEE11Resource.class
 com\trantheanh1301\service\impl\AvailabeslotServiceImpl.class
 com\trantheanh1301\pojo\User.class
 com\trantheanh1301\repository\ReviewRepository.class
+com\trantheanh1301\mapperdto\UserMapper.class
 com\trantheanh1301\repository\impl\DoctorAvailabilityRepositoryImpl.class
 com\trantheanh1301\service\impl\DoctorAvailabilityServiceImpl.class
 com\trantheanh1301\pojo\Patient.class
@@ -80,11 +88,13 @@ com\trantheanh1301\service\EmailService.class
 com\trantheanh1301\controllers\ApiAvailableslotControllers.class
 com\trantheanh1301\repository\impl\InvoiceRepositoryImpl.class
 com\trantheanh1301\repository\AppointmentRepository.class
+com\trantheanh1301\mapperdto\ClinicMapper.class
 com\trantheanh1301\repository\impl\AvailabeslotRepositoryImpl.class
 com\trantheanh1301\pojo\Specialty.class
 com\trantheanh1301\repository\AvailabeslotRepository.class
 com\trantheanh1301\service\InvoiceService.class
 com\trantheanh1301\service\impl\AppointmentServiceImpl.class
+com\trantheanh1301\mapperdto\DoctorMapper.class
 com\trantheanh1301\service\UserService.class
 com\trantheanh1301\service\PaymentService.class
 com\trantheanh1301\repository\impl\DoctorRepositoryImpl.class

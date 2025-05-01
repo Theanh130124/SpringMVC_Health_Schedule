@@ -4,6 +4,9 @@
  */
 package com.trantheanh1301.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,6 +52,10 @@ public class Specialty implements Serializable {
     @Size(max = 65535)
     @Column(name = "description", length = 65535)
     private String description;
+    
+    
+
+    
     @ManyToMany(mappedBy = "specialtySet")
     private Set<Doctor> doctorSet;
 

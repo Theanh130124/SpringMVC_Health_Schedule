@@ -78,6 +78,9 @@ const Calendar = () => {
         if (user === null) {
             toast.error("Vui lòng đăng nhập để đặt lịch khám!");
             nav("/login");
+            
+            //Đăng nhập xong thì quay về trang này
+  
         } else if (user.role === 'Patient') {
             nav("/booking");
         }

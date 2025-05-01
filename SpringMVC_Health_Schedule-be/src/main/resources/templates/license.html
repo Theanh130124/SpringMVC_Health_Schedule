@@ -24,6 +24,7 @@
                 <table class="table-striped table">
                     <thead>
                         <tr>
+                            <th>Họ tên</th>
                             <th>Mã số chứng chỉ:</th>
                             <th>Ngày cấp:</th>
                             <th>Ngày hết hạn:</th>
@@ -36,6 +37,7 @@
 
                     <tbody>
                         <tr th:each="l : ${license}">
+<!--                            <td th:text="${l.doctorId.user.firstName} ${l.doctorId.user.lastName}"></td>-->
                             <td th:text="${l.licenseNumber}"></td>
                             <td th:text="${l.issueDate}"></td>
                             <td th:text="${l.expiryDate}"></td>

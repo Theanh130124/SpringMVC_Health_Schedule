@@ -4,18 +4,23 @@
  */
 package com.trantheanh1301.controllers;
 
+import com.trantheanh1301.dto.DoctorDTO;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.service.DoctorService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.trantheanh1301.mapperdto.DoctorMapper;
 
 /**
  *
@@ -23,21 +28,34 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
+@Transactional
 public class ApiDoctorController {
     
     @Autowired
     private DoctorService doctorService;
     
-    @GetMapping("/doctor")
-    public ResponseEntity<?> getListDoctor(@RequestParam Map<String, String> params){
-        try{
-            List<Doctor> listDoctor = doctorService.getDoctor(params);
-            return new ResponseEntity<>(listDoctor, HttpStatus.OK);
-        }catch (Exception ex) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "Đã xảy ra lỗi" + ex.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+
+
+@GetMapping("/doctor")
+public ResponseEntity<?> getListDoctor(@RequestParam Map<String, String> params) {
+    try {
+        List<Doctor> listDoctor = doctorService.getDoctor(params);
+
+        List<DoctorDTO> dtoList = listDoctor.stream()
+                .map(DoctorMapper::toDoctorDTO)   //tương đương  .map(d -> DoctorMapper.toDoctorDTO(d))
+                .collect(Collectors.toList());   // bỏ vào list
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+
+    } catch (Exception ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Đã xảy ra lỗi: " + ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
+
 }
+
+
+
 

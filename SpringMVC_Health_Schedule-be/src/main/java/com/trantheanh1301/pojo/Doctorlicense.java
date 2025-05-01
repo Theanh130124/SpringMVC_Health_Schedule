@@ -90,6 +90,9 @@ public class Doctorlicense implements Serializable {
     private Date updatedAt;
     @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)
     //Muốn xemt thì bật Eager
+    
+    
+    
     @JsonIgnore
     @ManyToOne(optional = false)
     private Doctor doctorId;

@@ -1,6 +1,8 @@
 import axios from "axios"
 import cookie from 'react-cookies'
 
+
+//CÓ THAY ĐỔI 
 const BASE_URL = 'http://localhost:8080/SpringMVC_Health_Schedule/api/'
 
 
