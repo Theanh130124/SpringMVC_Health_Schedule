@@ -31,6 +31,9 @@ const App = () => {
   const [user, dispatch] = useReducer(MyUserReducer, cookie.load('user') || null);
 
 
+
+
+
   //Phần xử lý token cho notifications
   useEffect(() => {
     generateToken();
@@ -48,7 +51,7 @@ const App = () => {
           <Container fluid >
             <MyToaster />
             <Routes>
-
+{/* Permission lại bên BE */}
               <Route path="/appointment" element={<Appointment />} />
               <Route path="/callvideo" element={<CallVideo/>} />
               <Route path="/uploadLicense" element={<UploadLicense />} />

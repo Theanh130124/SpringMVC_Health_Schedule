@@ -21,16 +21,15 @@ public class DoctorlicenseDTO {
     private Date expiryDate;
     private String scopeDescription;
     private Boolean isVerified;
-    private Date verificationDate;
     private Date createdAt;
     private Date updatedAt;
     private Doctor doctor;
-    private User verifiedByAdmin;
+
 
     public DoctorlicenseDTO() {
     }
 
-    public DoctorlicenseDTO(Integer licenseId, String licenseNumber, String issuingAuthority, Date issueDate, Date expiryDate, String scopeDescription, Boolean isVerified, Date verificationDate, Date createdAt, Date updatedAt, Doctor doctor, User verifiedByAdmin) {
+    public DoctorlicenseDTO(Integer licenseId, String licenseNumber, String issuingAuthority, Date issueDate, Date expiryDate, String scopeDescription, Boolean isVerified, Date createdAt, Date updatedAt, Doctor doctor) {
         this.licenseId = licenseId;
         this.licenseNumber = licenseNumber;
         this.issuingAuthority = issuingAuthority;
@@ -38,11 +37,10 @@ public class DoctorlicenseDTO {
         this.expiryDate = expiryDate;
         this.scopeDescription = scopeDescription;
         this.isVerified = isVerified;
-        this.verificationDate = verificationDate;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.doctor = doctor;
-        this.verifiedByAdmin = verifiedByAdmin;
+
     }
 
     /**
@@ -146,16 +144,7 @@ public class DoctorlicenseDTO {
     /**
      * @return the verificationDate
      */
-    public Date getVerificationDate() {
-        return verificationDate;
-    }
-
-    /**
-     * @param verificationDate the verificationDate to set
-     */
-    public void setVerificationDate(Date verificationDate) {
-        this.verificationDate = verificationDate;
-    }
+  
 
     /**
      * @return the createdAt
@@ -202,17 +191,7 @@ public class DoctorlicenseDTO {
     /**
      * @return the verifiedByAdmin
      */
-    public User getVerifiedByAdmin() {
-        return verifiedByAdmin;
-    }
-
-    /**
-     * @param verifiedByAdmin the verifiedByAdmin to set
-     */
-    public void setVerifiedByAdmin(User verifiedByAdmin) {
-        this.verifiedByAdmin = verifiedByAdmin;
-    }
-    
+   
     
     
 }

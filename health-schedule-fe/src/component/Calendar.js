@@ -74,17 +74,22 @@ const Calendar = () => {
 
 
     //Xử lý riêng k bỏ vào useEffect(() 
-    const handleBookingClick = () => {
+    const handleBookingClick = (slot) => {
         if (user === null) {
             toast.error("Vui lòng đăng nhập để đặt lịch khám!");
             nav("/login");
-            
             //Đăng nhập xong thì quay về trang này
   
-        } else if (user.role === 'Patient') {
-            nav("/booking");
+        } else if (user.role == 'Patient') {
+            
+          //Truyền dữ liệu vào state
+          nav("/booking", { state: { slot } });      
+            
         }
+      
     };
+
+
 
 
     return (
@@ -152,15 +157,15 @@ const Calendar = () => {
                                     {slot.doctorId.user.firstName} {slot.doctorId.user.lastName}
                                 </Card.Title>
                                 <Card.Text className="card-text">
-                                    <strong >Thời gian</strong> {slot.startTime} - {slot.endTime}
+                                    <strong>Ngày khám:</strong> {new Date(slot.slotDate).toLocaleDateString()}
                                     <br />
-                                    <strong>Ngày:</strong> {new Date(slot.slotDate).toLocaleDateString()}
+                                    <strong >Thời gian</strong> {slot.startTime} - {slot.endTime}
                                     <br />
                                     <strong>Chuyên môn:</strong> {slot.doctorId.bio}
                                 </Card.Text>
 
 
-                                <Button variant="success" onClick={handleBookingClick}>
+                                <Button variant="success" onClick = { () => {handleBookingClick(slot)}}>
                                     Đặt lịch
                                 </Button>
                             </Card.Body>

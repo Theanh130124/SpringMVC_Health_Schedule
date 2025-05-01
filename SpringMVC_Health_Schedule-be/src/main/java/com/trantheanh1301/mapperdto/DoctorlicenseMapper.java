@@ -25,11 +25,10 @@ public class DoctorlicenseMapper {
         licenseDTO.setExpiryDate(license.getExpiryDate());
         licenseDTO.setScopeDescription(license.getScopeDescription());
         licenseDTO.setIsVerified(license.getIsVerified());
-        licenseDTO.setVerificationDate(license.getVerificationDate());
         licenseDTO.setCreatedAt(license.getCreatedAt());
         licenseDTO.setUpdatedAt(license.getUpdatedAt());
         licenseDTO.setDoctor(license.getDoctorId());
-        licenseDTO.setVerifiedByAdmin(license.getVerifiedByAdminId());
+      
         
         return licenseDTO;
     }
