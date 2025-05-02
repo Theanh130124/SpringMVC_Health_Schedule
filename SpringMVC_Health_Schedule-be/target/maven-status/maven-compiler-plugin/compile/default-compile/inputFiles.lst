@@ -20,6 +20,7 @@ E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\jav
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\controllers\StatsController.java
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\controllers\UserController.java
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\controllers\VNPayController.java
+E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\dto\AvailableslotDTO.java
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\dto\ClinicDTO.java
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\dto\DoctorDTO.java
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\dto\DoctorlicenseDTO.java
@@ -29,6 +30,7 @@ E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\jav
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\formatter\DateFormatter.java
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\formatter\ErrorResponseFormatter.java
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\formatter\StatsFormatter.java
+E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\mapperdto\AvailableslotMapper.java
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\mapperdto\ClinicMapper.java
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\mapperdto\DoctorlicenseMapper.java
 E:\SpringMVC\SpringMVC_Health_Schedule\SpringMVC_Health_Schedule-be\src\main\java\com\trantheanh1301\mapperdto\DoctorMapper.java

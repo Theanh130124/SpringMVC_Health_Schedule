@@ -151,10 +151,10 @@ const Calendar = () => {
                 {slots.map((slot) => (
                     <Col key={slot.slotId} md={4} lg={2} className="mb-3">
                         <Card>
-                            <Card.Img variant="top" src={slot.doctorId.user.avatar} />
+                            <Card.Img variant="top" src={slot.doctorId.userDTO.avatar} />
                             <Card.Body className="card-body-custom">
                                 <Card.Title>
-                                    {slot.doctorId.user.firstName} {slot.doctorId.user.lastName}
+                                    {slot.doctorId.userDTO.firstName} {slot.doctorId.userDTO.lastName}
                                 </Card.Title>
                                 <Card.Text className="card-text">
                                     <strong>Ngày khám:</strong> {new Date(slot.slotDate).toLocaleDateString()}

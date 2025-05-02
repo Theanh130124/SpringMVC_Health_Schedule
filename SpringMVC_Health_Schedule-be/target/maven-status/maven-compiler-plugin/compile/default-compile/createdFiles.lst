@@ -38,10 +38,12 @@ com\trantheanh1301\pojo\Doctoravailability.class
 com\trantheanh1301\service\ReviewService.class
 com\trantheanh1301\repository\UserRepository.class
 com\trantheanh1301\dto\DoctorlicenseDTO.class
+com\trantheanh1301\dto\AvailableslotDTO.class
 com\trantheanh1301\repository\impl\PatientRepositoryImpl.class
 com\trantheanh1301\service\DoctorService.class
 com\trantheanh1301\service\impl\DoctorLicenseServiceImpl.class
 com\trantheanh1301\service\AvailabeslotService.class
+com\trantheanh1301\mapperdto\AvailableslotMapper.class
 com\trantheanh1301\controllers\ApiDoctorController.class
 com\trantheanh1301\pojo\Healthrecord.class
 com\trantheanh1301\config\SpringSecurityConfigs.class

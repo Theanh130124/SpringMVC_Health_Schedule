@@ -70,7 +70,7 @@ const Booking = () => {
                                     <br />
                                     <strong>Ngày khám:</strong> {new Date(slot.slotDate).toLocaleDateString()}
                                     <br />
-                                    <strong>Bác sĩ khám:</strong> {slot.doctorId.user.firstName} {slot.doctorId.user.lastName}
+                                    <strong>Bác sĩ khám:</strong> {slot.doctorId.userDTO.firstName} {slot.doctorId.userDTO.lastName}
                                     <br />
                                     <strong>Nơi khám:</strong> {slot.doctorId.bio}
 

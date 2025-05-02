@@ -136,11 +136,7 @@ public class AvailabeslotRepositoryImpl implements AvailabeslotRepository {
         Doctor doctor = new Doctor();
         doctor.setDoctorId(doctorId);
         
-//                //Để có thể truy vấn specialty và clinic -> đã @Jsonignore
-//        DoctorDTO doctorDTO = DoctorMapper.toDoctorDTO(doctor);
-//        
-//        predicates.add(builder.equal(rA.get("doctorId"), doctorDTO));
-        
+     
         predicates.add(builder.equal(rA.get("doctorId"), doctor));
         predicates.add(builder.lessThanOrEqualTo(rA.get("startTime"), time));
         predicates.add(builder.greaterThanOrEqualTo(rA.get("endTime"), time));

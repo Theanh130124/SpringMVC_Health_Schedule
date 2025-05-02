@@ -4,6 +4,7 @@
  */
 package com.trantheanh1301.pojo;
 
+import com.trantheanh1301.dto.DoctorDTO;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -68,6 +69,11 @@ public class Availableslot implements Serializable {
     @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)
     @ManyToOne(optional = false)
     private Doctor doctorId;
+    
+    
+    
+    
+   
 
     public Availableslot() {
     }

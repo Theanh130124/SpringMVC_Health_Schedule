@@ -4,6 +4,7 @@
  */
 package com.trantheanh1301.controllers;
 
+import com.trantheanh1301.dto.AvailableslotDTO;
 import com.trantheanh1301.pojo.Availableslot;
 import com.trantheanh1301.service.AvailabeslotService;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class ApiAvailableslotControllers {
     @GetMapping("/find_slot")
     public ResponseEntity<?> getAvailabeSlot(@RequestParam Map<String, String> params) {
         try {
-            List<Availableslot> listDoctor = availabeSlotService.findSlot(params);
+            List<AvailableslotDTO> listDoctor = availabeSlotService.findSlot(params);
             return new ResponseEntity<>(listDoctor, HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
