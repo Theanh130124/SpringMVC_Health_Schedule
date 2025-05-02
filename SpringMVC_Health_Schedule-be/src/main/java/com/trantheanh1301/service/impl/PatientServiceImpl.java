@@ -24,5 +24,10 @@ public class PatientServiceImpl implements PatientService{
     public Patient register(Patient u) {
         return patientRepo.register(u);
     }
+
+    @Override
+    public Patient getPatientById(int id) {
+        return this.patientRepo.getPatientbyId(id);
+    }
     
 }
