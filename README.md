@@ -97,7 +97,7 @@ Phần này là FCM - Push notifications
 
 -> Vào healthapp 
 
-![alt text](image.png)
+
 
 
 Docs 
