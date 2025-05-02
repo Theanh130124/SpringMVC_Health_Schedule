@@ -15,6 +15,7 @@ export const endpoint = {
     'login':'/login',
     'findDoctor': '/find_slot',
     'listAppointment': '/appointment',
+    'bookdoctor': '/book_doctor',
     
    
 }

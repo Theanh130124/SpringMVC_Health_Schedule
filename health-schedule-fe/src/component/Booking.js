@@ -2,6 +2,10 @@ import { useContext, useState } from "react";
 import { MyUserContext } from "../configs/MyContexts";
 import { Button, Card, Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
+import { authApis, endpoint } from "../configs/Apis";
+import toast from "react-hot-toast";
+import MyToaster from "./layout/MyToaster";
+import MyConfirm from "./layout/MyConfirm";
 
 const Booking = () => {
 
@@ -10,8 +14,9 @@ const Booking = () => {
 
     const [loading, setLoading] = useState(false);
     const location = useLocation();
+    const [showConfirm, setShowConfirm] = useState(false);
     const slot = location.state?.slot;
-    const [appointment, setAppointment] = useState();
+    const [appointment, setAppointment] = useState({});
 
 
 
@@ -20,31 +25,43 @@ const Booking = () => {
 
     //duration là 120phuts 
     
-    // const Booking =  async () => {
+    const Booking =  async () => {
 
-    //     try {
-    //         setLoading(true);
-            
+        try {
+            setLoading(true);
+            let res = await authApis.post(endpoint['bookdoctor'], {
+
+                patientId: user.userId,
+                doctorId: slot.doctorId.doctorId,
+                clinicId: slot.doctorId.clinics[0].clinicId,
+                time : slot.slotDate + " " + slot.startTime,
+                reason: appointment.reason,
+                duration: 120,
+                
+            });
+
+            toast.success("Đặt lịch thành công!");
            
+        } catch (ex) {
+
+            console.error(ex);
+            toast.error("Đặt lịch thất bại!");
+        } finally {
+            setLoading(false);
+            setShowConfirm(false);
+        }
 
 
-
-    //         console.log(res.data);
-    //     } catch (ex) {
-    //         console.error(ex);
-    //     } finally {
-    //         setLoading(false);
-    //     }
+    }
 
 
-    // }
+    const handleConfirm = () => {
+        setShowConfirm(true);
+    };
 
-
-    // const handleBooking = async () => {
-
-
-    // }
-
+    const handleClose = () => {
+        setShowConfirm(false);
+    };
 
         
         
@@ -52,14 +69,15 @@ const Booking = () => {
     
 
     return (
-
+        <>
+        <MyToaster />
         <Container fluid className="p-0">
 
             <Row className="justify-content-center custom-row-primary mt-4">
 
                 
 
-                <Col lg={6} md={8} sm={10}>
+                <Col lg={8} md={10} sm={12}>
                 <Container className="p-3 shadow rounded bg-light me-5"> 
                 <h2 className="text-center">Thông tin chi tiết</h2>
                 <Card>
@@ -73,11 +91,26 @@ const Booking = () => {
                                     <strong>Bác sĩ khám:</strong> {slot.doctorId.userDTO.firstName} {slot.doctorId.userDTO.lastName}
                                     <br />
                                     <strong>Nơi khám:</strong> {slot.doctorId.bio}
+                                    <br />
+                                   
 
                                 </Card.Text>
+                                <Card.Text className="card-text">
+                                   
+                                    
+                                    <strong>Chi phí khám:</strong> {slot.doctorId.consultationFee.toLocaleString('vi-VN')} VNĐ
+                                    <br />
+                                    <strong>Bệnh viện:</strong> {slot.doctorId.clinics[0].name}
+                                    <br />
+                                    <strong>Địa chỉ:</strong> {slot.doctorId.clinics[0].address}
+                                </Card.Text>
+                                <FloatingLabel  label="Lý do khám" className="mb-3">
+                                                        <Form.Control type="text" placeholder="Lý do khám bệnh" required
+                                                            value={appointment.reason || ''} onChange={(e) => setAppointment({ ...appointment, reason: e.target.value })} />
+                                                    </FloatingLabel>
 
 
-                                <Button variant="success" onClick ="">
+                                <Button variant="success" onClick={handleConfirm} disabled={loading}>
                                     Xác nhận đặt lịch 
                                 </Button>
                             </Card.Body>
@@ -88,26 +121,26 @@ const Booking = () => {
 
                 </Col>
 
-                <Col lg={6} md={4} sm={2}>
-                {/* <Container className="p-3 shadow rounded bg-light me-5"> 
-
-
-                <FloatingLabel  label="Lý do khám" className="mb-3">
-                    <Form.Control type="text" placeholder="Lý do khám" required
-                        value={appointment.reason} onChange={e => setAppointment(e.target.value)} />
-                                                    </FloatingLabel>
-                    </Container> */}
-
-                </Col>
+               
 
             </Row>
+            <MyConfirm
+                    show={showConfirm}
+                    onHide={handleClose}
+                    
+                    onConfirm={Booking}
+                    loading={loading}
+                    title="Xác nhận đặt lịch"
+                    body="Bạn có chắc chắn muốn đặt lịch hẹn này không?"
+                />
+
 
             <Row>
 
 
             </Row>
         </Container>
-
+        </>
     );
 }
 
