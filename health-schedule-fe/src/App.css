@@ -45,7 +45,7 @@
   overflow: hidden; /* Ẩn nội dung tràn */
   text-overflow: ellipsis; /* Thêm dấu "..." nếu nội dung quá dài */
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Hiển thị tối đa 3 dòng */
+  -webkit-line-clamp: 5; /* Hiển thị tối đa 3 dòng */
   -webkit-box-orient: vertical;
 }
 

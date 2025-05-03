@@ -4,13 +4,18 @@ const { Firestore } = require("firebase-admin/firestore");
 const express = require("express");
 const app = express();
 
+
+
 //Cấp quyền dùng db
-const { db  } = require("./configs/Configs");
+const { db  } = require("./configs/FirebaseConfigs");
 
 
 
 //parse json
 app.use(express.json())
+
+
+
 
 app.post('/chats', async (req, res) => {
     try {

@@ -22,7 +22,7 @@ const Booking = () => {
 
 
 
-
+//Nữa gom myformat
     const formattedDate = slot.slotDate ? new Date(slot.slotDate).toISOString().split('T')[0] : "";
     const formattedTime = slot.startTime ? `${slot.startTime}` : "";
 

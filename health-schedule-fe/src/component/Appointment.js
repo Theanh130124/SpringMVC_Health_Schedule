@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { MyUserContext } from "../configs/MyContexts";
-import { authApis, endpoint } from "../configs/Apis";
+import { authApis, endpoint, fbApis } from "../configs/Apis";
 import { Alert, Button, Card, Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { load } from "react-cookies";
@@ -13,6 +13,32 @@ const Appointment = () => {
     const [page, setPage] = useState(1);
     const user = useContext(MyUserContext);
     const [msg, setMsg] = useState("");
+
+
+
+    // Tạo roomchat
+
+    const [room ,setRoom] = useState();
+
+
+    //doctorId chỉ lấy 1 trong list appointment 
+
+    const createRoom = async (doctorId) => {   
+        try {
+            let res = await fbApis().post(endpoint['chats'], {
+                "userId1": user.userId,
+                "userId2": doctorId,
+            });
+            setRoom(res);
+
+        }catch (ex) {
+
+            console.error(ex);
+
+
+
+    }
+    }
 
 
     const loadAppointments = async () => {
@@ -70,18 +96,36 @@ const Appointment = () => {
                                 <div>
                                     <Card.Title className="card-title"> Ngày hẹn : { new Date (a.appointmentTime).toLocaleDateString("vi-VN")}
                                     </Card.Title>
-                                    <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
-                                        Thời lượng cuộc hẹn: {a.durationMinutes} phút
-                                    </Card.Text>
-                                    <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
-                                        Lý do khám: {a.reason}
-                                    </Card.Text>
-                                    <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
-                                        Trạng thái cuộc hẹn: {a.status}
-                                    </Card.Text>
-                                    <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
-                                        Loại cuộc hẹn: {a.consultationType}
-                                    </Card.Text>
+                                     <Card.Text  className="card-text" style={{ fontSize: '0.85rem' }}>
+                                        
+                                        
+                                         
+                                        <strong>Bác sĩ khám</strong> {a.doctorId.user.firstName} {a.doctorId.user.lastName}
+                                        <br />
+                                            <strong>Bệnh viện</strong> {a.clinicId.name}
+                                        <br /> 
+                                        <strong>Địa điểm khám</strong> {a.clinicId.address}
+                                        <br />  
+
+                                        {/* Xử lý parse sau */}
+                                        {/* <strong>Thời gian </strong> {a.clinicId.appointmentTime} 
+                                        <br /> */}
+                                          
+
+                                       
+
+                                        </Card.Text>
+                                       
+                                        <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
+                                            <strong>Thời lượng cuộc hẹn:</strong> {a.durationMinutes} phút
+                                            <br />
+                                            <strong>Lý do khám:</strong> {a.reason}
+                                            <br />
+                                            <strong>Trạng thái cuộc hẹn:</strong> {a.status}
+                                            <br />
+                                            <strong>Loại cuộc hẹn:</strong> {a.consultationType}
+                                            <br />
+                                        </Card.Text>
 
 
                                     {/* Có lý do hủy có thể thêm */}
@@ -97,6 +141,9 @@ const Appointment = () => {
                                         {/* Chỉ Bệnh nhân được sửa hoặc hủy lịch trong 24h  */}
                                         {/* Tới trang sửa */}
 
+
+                                        {/* Chỉ lấy doctorId được click */}
+                                        <Button variant="success" as={Link} onClick={() => createRoom(a.doctorId.doctorId)} to="/roomchat" size="sm">Chat với bác sĩ</Button>
 
                                         <Button variant="primary" as={Link} to="/" size="sm">Sửa lịch hẹn</Button>
 

@@ -5,17 +5,18 @@
     "lint": "eslint .",
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
-    "start": "npm run shell",
+    "start": "npm run serve",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "engines": {
     "node": "22"
   },
-  "main": "index.js",
+  "main": "chatApis.js",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "firebase": "^11.6.1",
     "firebase-admin": "^12.6.0",
     "firebase-functions": "^6.0.1"
   },
