@@ -27,6 +27,9 @@ npm install -g firebase-tools
 
 firebase init functions
 
+
+firebase login
+
 -Chọn mục use .... rồi chọn project đã tạo trên firebase
 
 ```text
