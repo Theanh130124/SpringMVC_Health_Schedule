@@ -132,6 +132,7 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "verifiedByAdminId")
     private Set<Doctorlicense> doctorlicenseSet;
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Patient patient;
 

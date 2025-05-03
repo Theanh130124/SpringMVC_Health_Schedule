@@ -3,14 +3,21 @@ const logger = require("firebase-functions/logger");
 const { Firestore } = require("firebase-admin/firestore");
 const express = require("express");
 const app = express();
+const multer = require('multer');
+const FormData = require('form-data');
+const upload = multer({ storage: multer.memoryStorage() });
+
 
 //Cấp quyền dùng db
-const { db  } = require("./configs/Configs");
+const { db  } = require("./configs/FirebaseConfigs");
 
 
 
 //parse json
 app.use(express.json())
+
+
+
 
 app.post('/chats', async (req, res) => {
     try {
@@ -103,6 +110,8 @@ app.get('/chats/:chatId/messages', async (req, res) => {
     }
 });
 
+
+//Không dùng 
 // API endpoint để lấy những người tham gia của một cuộc trò chuyện
 app.get('/chats/:chatId/participants', async (req, res) => {
     try {
@@ -128,7 +137,7 @@ app.post('/chats/:chatId/messages' , async (req ,res) => {
         //Không cần truyền senderId vào header -> check body
         const {senderId , text , imageUrl} = req.body;
 
-        if (!senderId || !text){
+        if (!senderId || (!text && !imageUrl)){
             return res.status(400).send({error :'Thiếu senderId hoặc text'})
         }
 
@@ -164,5 +173,32 @@ app.post('/chats/:chatId/messages' , async (req ,res) => {
         return res.status(500).send({error: 'Không thể gửi tin nhắn !!!'})
     }
 })
+
+//Upload ảnh lên cloudinary
+
+app.post('/upload-image', upload.single('image'), async (req, res) => {
+    try {
+      const file = req.file;
+      if (!file) return res.status(400).send({ error: 'Chưa có file ảnh' });
+  
+      const cloudinaryPreset = 'healthapp';
+      const cloudName = 'dxiawzgnz';
+  
+      const formData = new FormData();
+      formData.append('file', file.buffer, file.originalname);
+      formData.append('upload_preset', cloudinaryPreset);
+  
+      const cloudRes = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        formData,
+        { headers: formData.getHeaders() }
+      );
+  
+      return res.status(200).send({ imageUrl: cloudRes.data.secure_url });
+    } catch (err) {
+      console.error('Lỗi khi upload ảnh:', err.message);
+      return res.status(500).send({ error: 'Không thể upload ảnh' });
+    }
+  });
 
 exports.app = onRequest(app);

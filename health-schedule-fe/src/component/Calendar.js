@@ -161,10 +161,13 @@ const Calendar = () => {
                                     <br />
                                     <strong >Thời gian</strong> {slot.startTime} - {slot.endTime}
                                     <br />
-                                    <strong>Chuyên môn:</strong> {slot.doctorId.bio}
+                                    {slot.doctorId.specialties.map((s) => ( <div><strong>Chuyên môn:</strong> {s.name} </div>))}
+                                    <br />
+                                    <strong>Phí khám:</strong> {slot.doctorId.consultationFee.toLocaleString('vi-VN')} VNĐ
+                                    <br />
                                 </Card.Text>
 
-
+                                {/* Sẽ bị mất khi re-render */}
                                 <Button variant="success" onClick = { () => {handleBookingClick(slot)}}>
                                     Đặt lịch
                                 </Button>

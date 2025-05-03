@@ -79,7 +79,7 @@ public class Clinic implements Serializable {
     
     
     
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "clinicSet")
     private Set<Doctor> doctorSet;
     

@@ -96,17 +96,17 @@ public class Appointment implements Serializable {
     @OneToMany(mappedBy = "appointmentId")
     private Set<Healthrecord> healthrecordSet;
 
-    @JsonIgnore
+
     @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id")
     @ManyToOne
     private Clinic clinicId;
 
-    @JsonIgnore
+    
     @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)
     @ManyToOne(optional = false)
     private Doctor doctorId;
 
-    @JsonIgnore
+   
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     @ManyToOne(optional = false)
     private Patient patientId;
