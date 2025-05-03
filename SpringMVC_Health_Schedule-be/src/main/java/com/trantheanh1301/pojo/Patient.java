@@ -59,7 +59,7 @@ public class Patient implements Serializable {
 
     private Set<Appointment> appointmentSet;
     
-    @JsonIgnore
+    
     @JoinColumn(name = "patient_id", referencedColumnName = "user_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
     private User user;

@@ -24,6 +24,8 @@ export const endpoint = {
 
     // Cho firebase
     'chats': '/chats',
+    'uploadImage': '/upload-image',
+    chatMessages: (chatId) => `/chats/${chatId}/messages`,
     
    
 }

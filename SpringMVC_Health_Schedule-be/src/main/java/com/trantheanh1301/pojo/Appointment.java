@@ -106,7 +106,7 @@ public class Appointment implements Serializable {
     @ManyToOne(optional = false)
     private Doctor doctorId;
 
-    @JsonIgnore
+   
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     @ManyToOne(optional = false)
     private Patient patientId;

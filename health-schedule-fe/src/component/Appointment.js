@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { MyUserContext } from "../configs/MyContexts";
 import { authApis, endpoint, fbApis } from "../configs/Apis";
 import { Alert, Button, Card, Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { load } from "react-cookies";
 import MySpinner from "./layout/MySpinner";
 
@@ -14,7 +14,7 @@ const Appointment = () => {
     const user = useContext(MyUserContext);
     const [msg, setMsg] = useState("");
 
-
+    const nav = useNavigate();
 
     // Tạo roomchat
 
@@ -23,13 +23,22 @@ const Appointment = () => {
 
     //doctorId chỉ lấy 1 trong list appointment 
 
-    const createRoom = async (doctorId) => {   
+
+    const createRoom = async (doctorId , appointment) => {   
         try {
             let res = await fbApis().post(endpoint['chats'], {
                 "userId1": user.userId,
                 "userId2": doctorId,
             });
-            setRoom(res);
+            const roomData = res.data;
+            //truyền appointment vào để lấy thông tin của doctor 
+            nav("/roomchat", {
+                state: {
+                    room: roomData,
+                    appointment: appointment
+                }, 
+            });
+
 
         }catch (ex) {
 
@@ -143,7 +152,7 @@ const Appointment = () => {
 
 
                                         {/* Chỉ lấy doctorId được click */}
-                                        <Button variant="success" as={Link} onClick={() => createRoom(a.doctorId.doctorId)} to="/roomchat" size="sm">Chat với bác sĩ</Button>
+                                        <Button variant="success"  onClick={() => createRoom(a.doctorId.doctorId , a)}  size="sm">Chat với bác sĩ</Button>
 
                                         <Button variant="primary" as={Link} to="/" size="sm">Sửa lịch hẹn</Button>
 

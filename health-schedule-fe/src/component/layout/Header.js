@@ -84,7 +84,7 @@ const Header = () => {
                                 <img src={user.avatar} width="40" className="rounded-circle" />
                                 Chào {user.username}!
                             </Link>
-                            <Button variant="danger" onClick={() => dispatch({ "type": "logout" })} as={Link} to="/login" >
+                            <Button variant="danger text-center" onClick={() => dispatch({ "type": "logout" })} as={Link} to="/login" >
                                 Đăng xuất
                             </Button>
                         </>}
