@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { MyUserContext } from "../configs/MyContexts";
 import { Button, Card, Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { authApis, endpoint } from "../configs/Apis";
 import toast from "react-hot-toast";
 import MyToaster from "./layout/MyToaster";
@@ -17,31 +17,45 @@ const Booking = () => {
     const [showConfirm, setShowConfirm] = useState(false);
     const slot = location.state?.slot;
     const [appointment, setAppointment] = useState({});
+    const nav = useNavigate();
+
+
+
+
+
+    const formattedDate = slot.slotDate ? new Date(slot.slotDate).toISOString().split('T')[0] : "";
+    const formattedTime = slot.startTime ? `${slot.startTime}` : "";
+
+    const fullTime = `${formattedDate} ${formattedTime}`;
 
 
 
     //của patient
     const user = useContext(MyUserContext);
 
-    //duration là 120phuts 
     
     const Booking =  async () => {
 
         try {
             setLoading(true);
-            let res = await authApis.post(endpoint['bookdoctor'], {
+            let res = await authApis().post(endpoint['bookdoctor'], {
 
                 patientId: user.userId,
                 doctorId: slot.doctorId.doctorId,
                 clinicId: slot.doctorId.clinics[0].clinicId,
-                time : slot.slotDate + " " + slot.startTime,
+                time : fullTime,
                 reason: appointment.reason,
                 duration: 120,
+                type :"Offline",
                 
             });
 
+            setAppointment(res); // không . data vì res là 1 object
+
+            
+
             toast.success("Đặt lịch thành công!");
-           
+            nav("/appointment"); //Đặt xong về xem lịch hẹn
         } catch (ex) {
 
             console.error(ex);
@@ -84,7 +98,7 @@ const Booking = () => {
                             
                             <Card.Body className="card-body-custom">
                                 <Card.Text className="card-text">
-                                    <strong >Thời gian</strong> {slot.startTime} - {slot.endTime}
+                                    <strong >Thời gian khám:</strong> {slot.startTime} - {slot.endTime}
                                     <br />
                                     <strong>Ngày khám:</strong> {new Date(slot.slotDate).toLocaleDateString()}
                                     <br />
@@ -95,15 +109,25 @@ const Booking = () => {
                                    
 
                                 </Card.Text>
-                                <Card.Text className="card-text">
-                                   
-                                    
+
+                                {slot.doctorId.clinics.map(c =>
+
+                                    <Card.Text className="card-text">
+                                                                    
+                                                                        
                                     <strong>Chi phí khám:</strong> {slot.doctorId.consultationFee.toLocaleString('vi-VN')} VNĐ
                                     <br />
-                                    <strong>Bệnh viện:</strong> {slot.doctorId.clinics[0].name}
+
+
+
+                                    <strong>Bệnh viện:</strong> {c.name}
                                     <br />
-                                    <strong>Địa chỉ:</strong> {slot.doctorId.clinics[0].address}
-                                </Card.Text>
+                                    <strong>Địa chỉ:</strong> {c.address}
+                                    </Card.Text>
+
+
+                                )}
+                              
                                 <FloatingLabel  label="Lý do khám" className="mb-3">
                                                         <Form.Control type="text" placeholder="Lý do khám bệnh" required
                                                             value={appointment.reason || ''} onChange={(e) => setAppointment({ ...appointment, reason: e.target.value })} />

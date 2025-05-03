@@ -1,7 +1,10 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 
-const MyConfirm = ({ show, onHide, onConfirm, loading, title, body}) => {
+
+
+
+const MyConfirm = ({ show, onHide, onConfirm, loading, title, body ,nav}) => {
 
 
     return (
