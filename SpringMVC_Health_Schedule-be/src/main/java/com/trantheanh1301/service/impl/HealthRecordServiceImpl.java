@@ -69,9 +69,9 @@ public class HealthRecordServiceImpl implements HealthRecordService {
     }
 
     @Override
-    public Healthrecord updateHealthRecord(Map<String, String> params) {
+    public Healthrecord updateHealthRecord(int id, Map<String, String> params) {
 
-        Healthrecord h = this.healthRecordRepository.getHealthRecordById(Integer.valueOf(params.get("recordId")));
+        Healthrecord h = this.healthRecordRepository.getHealthRecordById(id);
         LocalDate localDate = LocalDate.now(); 
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         h.setRecordDate(date);

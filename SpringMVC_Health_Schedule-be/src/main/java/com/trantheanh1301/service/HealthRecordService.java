@@ -16,5 +16,5 @@ import java.util.Map;
 public interface HealthRecordService {
     public Healthrecord addHealthRecord(Map<String,String> params);
     public Healthrecord getHealthRecordById(int id);
-    public Healthrecord updateHealthRecord(Map<String,String>params);
+    public Healthrecord updateHealthRecord(int id, Map<String,String>params);
 }
