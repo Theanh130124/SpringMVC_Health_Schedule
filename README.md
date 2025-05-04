@@ -34,6 +34,8 @@ Chạy powershell
 firebase login 
 
 
+Sau này cấu hình bên Fe nhớ mở symbollink để truy cập đc từ ngoài src
+
 -Chọn mục use .... rồi chọn project đã tạo trên firebase
 
 ```text
