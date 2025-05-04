@@ -148,27 +148,48 @@ const Appointment = () => {
                                         Link Videocall:
                                     </Card.Text> */}
                                 </div>
-
-                                {user.role === "Patient" ? <>
+{/* Fix ở bác sĩ thì là tên bệnh nhân */}
+                                {user.role === "Doctor" && (
                                     <div className="d-grid gap-1 mt-2">
-                                        {/* Chỉ Bệnh nhân được sửa hoặc hủy lịch trong 24h  */}
-                                        {/* Tới trang sửa */}
-
-
-                                        {/* Chỉ lấy doctorId được click */}
-                                        {loading[a.appointmentId] === true ? <MySpinner  /> : <Button variant="success" onClick={() => createRoom(a.doctorId.doctorId, a)} size="sm">Chat với bác sĩ</Button>}
-
-                                        <Button variant="primary" as={Link} to="/" size="sm">Sửa lịch hẹn</Button>
-
-                                        {/* Thêm Alert bạn chắc chứ */}
-                                        <Button variant="danger" as={Link} to="/" size="sm">Hủy lịch hẹn</Button>
-
-
+                                        {loading[a.appointmentId] === true ? (
+                                            <MySpinner />
+                                        ) : (
+                                            <Button
+                                                variant="success"
+                                                onClick={() => createRoom(a.patientId.patientId, a)}
+                                                size="sm"
+                                            >
+                                                Chat với bệnh nhân
+                                            </Button>
+                                        )}
                                     </div>
+                                )}
 
-                                </> : <>
-                                </>
-                                }
+                                {user.role === "Patient" && (
+                                    <div className="d-grid gap-1 mt-2">
+                                        {/* Chỉ Bệnh nhân được sửa hoặc hủy lịch trong 24h */}
+                                        {loading[a.appointmentId] === true ? (
+                                            <MySpinner />
+                                        ) : (
+                                            <Button
+                                                variant="success"
+                                                onClick={() => createRoom(a.doctorId.doctorId, a)}
+                                                size="sm"
+                                            >
+                                                Chat với bác sĩ
+                                            </Button>
+                                        )}
+
+                                        <Button variant="primary" as={Link} to="/" size="sm">
+                                            Sửa lịch hẹn
+                                        </Button>
+
+                                        <Button variant="danger" as={Link} to="/" size="sm">
+                                            Hủy lịch hẹn
+                                        </Button>
+                                    </div>
+                                )}
+
                             </Card.Body>
                         </Card>
 

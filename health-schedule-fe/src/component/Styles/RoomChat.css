@@ -1,0 +1,126 @@
+/* Container and Chat UI Styles */
+.chat-container {
+  height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+.chat-message {
+  display: flex;
+  margin-bottom: 10px;
+}
+.bubble {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 15px;
+  background-color: #e1ffc7;
+  position: relative;
+  word-break: break-word;
+}
+
+.bubble-left {
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.message-left {
+  justify-content: flex-start;
+}
+
+.message-right {
+  justify-content: flex-end;
+}
+
+.header-row {
+  margin-bottom: 15px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.current_user,
+.other_user {
+  font-weight: 600;
+}
+
+.messages-container {
+  height: 400px;
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.message-item {
+  margin-bottom: 15px;
+}
+
+.sent .message-content {
+  background-color: #0084ff;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 75%;
+  margin-left: auto;
+  display: inline-block;
+}
+
+.received .message-content {
+  background-color: #e4e6eb;
+  color: #333;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 75%;
+  display: inline-block;
+}
+
+.message-image {
+  margin-top: 5px;
+  max-width: 200px;
+  border-radius: 10px;
+}
+
+.input-row {
+  margin-top: 10px;
+}
+
+.message-input {
+  border-radius: 50px;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+
+
+.send-btn {
+  background-color: #0084ff;
+  border: none;
+  color: white;
+  border-radius: 50px;
+  padding: 10px 20px;
+}
+
+.send-btn:disabled {
+  background-color: #ccc;
+}
+
+/* Optional Styling for Icons */
+.image-input {
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.send-btn:hover {
+  background-color: #0057b7;
+}

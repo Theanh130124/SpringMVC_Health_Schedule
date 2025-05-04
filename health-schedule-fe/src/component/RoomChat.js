@@ -3,14 +3,12 @@ import { useLocation } from "react-router-dom";
 import { MyUserContext } from "../configs/MyContexts";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { endpoint, fbApis } from "../configs/Apis";
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
-import { db } from "../../functions/configs/FirebaseConfigs";
+import "./Styles/RoomChat.css";
+
+import { onSnapshot, collection, query, orderBy } from "firebase/firestore";
+import { db } from "../configs/FirebaseConfigs";
 
 const RoomChat = () => {
-
-
-
-
   const location = useLocation();
   const { room, appointment } = location.state || {};
   const [loading, setLoading] = useState(false);
@@ -21,21 +19,24 @@ const RoomChat = () => {
   const [messageText, setMessageText] = useState("");
   const [imageFile, setImageFile] = useState(null);
 
-  // const { roomId } = useParams();
-
   const doctor = appointment?.doctorId?.user;
   const patient = appointment?.patientId?.user;
   const otherUser = user.userId === doctor.userId ? patient : doctor;
 
-  const chatId = room?.chatId; //Lấy hết tin nhắn
+  const isDoctor = user.userId === appointment.doctorId.user.userId;
+  const currentAvatar = isDoctor ? appointment.doctorId.user.avatar : appointment.patientId.user.avatar;
+  const otherAvatar = isDoctor ? appointment.patientId.user.avatar : appointment.doctorId.user.avatar;
 
-
-
+  const chatId = room?.chatId;
 
   const fetchMessages = async () => {
     try {
       setLoading(true);
-      const res = await fbApis().get(endpoint.chatMessages(chatId));
+      const res = await fbApis().get(endpoint.chatMessages(chatId), {
+        headers: {
+          'userid': user.userId // Gửi userId trong header
+        }
+      });
       setMessages(res.data.sort((a, b) => a.timestamp - b.timestamp));
     } catch (error) {
       console.error("Xảy ra lỗi khi gửi tin nhắn:", error);
@@ -44,31 +45,10 @@ const RoomChat = () => {
     }
   };
 
-  // onSnapshot() của firebase sẽ tự động cập nhật tin nhắn mới không cần gọi fetchMessages
-  useEffect(() => {
-    const q = query(
-        collection(db, "chats", chatId, "messages"),
-        orderBy("timestamp", "asc")
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-        const newMessages = snapshot.docs.map(doc => ({
-            messageId: doc.id,
-            ...doc.data()
-        }));
-        setMessages(newMessages);
-    });
-
-    return () => unsubscribe(); // Clean up
-}, [chatId]);
-
   const handleSendMessage = async () => {
     try {
-      if (!messageText && !imageFile)
-        return;
+      if (!messageText && !imageFile) return;
       setLoading(true);
-
-
 
       let imageUrl = null;
 
@@ -79,8 +59,7 @@ const RoomChat = () => {
         let res = await fbApis().post(endpoint.uploadFile, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        imageFile = res.data.imageUrl;
-
+        imageUrl = res.data.imageUrl;
       }
       await fbApis().post(endpoint.chatMessages(chatId), {
         senderId: user.userId,
@@ -88,13 +67,9 @@ const RoomChat = () => {
         imageUrl: imageUrl,
         timestamp: Date.now(),
       });
-      // Làm mới
       setMessageText("");
       setImageFile(null);
       fetchMessages();
-
-
-
     } catch (error) {
       console.error("Lỗi khi gửi tin nhắn:", error);
     } finally {
@@ -103,70 +78,96 @@ const RoomChat = () => {
   };
 
   useEffect(() => {
-    fetchMessages();
+    if (!chatId) return;
+
+    const q = query(
+      collection(db, "chats", chatId, "messages"),
+      orderBy("timestamp", "asc")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const msgs = snapshot.docs.map(doc => ({ ...doc.data(), messageId: doc.id }));
+      setMessages(msgs);
+    });
+
+    return () => unsubscribe(); // Dọn dẹp khi component bị huỷ
   }, [chatId]);
 
-  //Tự động cuôn xuống cuối khi có tin nhắn mới
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+
 
 
   return (
-    <>
-      <Container>
+    <Container fluid className="chat-container">
 
-        <Row>
-          <Col>
-            {/* current_user */}
-            <div className="current_user">
-              <h4>Người dùng hiện tại: {user.firstName} {user.lastName}</h4>
+      <Row className="chat-box">
+        <Col className="chat-container">
+          {messages.map(msg => {
+            const isCurrentUser = msg.senderId === user.userId;
+            const sender = isCurrentUser ? user : otherUser;
+            const avatarUrl = isCurrentUser ? currentAvatar : otherAvatar;
 
-            </div>
-
-            {/* Người còn lại */}
-            <div className="other_user">
-              <h4>Người dùng còn lại: {appointment.doctorId.user.firstName} {appointment.doctorId.user.lastName}</h4>
-            </div>
-
-          </Col>
-
-        </Row>
-
-        <Row>
-          <Col style={{ height: "400px", overflowY: "auto", border: "1px solid #ccc", marginTop: "10px" }}>
-            {messages.map(msg => (
-              <div key={msg.messageId} style={{ marginBottom: "10px" }}>
-                <b>{msg.senderId === user.userId ? "Bạn" : otherUser.firstName}:</b>
-                <p>{msg.text}</p>
-                {msg.imageUrl && <img src={msg.imageUrl} alt="Hình ảnh" width="200" />}
+            return (
+              <div key={msg.messageId} className={`chat-message ${isCurrentUser ? 'message-right' : 'message-left'}`}>
+                {!isCurrentUser && (
+                  <img
+                    src={avatarUrl || "https://via.placeholder.com/40"}
+                    alt="Avatar"
+                    className="message-avatar"
+                  />
+                )}
+                <div>
+                  {!isCurrentUser && (
+                    <div style={{ fontWeight: "bold" }}>
+                      {sender.firstName} {sender.lastName}
+                    </div>
+                  )}
+                  <div className={`bubble ${isCurrentUser ? '' : 'bubble-left'}`}>
+                    {msg.text && <p style={{ marginBottom: "5px" }}>{msg.text}</p>}
+                    {msg.imageUrl && (
+                      <img src={msg.imageUrl} alt="Hình ảnh" style={{ maxWidth: "200px", borderRadius: "10px" }} />
+                    )}
+                  </div>
+                </div>
+                {isCurrentUser && (
+                  <img
+                    src={avatarUrl || "https://via.placeholder.com/40"}
+                    alt="Avatar"
+                    className="message-avatar"
+                    style={{ marginLeft: "10px" }}
+                  />
+                )}
               </div>
-            ))}
-            <div ref={messagesEndRef}></div>
-          </Col>
-        </Row>
+            );
+          })}
+          <div ref={messagesEndRef}></div>
+        </Col>
+      </Row>
 
-        <Row style={{ marginTop: "10px" }}>
-          <Col>
-            <Form.Control
-              type="text"
-              placeholder="Nhập tin nhắn"
-              value={messageText}
-              onChange={e => setMessageText(e.target.value)}
-            />
-          </Col>
-          <Col>
-            <Form.Control type="file" onChange={e => setImageFile(e.target.files[0])} />
-          </Col>
-          <Col>
-            <Button onClick={handleSendMessage} disabled={loading}>
-              Gửi
-            </Button>
-          </Col>
-        </Row>
-      </Container>
-
-    </>
+      <Row className="input-row">
+        <Col>
+          <Form.Control
+            type="text"
+            placeholder="Nhập tin nhắn..."
+            value={messageText}
+            onChange={e => setMessageText(e.target.value)}
+            className="message-input"
+          />
+        </Col>
+        <Col>
+          <input
+            type="file"
+            onChange={e => setImageFile(e.target.files[0])}
+            className="image-input"
+          />
+        </Col>
+        <Col>
+          <Button onClick={handleSendMessage} disabled={loading} className="send-btn">
+            Gửi
+          </Button>
+        </Col>
+      </Row>
+    </Container>
   );
-}
+};
+
 export default RoomChat;
