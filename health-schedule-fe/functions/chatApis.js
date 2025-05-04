@@ -1,4 +1,4 @@
-const {onRequest} = require("firebase-functions/v2/https");
+const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 const { Firestore } = require("firebase-admin/firestore");
 const express = require("express");
@@ -9,7 +9,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 
 //Cấp quyền dùng db
-const { db  } = require("./configs/FirebaseConfigs");
+const { db } = require("./configs/FirebaseConfigs");
 
 
 
@@ -41,12 +41,14 @@ app.post('/chats', async (req, res) => {
                     [userId1]: true,
                     [userId2]: true,
                 },
-                
+                createdAt: Firestore.FieldValue.serverTimestamp()
+
             });
-            const docRef = await chatRef.get()
-            return res.status(201).send({ chatId : docRef.id ,
+            const docRef = await chatRef.collection('messages').add({});
+            return res.status(201).send({
+                chatId: docRef.id,
                 ...docRef.data()
-             });
+            });
         } else {
             return res.status(200).send({ chatId, message: 'Cuộc trò chuyện đã tồn tại' });
         }
@@ -69,19 +71,19 @@ app.get('/chats/:chatId/messages', async (req, res) => {
         //startAfter=msg456 phân trang firebase
         const { limit = 50, orderBy = 'timestamp', orderDirection = 'asc', startAfter } = req.query;
 
-     
-        if(!userId){
-            return res.status(400).send({error : "Thiếu userId"})
+
+        if (!userId) {
+            return res.status(400).send({ error: "Thiếu userId" })
         }
         //permission
         const chatRef = db.collection("chats").doc(chatId);
         const chatDoc = await chatRef.get()
-        if(!chatDoc.exists){
-            return res.status(404).send({error:"Phòng chat không tồn tại"})
+        if (!chatDoc.exists) {
+            return res.status(404).send({ error: "Phòng chat không tồn tại" })
         }
         const participants = chatDoc.data().participants || {};
-        if(!participants[userId]){
-            return res.status(403).send({error:'Bạn không thuộc đoạn chat này'})
+        if (!participants[userId]) {
+            return res.status(403).send({ error: 'Bạn không thuộc đoạn chat này' })
         }
 
         const messagesRef = db.collection('chats').doc(chatId).collection('messages');
@@ -131,46 +133,52 @@ app.get('/chats/:chatId/participants', async (req, res) => {
 });
 
 //để có permisstion những người trong phòng chat mới được nhắn
-app.post('/chats/:chatId/messages' , async (req ,res) => {
-    try{
-        const {chatId} = req.params;
+app.post('/chats/:chatId/messages', async (req, res) => {
+    try {
+        const { chatId } = req.params;
         //Không cần truyền senderId vào header -> check body
-        const {senderId , text , imageUrl} = req.body;
+        const { senderId, text, imageUrl } = req.body;
 
-        if (!senderId || (!text && !imageUrl)){
-            return res.status(400).send({error :'Thiếu senderId hoặc text'})
+        if (!senderId || (!text && !imageUrl)) {
+            return res.status(400).send({ error: 'Thiếu senderId hoặc text' })
+        }
+        if (imageUrl && !isValidUrl(imageUrl)) {
+            return res.status(400).send({ error: 'URL ảnh không hợp lệ' });
+        }
+        if (text && text.length > 1000) {
+            return res.status(400).send({ error: 'Tin nhắn quá dài' });
         }
 
-//permisstion
+        //permisstion
 
         const chatRef = db.collection('chats').doc(chatId);
         const chatDoc = await chatRef.get();
-        if(!chatDoc.exists){
-            return res.status(404).send({error : 'Phòng chat không tồn tại'})
+        if (!chatDoc.exists) {
+            return res.status(404).send({ error: 'Phòng chat không tồn tại' })
         }
         const participants = chatDoc.data().participants || {};
-        if(!participants[senderId]){
-            return res.status(403).send({error:'Bạn không thuộc đoạn chat này'})
+        if (!participants[senderId]) {
+            return res.status(403).send({ error: 'Bạn không thuộc đoạn chat này' })
         }
         const messagesRef = db.collection('chats').doc(chatId).collection('messages')
         const newMessage = {
-            senderId : senderId,
-            text : text,
+            senderId: senderId,
+            text: text,
             //time hiện tại
             timestamp: Firestore.FieldValue.serverTimestamp(),
-//đôi khi gửi ảnh hoặc không -> không thì undifined
+            //đôi khi gửi ảnh hoặc không -> không thì undifined
             ...(imageUrl && { imageUrl: imageUrl }),
         };
         const docRef = await messagesRef.add(newMessage);
         const createdDoc = await docRef.get();
-        return res.status(201).send({ 
+        return res.status(201).send({
             messageId: docRef.id,
-            ...createdDoc.data() 
-          });
+            ...createdDoc.data()
+        });
 
-    }catch(error){
+    } catch (error) {
         console.error('Lỗi khi gửi tin nhắn', error)
-        return res.status(500).send({error: 'Không thể gửi tin nhắn !!!'})
+        return res.status(500).send({ error: 'Không thể gửi tin nhắn !!!' })
     }
 })
 
@@ -178,27 +186,27 @@ app.post('/chats/:chatId/messages' , async (req ,res) => {
 
 app.post('/upload-image', upload.single('image'), async (req, res) => {
     try {
-      const file = req.file;
-      if (!file) return res.status(400).send({ error: 'Chưa có file ảnh' });
-  
-      const cloudinaryPreset = 'healthapp';
-      const cloudName = 'dxiawzgnz';
-  
-      const formData = new FormData();
-      formData.append('file', file.buffer, file.originalname);
-      formData.append('upload_preset', cloudinaryPreset);
-  
-      const cloudRes = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        formData,
-        { headers: formData.getHeaders() }
-      );
-  
-      return res.status(200).send({ imageUrl: cloudRes.data.secure_url });
+        const file = req.file;
+        if (!file) return res.status(400).send({ error: 'Chưa có file ảnh' });
+
+        const cloudinaryPreset = 'healthapp';
+        const cloudName = 'dxiawzgnz';
+
+        const formData = new FormData();
+        formData.append('file', file.buffer, file.originalname);
+        formData.append('upload_preset', cloudinaryPreset);
+
+        const cloudRes = await axios.post(
+            `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+            formData,
+            { headers: formData.getHeaders() }
+        );
+
+        return res.status(200).send({ imageUrl: cloudRes.data.secure_url });
     } catch (err) {
-      console.error('Lỗi khi upload ảnh:', err.message);
-      return res.status(500).send({ error: 'Không thể upload ảnh' });
+        console.error('Lỗi khi upload ảnh:', err.message);
+        return res.status(500).send({ error: 'Không thể upload ảnh' });
     }
-  });
+});
 
 exports.app = onRequest(app);

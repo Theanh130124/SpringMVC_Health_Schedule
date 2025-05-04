@@ -18,14 +18,15 @@ const Appointment = () => {
 
     // Tạo roomchat
 
-    const [room ,setRoom] = useState();
+    const [room, setRoom] = useState();
 
 
     //doctorId chỉ lấy 1 trong list appointment 
 
-
-    const createRoom = async (doctorId , appointment) => {   
+    //prev ghi lại dữ liệu -> dùng loading sẽ bị đè
+    const createRoom = async (doctorId, appointment) => {
         try {
+            setLoading(prev => ({ ...prev, [appointment.appointmentId]: true }));
             let res = await fbApis().post(endpoint['chats'], {
                 "userId1": user.userId,
                 "userId2": doctorId,
@@ -36,17 +37,20 @@ const Appointment = () => {
                 state: {
                     room: roomData,
                     appointment: appointment
-                }, 
+                },
             });
 
 
-        }catch (ex) {
+        } catch (ex) {
 
             console.error(ex);
 
 
 
-    }
+        }
+        finally {
+            setLoading(prev => ({ ...prev, [appointment.appointmentId]: false }));
+        }
     }
 
 
@@ -103,38 +107,38 @@ const Appointment = () => {
                         <Card className="card-doctor shadow-sm">
                             <Card.Body className="card-body-custom">
                                 <div>
-                                    <Card.Title className="card-title"> Ngày hẹn : { new Date (a.appointmentTime).toLocaleDateString("vi-VN")}
+                                    <Card.Title className="card-title"> Ngày hẹn : {new Date(a.appointmentTime).toLocaleDateString("vi-VN")}
                                     </Card.Title>
-                                     <Card.Text  className="card-text" style={{ fontSize: '0.85rem' }}>
-                                        
-                                        
-                                         
+                                    <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
+
+
+
                                         <strong>Bác sĩ khám</strong> {a.doctorId.user.firstName} {a.doctorId.user.lastName}
                                         <br />
-                                            <strong>Bệnh viện</strong> {a.clinicId.name}
-                                        <br /> 
+                                        <strong>Bệnh viện</strong> {a.clinicId.name}
+                                        <br />
                                         <strong>Địa điểm khám</strong> {a.clinicId.address}
-                                        <br />  
+                                        <br />
 
                                         {/* Xử lý parse sau */}
                                         {/* <strong>Thời gian </strong> {a.clinicId.appointmentTime} 
                                         <br /> */}
-                                          
 
-                                       
 
-                                        </Card.Text>
-                                       
-                                        <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
-                                            <strong>Thời lượng cuộc hẹn:</strong> {a.durationMinutes} phút
-                                            <br />
-                                            <strong>Lý do khám:</strong> {a.reason}
-                                            <br />
-                                            <strong>Trạng thái cuộc hẹn:</strong> {a.status}
-                                            <br />
-                                            <strong>Loại cuộc hẹn:</strong> {a.consultationType}
-                                            <br />
-                                        </Card.Text>
+
+
+                                    </Card.Text>
+
+                                    <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
+                                        <strong>Thời lượng cuộc hẹn:</strong> {a.durationMinutes} phút
+                                        <br />
+                                        <strong>Lý do khám:</strong> {a.reason}
+                                        <br />
+                                        <strong>Trạng thái cuộc hẹn:</strong> {a.status}
+                                        <br />
+                                        <strong>Loại cuộc hẹn:</strong> {a.consultationType}
+                                        <br />
+                                    </Card.Text>
 
 
                                     {/* Có lý do hủy có thể thêm */}
@@ -152,7 +156,7 @@ const Appointment = () => {
 
 
                                         {/* Chỉ lấy doctorId được click */}
-                                        <Button variant="success"  onClick={() => createRoom(a.doctorId.doctorId , a)}  size="sm">Chat với bác sĩ</Button>
+                                        {loading[a.appointmentId] === true ? <MySpinner  /> : <Button variant="success" onClick={() => createRoom(a.doctorId.doctorId, a)} size="sm">Chat với bác sĩ</Button>}
 
                                         <Button variant="primary" as={Link} to="/" size="sm">Sửa lịch hẹn</Button>
 

@@ -3,7 +3,8 @@ import { useLocation } from "react-router-dom";
 import { MyUserContext } from "../configs/MyContexts";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { endpoint, fbApis } from "../configs/Apis";
-
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import { db } from "../../functions/configs/FirebaseConfigs";
 
 const RoomChat = () => {
 
@@ -42,6 +43,24 @@ const RoomChat = () => {
       setLoading(false);
     }
   };
+
+  // onSnapshot() của firebase sẽ tự động cập nhật tin nhắn mới không cần gọi fetchMessages
+  useEffect(() => {
+    const q = query(
+        collection(db, "chats", chatId, "messages"),
+        orderBy("timestamp", "asc")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+        const newMessages = snapshot.docs.map(doc => ({
+            messageId: doc.id,
+            ...doc.data()
+        }));
+        setMessages(newMessages);
+    });
+
+    return () => unsubscribe(); // Clean up
+}, [chatId]);
 
   const handleSendMessage = async () => {
     try {
@@ -109,12 +128,6 @@ const RoomChat = () => {
             <div className="other_user">
               <h4>Người dùng còn lại: {appointment.doctorId.user.firstName} {appointment.doctorId.user.lastName}</h4>
             </div>
-
-
-
-
-
-
 
           </Col>
 
