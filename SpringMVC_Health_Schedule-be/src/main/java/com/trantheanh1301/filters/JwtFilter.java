@@ -14,19 +14,20 @@ import java.util.List;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
+import java.util.stream.Collectors;
+
 public class JwtFilter implements Filter {
 
     // Danh sách các API không cần JWT
     private static final List<String> WHITELIST = Arrays.asList(
-            "/api/login",       // Đăng nhập
-            "/api/users",       // Đăng ký tài khoản bệnh nhân
-            "/api/doctor",      // Tìm kiếm bác sĩ ngoài trang chủ
-            "/api/payment/" ,  // Tất cả các endpoint dưới /api/payment
+            "/api/login", // Đăng nhập
+            "/api/users", // Đăng ký tài khoản bệnh nhân
+            "/api/doctor", // Tìm kiếm bác sĩ ngoài trang chủ
+            "/api/payment/", // Tất cả các endpoint dưới /api/payment
             "/api/find_slot"
-            );
-
-
-
+    );
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -56,7 +57,18 @@ public class JwtFilter implements Filter {
                 String username = JwtUtils.validateTokenAndGetUsername(token);
                 if (username != null) {
                     httpRequest.setAttribute("username", username);
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, null);
+
+                    List<String> roles = JwtUtils.getRoles(token);  // Lấy roles từ token
+
+                    List<GrantedAuthority> authorities = roles.stream()
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toList());
+                    //
+                    System.out.println("Authorities in context: " + authorities);
+
+                    UsernamePasswordAuthenticationToken authentication
+                            = new UsernamePasswordAuthenticationToken(username, null, authorities);
+
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     chain.doFilter(request, response);
                     return;

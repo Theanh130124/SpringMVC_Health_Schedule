@@ -17,6 +17,7 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.util.Date;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,14 +27,18 @@ public class JwtUtils {
     private static final String SECRET = "12345678901234567890123456789012"; // 32 ký tự (AES key)
     private static final long EXPIRATION_MS = 864000000; // 1 ngày -> mình đã chỉnh lên 10 ngày
 
-    public static String generateToken(String username) throws Exception {
+    public static String generateToken(String username,List<String> roles) throws Exception {
         JWSSigner signer = new MACSigner(SECRET);
-
+         //Thế anh đã bổ sung role ở đây để có thể dùng @PreAuthorize  ,
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(username)
+                .claim("roles", roles)   // thêm claim chứa danh sách roles
+                
                 .expirationTime(new Date(System.currentTimeMillis() + EXPIRATION_MS))
                 .issueTime(new Date())
                 .build();
+        //
+        System.out.println("Roles from token: " + roles);
 
         SignedJWT signedJWT = new SignedJWT(
                 new JWSHeader(JWSAlgorithm.HS256),
@@ -57,5 +62,13 @@ public class JwtUtils {
         }
         return null;
     }
+    
+    //Đã bổ sung để lấy role 
+    
+    public static List<String> getRoles(String token) throws Exception {
+    SignedJWT signedJWT = SignedJWT.parse(token);
+    return (List<String>) signedJWT.getJWTClaimsSet().getClaim("roles");
+}
+
 
 }

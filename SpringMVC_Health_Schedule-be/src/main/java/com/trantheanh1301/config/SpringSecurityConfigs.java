@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
@@ -33,6 +35,9 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 @Configuration
 @EnableWebSecurity
 @EnableTransactionManagement
+
+@EnableGlobalMethodSecurity(prePostEnabled = true) // dùng cho PreAuthorize phải bật cả bên WebAppContext nữa
+
 @ComponentScan(basePackages = {
     "com.trantheanh1301.controllers",
     "com.trantheanh1301.repository",
@@ -63,10 +68,10 @@ public class SpringSecurityConfigs {
 
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
             Exception {
-        //Muốn chứng thực bằng jwt thì chỉ permit api bên này (còn muốn cho không jwt và form luôn thì bỏ trong cả 2 )
+        //Muốn chứng thực bằng jwt thì chỉ permit api bên này (còn muốn cho không jwt và form luôn thì bỏ trong cả 2 ) -> còn muốn chứng thực bằng form thì authenticated bên này
         http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(c -> c.disable()).authorizeHttpRequests(requests
                 -> requests.requestMatchers("/", "/home").authenticated()
-                        .requestMatchers("/api/**").permitAll() // nhưng thằng muốn không dùng jwt thì bỏ bên jwtfilter
+                        .requestMatchers("/api/**").permitAll() // nhưng thằng muốn không dùng jwt  thì bỏ bên jwtfilter WHITELIST
                         .requestMatchers("/js/**").permitAll().requestMatchers("/css/**").permitAll().requestMatchers("/images/**").permitAll()
                         .requestMatchers("/stats").hasAnyAuthority("Admin", "Doctor").requestMatchers("/license").hasAuthority("Admin").anyRequest().authenticated()// mọi thứ còn lại đều cần token 
 

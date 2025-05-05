@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,9 @@ public class ApiUserController {
 
     @Autowired
     private UserService userDetailsService;
+    
+
+
 
     //Try catch chỗ này cho nó hiện lỗi chi tiết là gì đỡ vào log check
     @PostMapping(path = "/users", consumes = MediaType.MULTIPART_FORM_DATA)
@@ -55,7 +59,11 @@ public class ApiUserController {
     public ResponseEntity<?> login(@RequestBody User u) {
         if (this.userDetailsService.authenticate(u.getUsername(), u.getPassword())) {
             try {
-                String token = JwtUtils.generateToken(u.getUsername());
+                //Lấy ra để nó tự gán role -> mình không truyền vào body
+                User user = userDetailsService.getUserByUsername(u.getUsername());
+                //Cấu hình tất cả các role -> login lấy ra role luôn (jwt phân biệt) 
+                List<String> roles = List.of(user.getRole());
+                String token = JwtUtils.generateToken(user.getUsername(), roles);
                 return ResponseEntity.ok().body(Collections.singletonMap("token", token));
 
             } catch (Exception e) {
