@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class ApiDoctorLicenseController {
 
     //Chưa permission
     //Xem xóa sửa nửa , -> chỉ có current mới dc xem và , admin , (gửi rồi không đc sửa) -> nếu sửa thì phải cho admin duyệt nữa
+    @PreAuthorize("hasAuthority('Doctor')")
     @PostMapping("/doctor_license")
     //@RequestParam  sẽ gửi application/x-www-form-urlencoded(form-data)
     //@RequestBody thì raw -> json
@@ -49,8 +51,7 @@ public class ApiDoctorLicenseController {
         //Permission ở đây ( Bác sĩ đó mới đc update -> dưới service
     }
 
-    
-    //Bác sĩ sửa thông tin chứng chỉ hành nghề
+    @PreAuthorize("hasAuthority('Admin')")
     @PatchMapping("/doctor_license/{id}")
     public ResponseEntity<?> updateLicense(@PathVariable int id, @RequestParam Map<String, String> params) {
         try {
@@ -67,7 +68,7 @@ public class ApiDoctorLicenseController {
     
     
     
-    
+    @PreAuthorize("hasAuthority('Admin')")
     @DeleteMapping("/doctor_license/{id}")
     public ResponseEntity<?> removeLicense(@PathVariable int id) {
         try {
