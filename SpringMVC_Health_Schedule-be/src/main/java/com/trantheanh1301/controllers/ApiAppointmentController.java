@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,8 +30,6 @@ public class ApiAppointmentController {
     @Autowired
     private AppointmentService appointmentService;
 
-    
-    
     @PreAuthorize("hasAuthority('Patient')")
     @PostMapping("/book_doctor")
     public ResponseEntity<?> bookDoctor(@RequestParam Map<String, String> params) {
@@ -49,6 +49,19 @@ public class ApiAppointmentController {
         try {
 
             return new ResponseEntity<>(appointmentService.getListAppointment(params), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Đã xảy ra lỗi" + ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('Patient')")
+    @PatchMapping("/book_doctor/{id}")
+    public ResponseEntity<?> updateBookDoctor(@RequestParam Map<String, String> params, @PathVariable(value ="id") int id) {
+        try {
+            
+            return new ResponseEntity<>(appointmentService.updateAppointment(id, params) , HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Đã xảy ra lỗi" + ex.getMessage());

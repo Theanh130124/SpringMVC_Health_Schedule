@@ -17,6 +17,7 @@ import com.trantheanh1301.repository.PatientRepository;
 import com.trantheanh1301.service.AppointmentService;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,11 +45,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     private AvailabeslotRepository slotRepo;
-    
+
     @Autowired
     private EmailServiceImpl emailService;
 
-    
     //nữa fe cần có ds các bs,clinic,patient...
     @Override
     public Appointment registerAppointment(Map<String, String> params) {
@@ -76,7 +76,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new RuntimeException("Lịch đã được đặt!");
         }
         slot.setIsBooked(true);
-        
+
         //Cập nhật slot 
         slotRepo.addOrUpdate(slot);
 
@@ -89,27 +89,86 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setReason(params.get("reason"));
         appointment.setStatus("Scheduled");
         appointment.setConsultationType(params.get("type"));
-        
+
         //Cập nhật lịch khám
         appointmentRepo.addOrUpdate(appointment);
-       
-        
+
         emailService.sendAppointmentConfirmation(patient.getUser().getEmail(),
-                patient.getUser().getFirstName() +patient.getUser().getLastName(),
+                patient.getUser().getFirstName() + patient.getUser().getLastName(),
                 doctor.getUser().getFirstName() + doctor.getUser().getLastName(),
                 appointment.getAppointmentTime().toString());
-        
+
         return appointment;
     }
 
     @Override
     public List<Appointment> getListAppointment(Map<String, String> params) {
-      return appointmentRepo.getListAppointment(params);
+        return appointmentRepo.getListAppointment(params);
     }
 
     @Override
     public Appointment getAppointmentById(int id) {
         return this.appointmentRepo.getAppointmentById(id);
+    }
+
+    @Override
+    public Appointment updateAppointment(int id, Map<String, String> params) {
+
+        Appointment appointment = appointmentRepo.getAppointmentById(id);
+
+        Integer doctorId = Integer.valueOf(params.get("doctorId"));
+
+        if (appointment == null) {
+            throw new RuntimeException("Không tìm thấy lịch hẹn trên");
+        }
+
+        if (appointment.getCreatedAt() != null) {
+            Date date_now = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(appointment.getCreatedAt());
+            cal.add(Calendar.HOUR_OF_DAY, 24);
+
+            //Qúa 24h sẽ không cho sửa -> Nhưng phải thực hiện set lịch hiện tại về chưa book 
+            //và lịch book thành đã book (theo thời gian đã chọn)
+            if (cal.getTime().after(date_now)) {
+                if (params.containsKey("appointmentTime")) {
+
+                    //Time cũ
+                    Date time_old = appointment.getAppointmentTime();
+                    //Thực hiện update slot cũ về false -> chưa book
+                    Availableslot slot_old = slotRepo.getSlotbyDoctorId(doctorId, time_old);
+                    if (slot_old == null || slot_old.getIsBooked() == false) {
+                        throw new RuntimeException("Lịch chưa được đặt nên không được sửa!");
+                    }
+                    slot_old.setIsBooked(false);
+                    slotRepo.addOrUpdate(slot_old);
+
+                    //(Time mới) appointment_time -> phải là thời gian trống còn lại của bác sĩ
+                    appointment.setAppointmentTime(new Date(params.get("appointmentTime")));
+                    //Thực hiện update slot mới -> cho lịch tương ứng
+                    Availableslot slot_new = slotRepo.getSlotbyDoctorId(doctorId, new Date(params.get("appointmentTime")));
+                    if (slot_new == null || slot_new.getIsBooked()) {
+                        throw new RuntimeException("Lịch đã được đặt!");
+                    }
+                    slot_new.setIsBooked(true);
+                    slotRepo.addOrUpdate(slot_new);
+                }
+                if (params.containsKey("reason")) {
+                    appointment.setReason(params.get("reason"));
+                }
+
+            }
+            throw new RuntimeException("Không thể sữa lịch hẹn quá 24 giò");
+        }
+        //Cập nhật lịch khám
+        appointmentRepo.addOrUpdate(appointment);
+
+        emailService.sendAppointmentConfirmation(appointment.getPatientId().getUser().getEmail(),
+                appointment.getPatientId().getUser().getFirstName() + appointment.getPatientId().getUser().getLastName(),
+                appointment.getDoctorId().getUser().getFirstName() + appointment.getDoctorId().getUser().getLastName(),
+                appointment.getAppointmentTime().toString());
+
+        return appointment;
     }
 
 }

@@ -16,4 +16,5 @@ public interface AppointmentService {
     Appointment registerAppointment(Map<String,String> params);
     List<Appointment> getListAppointment(Map<String,String> params);
     Appointment getAppointmentById(int id);
+    Appointment updateAppointment(int id , Map<String,String> params);
 }

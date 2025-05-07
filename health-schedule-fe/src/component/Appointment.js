@@ -112,9 +112,16 @@ const Appointment = () => {
                                     <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
 
 
-
-                                        <strong>Bác sĩ khám</strong> {a.doctorId.user.firstName} {a.doctorId.user.lastName}
-                                        <br />
+                                        {user.role === "Patient" &&(<div>
+                                            <strong>Bác sĩ khám</strong> {a.doctorId.user.firstName} {a.doctorId.user.lastName}
+                                            <br />
+                                        </div>)
+                                        }
+                                        {user.role === "Doctor" && (<div>
+                                            <strong>Bệnh nhân khám</strong> {a.patientId.user.firstName} {a.patientId.user.lastName}
+                                            <br />
+                                        </div>)
+                                        }
                                         <strong>Bệnh viện</strong> {a.clinicId.name}
                                         <br />
                                         <strong>Địa điểm khám</strong> {a.clinicId.address}
@@ -148,7 +155,7 @@ const Appointment = () => {
                                         Link Videocall:
                                     </Card.Text> */}
                                 </div>
-{/* Fix ở bác sĩ thì là tên bệnh nhân */}
+                                {/* Fix ở bác sĩ thì là tên bệnh nhân */}
                                 {user.role === "Doctor" && (
                                     <div className="d-grid gap-1 mt-2">
                                         {loading[a.appointmentId] === true ? (
