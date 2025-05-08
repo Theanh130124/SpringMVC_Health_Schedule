@@ -29,21 +29,7 @@ const RoomChat = () => {
 
   const chatId = room?.chatId;
 
-  const fetchMessages = async () => {
-    try {
-      setLoading(true);
-      const res = await fbApis().get(endpoint.chatMessages(chatId), {
-        headers: {
-          'userid': user.userId // Gửi userId trong header
-        }
-      });
-      setMessages(res.data.sort((a, b) => a.timestamp - b.timestamp));
-    } catch (error) {
-      console.error("Xảy ra lỗi khi gửi tin nhắn:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+
 
   const handleSendMessage = async () => {
     try {
@@ -69,7 +55,6 @@ const RoomChat = () => {
       });
       setMessageText("");
       setImageFile(null);
-      fetchMessages();
     } catch (error) {
       console.error("Lỗi khi gửi tin nhắn:", error);
     } finally {
@@ -77,6 +62,21 @@ const RoomChat = () => {
     }
   };
 
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const res = await fbApis().get(endpoint.chatMessages(chatId), {
+        headers: { userid: user.userId },
+      });
+      setMessages(res.data.sort((a, b) => a.timestamp - b.timestamp));
+    };
+
+    if (chatId) {
+      fetchMessages();
+    }
+  }, [chatId]);
+
+  //Xử lý snapphot để lấy tin nhắn realtime
   useEffect(() => {
     if (!chatId) return;
 
@@ -94,20 +94,47 @@ const RoomChat = () => {
   }, [chatId]);
 
 
+  //Cuon xuống cuối khi có tin nhắn mới
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
 
   return (
     <Container fluid className="chat-container">
+      {/* Header */}
+      <Row className="chat-header">
+        <Col>
+          <div className="chat-header-content">
+            <img
+              src={otherAvatar || "https://via.placeholder.com/40"}
+              alt="Avatar"
+              className="header-avatar"
+            />
+            <h5 className="header-title">
+              {otherUser?.firstName} {otherUser?.lastName}
+            </h5>
+          </div>
+        </Col>
+      </Row>
 
+      {/* Chat Messages */}
       <Row className="chat-box">
-        <Col className="chat-container">
-          {messages.map(msg => {
+        <Col className="chat-messages">
+          {messages.map((msg) => {
             const isCurrentUser = msg.senderId === user.userId;
             const sender = isCurrentUser ? user : otherUser;
             const avatarUrl = isCurrentUser ? currentAvatar : otherAvatar;
 
             return (
-              <div key={msg.messageId} className={`chat-message ${isCurrentUser ? 'message-right' : 'message-left'}`}>
+              <div
+                key={msg.messageId}
+                className={`chat-message ${isCurrentUser ? "message-right" : "message-left"} ${msg.isNew ? "new-message" : ""
+                  }`}
+              >
                 {!isCurrentUser && (
                   <img
                     src={avatarUrl || "https://via.placeholder.com/40"}
@@ -117,14 +144,18 @@ const RoomChat = () => {
                 )}
                 <div>
                   {!isCurrentUser && (
-                    <div style={{ fontWeight: "bold" }}>
+                    <div className="message-sender">
                       {sender.firstName} {sender.lastName}
                     </div>
                   )}
-                  <div className={`bubble ${isCurrentUser ? '' : 'bubble-left'}`}>
-                    {msg.text && <p style={{ marginBottom: "5px" }}>{msg.text}</p>}
+                  <div className={`bubble ${isCurrentUser ? "" : "bubble-left"}`}>
+                    {msg.text && <p>{msg.text}</p>}
                     {msg.imageUrl && (
-                      <img src={msg.imageUrl} alt="Hình ảnh" style={{ maxWidth: "200px", borderRadius: "10px" }} />
+                      <img
+                        src={msg.imageUrl}
+                        alt="Hình ảnh"
+                        className="message-image"
+                      />
                     )}
                   </div>
                 </div>
@@ -133,7 +164,6 @@ const RoomChat = () => {
                     src={avatarUrl || "https://via.placeholder.com/40"}
                     alt="Avatar"
                     className="message-avatar"
-                    style={{ marginLeft: "10px" }}
                   />
                 )}
               </div>
@@ -143,25 +173,30 @@ const RoomChat = () => {
         </Col>
       </Row>
 
+      {/* Input Row */}
       <Row className="input-row">
-        <Col>
+        <Col xs={8}>
           <Form.Control
             type="text"
             placeholder="Nhập tin nhắn..."
             value={messageText}
-            onChange={e => setMessageText(e.target.value)}
+            onChange={(e) => setMessageText(e.target.value)}
             className="message-input"
           />
         </Col>
-        <Col>
+        <Col xs={2}>
           <input
             type="file"
-            onChange={e => setImageFile(e.target.files[0])}
+            onChange={(e) => setImageFile(e.target.files[0])}
             className="image-input"
           />
         </Col>
-        <Col>
-          <Button onClick={handleSendMessage} disabled={loading} className="send-btn">
+        <Col xs={2}>
+          <Button
+            onClick={handleSendMessage}
+            disabled={loading}
+            className="send-btn"
+          >
             Gửi
           </Button>
         </Col>

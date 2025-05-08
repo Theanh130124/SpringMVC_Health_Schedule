@@ -109,7 +109,7 @@ const Finddoctor = () => {
                     {doctors.map(d => (
                         <Col key={d.doctorId} xs={12} sm={6} md={4} lg={3} >
                             <Card className="card-doctor shadow-sm">
-                                <Card.Img variant="top" src={d.userDTO.avatar} className="card-img-top " />
+                                <Card.Img variant="top" src={d.userDTO.avatar}  />
                                 <Card.Body className="card-body-custom">
                                     <div>
                                         <Card.Title className="card-title"> Bác sĩ : {`${d.userDTO.firstName} ${d.userDTO.lastName}`.split(' ').slice(0, 4).join(' ')}
