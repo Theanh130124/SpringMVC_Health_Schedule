@@ -1,16 +1,44 @@
+/* Vùng tìm kiếm */
+/* Vùng tìm kiếm */
+.search-bar {
+    background-color: #007bff; /* Màu nền xanh */
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    color: #fff; /* Màu chữ trắng */
+}
+
+/* Tiêu đề tìm kiếm */
+.search-title {
+    font-size: 2.5rem; /* Tăng kích thước chữ */
+    font-weight: bold;
+    color: #fff; /* Màu chữ trắng */
+    margin-bottom: 10px;
+}
+
+/* Phần mô tả */
+.search-subtitle {
+    font-size: 1.2rem; /* Tăng kích thước chữ */
+    color: #e0e0e0; /* Màu chữ phụ nhạt hơn */
+    margin-bottom: 20px;
+}
+
+/* Trường nhập tìm kiếm */
 .search-input {
-    border-radius: 20px;
+    font-size: 1rem;
     padding: 10px 20px;
-    border: 1px solid #ced4da;
-    transition: 0.3s;
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.1);
+    border: 2px solid #fff;
+    background-color: #f8f9fa;
+    color: #333;
+    transition: all 0.3s ease;
 }
 
 .search-input:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.25);
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
 }
-
 
 /* Custom Row Spacing */
 .custom-row {

@@ -115,12 +115,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Appointment updateAppointment(int id, Map<String, String> params) {
 
         Appointment appointment = appointmentRepo.getAppointmentById(id);
-
-        Integer doctorId = Integer.valueOf(params.get("doctorId"));
-
         if (appointment == null) {
             throw new RuntimeException("Không tìm thấy lịch hẹn trên");
         }
+
+        Integer doctorId = Integer.valueOf(params.get("doctorId"));
+
 
         if (appointment.getCreatedAt() != null) {
             Date date_now = new Date();

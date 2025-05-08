@@ -7,7 +7,7 @@ import { load } from "react-cookies";
 import MySpinner from "./layout/MySpinner";
 
 const Appointment = () => {
-
+//Phân trang cho thằng này
     const [loading, setLoading] = useState(false);
     const [appointments, setAppointments] = useState([]);
     const [page, setPage] = useState(1);
@@ -125,6 +125,8 @@ const Appointment = () => {
                                         <strong>Bệnh viện</strong> {a.clinicId.name}
                                         <br />
                                         <strong>Địa điểm khám</strong> {a.clinicId.address}
+                                        <br />
+                                        <strong>Thời gian bắt đầu khám</strong> {new Date(a.appointmentTime).toLocaleTimeString("vi-VN")}
                                         <br />
 
                                         {/* Xử lý parse sau */}

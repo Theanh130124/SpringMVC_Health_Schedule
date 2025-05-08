@@ -1,0 +1,129 @@
+.search-bar {
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-button {
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.form-label {
+  font-size: 1rem;
+  color: #007bff;
+}
+
+.rounded-pill {
+  border-radius: 50px !important;
+}
+/* Card container */
+.card-body-custom {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 20px;
+}
+
+/* Card hover effect */
+.card-body-custom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Card title */
+.card-body-custom .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Card text */
+.card-body-custom .card-text {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Card image */
+.card-body-custom img {
+    border-radius: 15px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+/* Button styling */
+.card-body-custom .btn {
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 50px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.card-body-custom .btn:hover {
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* Tiêu đề chính */
+.calendar-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hiệu ứng animation */
+.animated-title {
+    animation: fadeInSlide 1.5s ease-in-out;
+}
+
+/* Keyframes cho animation */
+@keyframes fadeInSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hiệu ứng gạch chân */
+.calendar-title::after {
+    content: "";
+    display: block;
+    width: 50%;
+    height: 4px;
+    background: linear-gradient(90deg, #007bff, #00c6ff);
+    margin: 10px auto 0;
+    border-radius: 2px;
+    animation: slideIn 1.5s ease-in-out;
+}
+
+/* Keyframes cho hiệu ứng gạch chân */
+@keyframes slideIn {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 50%;
+    }
+}

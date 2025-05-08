@@ -5,13 +5,14 @@ import { load } from "react-cookies";
 import MySpinner from "./layout/MySpinner";
 import { Link, unstable_HistoryRouter, useNavigate } from "react-router-dom";
 import { MyUserContext } from "../configs/MyContexts";
-
+import "./Styles/Calendar.css";
 import { useHistory } from 'react-router-dom';
+import LoadMoreButton from "./layout/LoadMoreButton";
 import toast from "react-hot-toast";
 
 const Calendar = () => {
 
-    
+
     const [loading, setLoading] = useState(false);
     const [slots, setSlots] = useState([]);
     const [page, setPage] = useState(1);
@@ -79,14 +80,14 @@ const Calendar = () => {
             toast.error("Vui lòng đăng nhập để đặt lịch khám!");
             nav("/login");
             //Đăng nhập xong thì quay về trang này
-  
+
         } else if (user.role == 'Patient') {
-            
-          //Truyền dữ liệu vào state
-          nav("/booking", { state: { slot } });      
-            
+
+            //Truyền dữ liệu vào state
+            nav("/booking", { state: { slot } });
+
         }
-      
+
     };
 
 
@@ -96,43 +97,42 @@ const Calendar = () => {
         <Container fluid className="p-0 container-custom">
 
 
-            <Row className="g-4 custom-row mt-5">
+            <Row className="g-4 custom-row mt-5 align-items-center search-bar">
                 <Col md={4} lg={4} xs={12}>
                     <Form.Group>
-                        <Form.Label>Chọn ngày</Form.Label>
+                        <Form.Label className="fw-bold text-primary">Chọn ngày</Form.Label>
                         <Form.Control
                             type="date"
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
+                            className="rounded-pill shadow-sm"
                         />
                     </Form.Group>
                 </Col>
                 <Col md={4} lg={4} xs={12}>
                     <Form.Group>
-                        <Form.Label>Chọn giờ</Form.Label>
+                        <Form.Label className="fw-bold text-primary">Chọn giờ</Form.Label>
                         <Form.Control
                             type="time"
                             value={time}
                             onChange={(e) => setTime(e.target.value)}
+                            className="rounded-pill shadow-sm"
                         />
                     </Form.Group>
                 </Col>
-                <Col md={4} lg={4} xs={12} >
-
-
-
-                    <Button variant="primary" className="search-button mt-4" onClick={loadSlots}>
-                        Tìm kiếm
+                <Col md={4} lg={4} xs={12} className="text-center">
+                    <Button
+                        variant="primary"
+                        className="search-button mt-4 rounded-pill px-4 shadow-sm"
+                        onClick={loadSlots}
+                    >
+                        <i className="bi bi-search"></i> Tìm kiếm
                     </Button>
-
-
                 </Col>
-
-
             </Row>
             <Row className="justify-content-center g-4 mt-5">
                 <Col xs="auto">
-                    <h1 className="calendar-title">Chọn lịch trống</h1>
+                    <h1 className="calendar-title animated-title">Chọn lịch trống</h1>
                 </Col>
             </Row>
 
@@ -149,28 +149,35 @@ const Calendar = () => {
                     </Alert>
                 )}
                 {slots.map((slot) => (
-                    <Col key={slot.slotId} md={4} lg={2} className="mb-3">
-                        <Card>
+                    <Col key={slot.slotId} md={4} lg={3} className="mb-4">
+                        <Card className="card-body-custom">
                             <Card.Img variant="top" src={slot.doctorId.userDTO.avatar} />
-                            <Card.Body className="card-body-custom">
+                            <Card.Body>
                                 <Card.Title>
-                                    {slot.doctorId.userDTO.firstName} {slot.doctorId.userDTO.lastName}
+                                   Bác sĩ: {slot.doctorId.userDTO.firstName} {slot.doctorId.userDTO.lastName}
                                 </Card.Title>
-                                <Card.Text className="card-text">
+                                <Card.Text>
                                     <strong>Ngày khám:</strong> {new Date(slot.slotDate).toLocaleDateString()}
                                     <br />
-                                    <strong >Thời gian</strong> {slot.startTime} - {slot.endTime}
+                                    <strong>Thời gian:</strong> {slot.startTime} - {slot.endTime}
                                     <br />
-                                    {slot.doctorId.specialties.map((s) => ( <div><strong>Chuyên môn:</strong> {s.name} </div>))}
+                                    {slot.doctorId.specialties.map((s, index) => (
+                                        <div key={index}>
+                                            <strong>Chuyên môn:</strong> {s.name}
+                                        </div>
+                                    ))}
                                     <br />
                                     <strong>Phí khám:</strong> {slot.doctorId.consultationFee.toLocaleString('vi-VN')} VNĐ
-                                    <br />
                                 </Card.Text>
-
-                                {/* Sẽ bị mất khi re-render */}
-                                <Button variant="success" onClick = { () => {handleBookingClick(slot)}}>
-                                    Đặt lịch
-                                </Button>
+                                <div className="text-center">
+                                    <Button
+                                        variant="success"
+                                        className="rounded-pill px-4"
+                                        onClick={() => handleBookingClick(slot)}
+                                    >
+                                        Đặt lịch
+                                    </Button>
+                                </div>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -183,8 +190,12 @@ const Calendar = () => {
 
             <Row className="justify-content-center align-items-center g-4 mb-4 mt-4">
                 {hasMore && slots.length > 0 && !loading && (
-                    <Col md={1} lg={1} xs={1}>
-                        <Button variant="info" onClick={() => setPage(prev => prev + 1)} > Xem thêm</Button>
+                    <Col md={8} lg={6} xs={10}>
+                        <LoadMoreButton
+                            hasMore={hasMore}
+                            loading={loading}
+                            onClick={() => setPage((prev) => prev + 1)}
+                        />
                     </Col>
                 )}
             </Row>

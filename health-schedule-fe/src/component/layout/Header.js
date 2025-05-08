@@ -1,6 +1,6 @@
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap"
 import { Link } from "react-router-dom"
-
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import "./Styles/Header.css";
 import { useContext } from "react";
 import { MyDipatcherContext, MyUserContext } from "../../configs/MyContexts";
@@ -84,8 +84,14 @@ const Header = () => {
                                 <img src={user.avatar} width="40" className="rounded-circle" />
                                 Chào {user.username}!
                             </Link>
-                            <Button variant="danger text-center" onClick={() => dispatch({ "type": "logout" })} as={Link} to="/login" >
-                                Đăng xuất
+                            <Button
+                                variant="danger"
+                                className="logout-btn d-flex align-items-center"
+                                onClick={() => dispatch({ type: "logout" })}
+                                as={Link}
+                                to="/login"
+                            >
+                                <i className="bi bi-box-arrow-right me-2"></i> Đăng xuất
                             </Button>
                         </>}
                     </Nav>

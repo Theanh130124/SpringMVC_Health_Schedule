@@ -43,7 +43,11 @@ public class ApiAppointmentController {
         }
 
     }
-
+    
+    
+    //Nen permission dung nguoi thi moi xem duoc cua nguoi do theo token 
+    
+    @PreAuthorize("hasAnyAuthority('Patient', 'Doctor')")
     @GetMapping("/appointment")
     public ResponseEntity<?> getListAppointment(@RequestParam Map<String, String> params) {
         try {

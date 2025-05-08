@@ -79,28 +79,32 @@ const Finddoctor = () => {
     return (
         <>
             <Container fluid className="p-0">
-                <Row className="justify-content-center g-4 custom-row mt-5">
+                <Row className="justify-content-center g-4 custom-row mt-5 search-bar">
+                    <Col xs={12} className="text-center">
+                        <h2 className="search-title">
+                            <i className="bi bi-search-heart me-2 search-icon"></i> Tìm kiếm bác sĩ
+                        </h2>
+                        <p className="search-subtitle">Nhập tên bác sĩ, chuyên khoa hoặc phòng khám để tìm kiếm</p>
+                    </Col>
                     <Col md={6} lg={6} xs={12}>
                         <Form.Control
                             type="text"
                             placeholder="Tìm bác sĩ, chuyên khoa hoặc phòng khám..."
                             value={keyword}
-                            className="search-input"
+                            className="search-input rounded-pill shadow-sm"
                             onChange={handleKeywordChange}
-
                         />
-
                     </Col>
                 </Row>
 
 
                 <Row className="justify-content-center g-4  mt-4">
 
-                {loading && !q.get('keyword') && (
-                    <div className="text-center mt-4">
-                        <MySpinner />
-                    </div>
-                )}
+                    {loading && !q.get('keyword') && (
+                        <div className="text-center mt-4">
+                            <MySpinner />
+                        </div>
+                    )}
                     {doctors.length === 0 && <Alert variant="info" className="m-2 text-center">Không tìm thấy bác sĩ nào!</Alert>}
                     {doctors.map(d => (
                         <Col key={d.doctorId} xs={12} sm={6} md={4} lg={3} >
@@ -110,26 +114,26 @@ const Finddoctor = () => {
                                     <div>
                                         <Card.Title className="card-title"> Bác sĩ : {`${d.userDTO.firstName} ${d.userDTO.lastName}`.split(' ').slice(0, 4).join(' ')}
                                             {`${d.userDTO.firstName} ${d.userDTO.lastName}`.split(' ').length > 4 && '...'}</Card.Title>
-                                       
-                                       {/*  */}
 
-                                       {d.specialties.map( s => (<Card.Text key={s.specialtyId} className="card-text" style={{ fontSize: '0.85rem' }}>
-                                            Chuyên khoa: {s.name}
-                                        </Card.Text> ))}
-                                        
+                                        {/*  */}
 
-                                        
-                                        {d.clinics.map( c => (<Card.Text key={c.clinicId} className="card-text" style={{ fontSize: '0.85rem' }}>
-                                            Bệnh viên: {c.name} <br />
-                                            Địa chỉ: {c.address}
+                                        {d.specialties.map(s => (<Card.Text key={s.specialtyId} className="card-text" style={{ fontSize: '0.85rem' }}>
+                                            <strong>Chuyên khoa:</strong> {s.name}
+                                        </Card.Text>))}
+
+
+
+                                        {d.clinics.map(c => (<Card.Text key={c.clinicId} className="card-text" style={{ fontSize: '0.85rem' }}>
+                                            <strong>Bệnh viên : </strong>{c.name} <br />
+                                            <strong>Địa chỉ: </strong>{c.address}
                                         </Card.Text>
                                         ))}
                                         <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
-                                            Đánh giá : {d.averageRating} <RatingIcon rating={d.averageRating} />
+                                            <strong>Đánh giá :</strong> {d.averageRating} <RatingIcon rating={d.averageRating} />
                                         </Card.Text>
 
                                         <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
-                                            Phí khám:  {d.consultationFee.toLocaleString('vi-VN')} VNĐ
+                                            <strong>Phí khám:</strong>  {d.consultationFee.toLocaleString('vi-VN')} VNĐ
                                         </Card.Text>
 
 
