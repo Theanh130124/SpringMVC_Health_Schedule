@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.GrantedAuthority;
 import java.util.stream.Collectors;
+import org.springframework.util.AntPathMatcher;
 
 public class JwtFilter implements Filter {
 
@@ -26,7 +27,8 @@ public class JwtFilter implements Filter {
             "/api/users", // Đăng ký tài khoản bệnh nhân
             "/api/doctor", // Tìm kiếm bác sĩ ngoài trang chủ
             "/api/payment/", // Tất cả các endpoint dưới /api/payment
-            "/api/find_slot"
+            "/api/find_slot",
+            "/api/reviews/**"
     );
 
     @Override
@@ -86,13 +88,12 @@ public class JwtFilter implements Filter {
     }
 
     // Kiểm tra xem URL có phải là một trong các endpoint không yêu cầu JWT
+    private static final AntPathMatcher pathMatcher = new AntPathMatcher();
+
     private boolean isInWhitelist(String path) {
-        for (String whitePath : WHITELIST) {
-            // Kiểm tra nếu đường dẫn chứa "/api/payment/" hoặc các endpoint whitelist khác
-            if (path.equals(whitePath)) {
-                return true;
-            }
-        }
-        return false;
+        //Kiểm tra cả 2 loại đường dẫn
+        //Đường dẫn cố định như /api/login
+        //Đường dẫn động như /reviews/{doctorId}...
+        return WHITELIST.stream().anyMatch(pattern -> pathMatcher.match(pattern, path));
     }
 }

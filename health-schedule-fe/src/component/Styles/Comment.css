@@ -1,0 +1,124 @@
+/* General Section Styling */
+.comment-section {
+    background-color: #f8fafd;
+    padding: 50px 0;
+    border-radius: 12px;
+  }
+  
+  /* Review Card Styling */
+  .card-comment {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    padding: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .card-comment:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Avatar Image */
+  .review-avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+  }
+  
+  /* Review Header */
+  .review-header {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #333;
+  }
+  
+  .review-date {
+    font-size: 0.85rem;
+    color: #777;
+  }
+  
+  /* Comment Text */
+  .comment-content {
+    font-size: 1rem;
+    color: #444;
+    margin-top: 5px;
+    white-space: pre-wrap;
+  }
+  
+  /* Reply Box */
+  .reply-box {
+    background: #ecf4ff;
+    padding: 15px;
+    margin-top: 12px;
+    border-left: 4px solid #007bff;
+    border-radius: 12px;
+  }
+  
+  .reply-box .text-primary {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  
+  .reply-box p {
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  /* Spinner */
+  .spinner-container {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  /* Buttons */
+  .btn-save,
+  .btn-cancel {
+    margin-top: 10px;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    border-radius: 30px;
+    font-weight: 500;
+  }
+  
+  .btn-save {
+    background-color: #007bff;
+    color: white;
+    border: none;
+  }
+  
+  .btn-save:hover {
+    background-color: #0062cc;
+  }
+  
+  .btn-cancel {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    margin-left: 10px;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #5a6268;
+  }
+  
+  /* Reply Button */
+  button.btn-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0;
+  }
+  
+  button.btn-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Textarea */
+  .form-control {
+    border-radius: 10px;
+    font-size: 0.95rem;
+    padding: 10px;
+    resize: vertical;
+  }
+  
