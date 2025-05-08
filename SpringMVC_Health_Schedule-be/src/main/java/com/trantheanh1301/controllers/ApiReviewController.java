@@ -33,7 +33,7 @@ public class ApiReviewController {
     @Autowired
     private ReviewService reviewService;
 
-    @PostMapping("/reviews")
+    @PostMapping("/review")
     public ResponseEntity<?> addReview(@RequestParam Map<String, String> params) {
         try {
             Review r = this.reviewService.addReview(params);
@@ -43,7 +43,7 @@ public class ApiReviewController {
         }
     }
 
-    @PatchMapping("/reviews/{id}")
+    @PatchMapping("/review/{id}")
     public ResponseEntity<?> updateResponseReview(@RequestBody Map<String, String> params, @PathVariable("id") int id) {
         try {
             Review r = this.reviewService.getReviewById(id);

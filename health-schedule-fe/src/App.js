@@ -14,7 +14,7 @@ import { generateToken, messaging } from './notifications/firebase';
 import { createContext, useEffect, useReducer } from "react"
 import { onMessage } from 'firebase/messaging';
 import MyUserReducer from './reducers/MyUserReducer';
-import { MyDipatcherContext, MyUserContext } from './configs/MyContexts';
+import { MyDipatcherContext, MyUserContext, MyDoctorContext } from './configs/MyContexts';
 import cookie from 'react-cookies'
 import Booking from './component/Booking';
 import Calendar from './component/Calendar';
@@ -23,6 +23,9 @@ import Appointment from './component/Appointment';
 import CallVideo from './component/CallVideo';
 import RoomChat from './component/RoomChat';
 
+import Chats from './component/Chats';
+import Review from './component/Review';
+import { useState } from 'react';
 
 
 
@@ -30,7 +33,7 @@ const App = () => {
   //dispatch nhận action.type bên MyUserReducer.js -> F5 sẽ không mất vì đã lưu cookie
 
   const [user, dispatch] = useReducer(MyUserReducer, cookie.load('user') || null);
-
+  const [doctor, setDoctor] = useState({});
 
 
 
@@ -45,6 +48,7 @@ const App = () => {
   }
     , [])
   return (
+    <MyDoctorContext.Provider value={[doctor,setDoctor]}>
     <MyUserContext.Provider value={user}>
       <MyDipatcherContext.Provider value={dispatch}>
         <BrowserRouter>
@@ -65,12 +69,14 @@ const App = () => {
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/findDoctor" element={<Finddoctor />} />
+              <Route path="/review" element={<Review />} />
             </Routes>
           </Container>
           <Footer />
         </BrowserRouter>
       </MyDipatcherContext.Provider>
     </MyUserContext.Provider>
+    </MyDoctorContext.Provider>
 
   )
 }

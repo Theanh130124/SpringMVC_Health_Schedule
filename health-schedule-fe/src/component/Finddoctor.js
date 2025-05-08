@@ -2,12 +2,11 @@ import { useEffect, useState } from "react"
 import { Alert, Button, Card, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import Apis, { endpoint } from "../configs/Apis";
 import { Link, useSearchParams } from "react-router-dom";
-
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MySpinner from "./layout/MySpinner";
 import RatingIcon from "../utils/RattingIcon";
-
+import { useContext } from "react";
+import { MyDoctorContext } from "../configs/MyContexts";
 const Finddoctor = () => {
 
     // Nhớ làm xem thêm
@@ -19,8 +18,11 @@ const Finddoctor = () => {
 
     const [keyword, setKeyword] = useState("");
 
-
-
+    const [doctor, setDoctor] = useContext(MyDoctorContext);
+    const handleClick =(d)=>{
+        setDoctor(d)    
+        console.log(doctor)
+    }
 
     const handleKeywordChange = (e) => {
         let value = e.target.value;
@@ -143,7 +145,7 @@ const Finddoctor = () => {
                                     <div className="d-grid gap-1 mt-2">
                                         {/* Xem lịch trống là tìm lịch trống theo id doctor đó */}
                                         <Button variant="primary" as={Link} to="/calendar" size="sm">Xem lịch trống</Button>
-                                        <Button variant="danger" as={Link} to="/review" size="sm">Xem đánh giá</Button>
+                                        <Button variant="danger" as={Link} to={`/review/?doctorId=${d.doctorId}`} onClick={()=>handleClick(d)} size="sm">Xem đánh giá</Button>
                                     </div>
                                 </Card.Body>
                             </Card>

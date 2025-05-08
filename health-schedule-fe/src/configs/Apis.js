@@ -20,7 +20,8 @@ export const endpoint = {
     'findDoctor': '/find_slot',
     'listAppointment': '/appointment',
     'bookdoctor': '/book_doctor',
-
+    'reviews': '/reviews',
+    'review':'/review',
 
     // Cho firebase
     'chats': '/chats',
@@ -49,7 +50,7 @@ export const authApis = () => {
         headers: {
             'Authorization' : `Bearer ${cookie.load('token')}`,
             //Bổ sung để lưu from
-            'Content-Type' : 'application/x-www-form-urlencoded'
+            'Content-Type' : 'application/json'
         }
     })
 }

@@ -81,7 +81,6 @@ public class Review implements Serializable {
     private Doctor doctorId;
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     @ManyToOne(optional = false)
-    @JsonIgnore
     private Patient patientId;
 
     public Review() {
