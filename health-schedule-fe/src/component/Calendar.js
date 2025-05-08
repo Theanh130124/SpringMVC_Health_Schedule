@@ -154,7 +154,7 @@ const Calendar = () => {
                             <Card.Img variant="top" src={slot.doctorId.userDTO.avatar} />
                             <Card.Body className="card-body-custom">
                                 <Card.Title className="card-title">
-                                   Bác sĩ: {slot.doctorId.userDTO.firstName} {slot.doctorId.userDTO.lastName}
+                                    Bác sĩ: {slot.doctorId.userDTO.firstName} {slot.doctorId.userDTO.lastName}
                                 </Card.Title>
                                 <Card.Text className="card-text">
                                     <strong>Ngày khám:</strong> {new Date(slot.slotDate).toLocaleDateString()}
@@ -162,11 +162,11 @@ const Calendar = () => {
                                     <strong>Thời gian:</strong> {slot.startTime} - {slot.endTime}
                                     <br />
                                     {slot.doctorId.specialties.map((s, index) => (
-                                        <div key={index}>
+                                        <span key={index}>
                                             <strong>Chuyên môn:</strong> {s.name}
-                                        </div>
+                                            <br />
+                                        </span>
                                     ))}
-                                    <br />
                                     <strong>Phí khám:</strong> {slot.doctorId.consultationFee.toLocaleString('vi-VN')} VNĐ
                                 </Card.Text>
                                 <div className="text-center">

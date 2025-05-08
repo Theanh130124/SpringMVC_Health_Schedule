@@ -6,11 +6,12 @@ import { authApis, endpoint } from "../configs/Apis";
 import toast from "react-hot-toast";
 import MyToaster from "./layout/MyToaster";
 import MyConfirm from "./layout/MyConfirm";
+import { ConvertToVietnamTime } from "../utils/ConvertToVietnamTime";
 
 const Booking = () => {
 
-    
-    
+
+
 
     const [loading, setLoading] = useState(false);
     const location = useLocation();
@@ -22,10 +23,8 @@ const Booking = () => {
 
 
 
-//Nữa gom myformat
-    const formattedDate = slot.slotDate ? new Date(slot.slotDate).toISOString().split('T')[0] : "";
-    const formattedTime = slot.startTime ? `${slot.startTime}` : "";
-
+    const formattedDate = slot.slotDate ? ConvertToVietnamTime(slot.slotDate) : "";
+    const formattedTime = slot.startTime || "";
     const fullTime = `${formattedDate} ${formattedTime}`;
 
 
@@ -33,8 +32,8 @@ const Booking = () => {
     //của patient
     const user = useContext(MyUserContext);
 
-    
-    const Booking =  async () => {
+
+    const Booking = async () => {
 
         try {
             setLoading(true);
@@ -43,21 +42,26 @@ const Booking = () => {
                 patientId: user.userId,
                 doctorId: slot.doctorId.doctorId,
                 clinicId: slot.doctorId.clinics[0].clinicId,
-                time : fullTime,
+                time: fullTime,
                 reason: appointment.reason,
                 duration: 120,
-                type :"Offline",
-                
+                type: "Offline",
+
             });
 
             setAppointment(res); // không . data vì res là 1 object
 
-            
+
 
             toast.success("Đặt lịch thành công!");
             nav("/appointment"); //Đặt xong về xem lịch hẹn
         } catch (ex) {
-
+            console.log(user.userId);
+            console.log(slot.doctorId.doctorId);
+            console.log(slot.doctorId.clinics[0].clinicId);
+            console.log(fullTime);
+            console.log(appointment.reason);
+            
             console.error(ex);
             toast.error("Đặt lịch thất bại!");
         } finally {
@@ -77,81 +81,77 @@ const Booking = () => {
         setShowConfirm(false);
     };
 
-        
-        
-        
-    
+
+
+
+
 
     return (
         <>
-        <MyToaster />
-        <Container fluid className="p-0">
+            <MyToaster />
+            <Container fluid className="p-0">
 
-            <Row className="justify-content-center custom-row-primary mt-4">
+                <Row className="justify-content-center custom-row-primary mt-4">
 
-                
 
-                <Col lg={8} md={10} sm={12}>
-                <Container className="p-3 shadow rounded bg-light me-5"> 
-                <h2 className="text-center">Thông tin chi tiết</h2>
-                <Card>
-                            
-                            <Card.Body className="card-body-custom">
-                                <Card.Text className="card-text">
-                                    <strong >Thời gian khám:</strong> {slot.startTime} - {slot.endTime}
-                                    <br />
-                                    <strong>Ngày khám:</strong> {new Date(slot.slotDate).toLocaleDateString()}
-                                    <br />
-                                    <strong>Bác sĩ khám:</strong> {slot.doctorId.userDTO.firstName} {slot.doctorId.userDTO.lastName}
-                                    <br />
-                                    <strong>Nơi khám:</strong> {slot.doctorId.bio}
-                                    <br />
-                                   
 
-                                </Card.Text>
+                    <Col lg={8} md={10} sm={12}>
+                        <Container className="p-3 shadow rounded bg-light me-5">
+                            <h2 className="text-center">Thông tin chi tiết</h2>
+                            <Card>
 
-                                {slot.doctorId.clinics.map(c =>
-
+                                <Card.Body className="card-body-custom">
                                     <Card.Text className="card-text">
-                                                                    
-                                                                        
-                                    <strong>Chi phí khám:</strong> {slot.doctorId.consultationFee.toLocaleString('vi-VN')} VNĐ
-                                    <br />
+                                        <strong >Thời gian khám:</strong> {slot.startTime} - {slot.endTime}
+                                        <br />
+                                        <strong>Ngày khám:</strong> {new Date(slot.slotDate).toLocaleDateString()}
+                                        <br />
+                                        <strong>Bác sĩ khám:</strong> {slot.doctorId.userDTO.firstName} {slot.doctorId.userDTO.lastName}
+                                        <br />
 
 
 
-                                    <strong>Bệnh viện:</strong> {c.name}
-                                    <br />
-                                    <strong>Địa chỉ:</strong> {c.address}
+
                                     </Card.Text>
 
+                                    {slot.doctorId.specialties.map(s => (
+                                        <strong key={s.specialtyId}>Chuyên khoa: {s.name}</strong>
+                                    ))}
 
-                                )}
-                              
-                                <FloatingLabel  label="Lý do khám" className="mb-3">
-                                                        <Form.Control type="text" placeholder="Lý do khám bệnh" required
-                                                            value={appointment.reason || ''} onChange={(e) => setAppointment({ ...appointment, reason: e.target.value })} />
-                                                    </FloatingLabel>
+                                    {slot.doctorId.clinics.map(c => (
+                                        <Card.Text key={c.clinicId} className="card-text">
+                                            <strong>Chi phí khám:</strong> {slot.doctorId.consultationFee.toLocaleString('vi-VN')} VNĐ
+                                            <br />
+                                            <strong>Bệnh viện:</strong> {c.name}
+                                            <br />
+                                            <strong>Địa chỉ:</strong> {c.address}
+                                        </Card.Text>
+                                    ))}
+
+                                    <FloatingLabel label="Lý do khám" className="mb-3">
+                                        <Form.Control type="text" placeholder="Lý do khám bệnh" required
+                                            value={appointment.reason || ''} onChange={(e) => setAppointment({ ...appointment, reason: e.target.value })} />
+                                    </FloatingLabel>
 
 
-                                <Button variant="success" onClick={handleConfirm} disabled={loading}>
-                                    Xác nhận đặt lịch 
-                                </Button>
-                            </Card.Body>
-                        </Card>
-                </Container>
+                                    <Button variant="success" onClick={handleConfirm} disabled={loading}>
+                                        Xác nhận đặt lịch
+                                    </Button>
+                                </Card.Body>
+                            </Card>
+                        </Container>
 
 
 
-                </Col>
+                    </Col>
 
-               
 
-            </Row>
-            <MyConfirm
+
+                </Row>
+                <MyConfirm
                     show={showConfirm}
                     onHide={handleClose}
-                    
+
                     onConfirm={Booking}
                     loading={loading}
                     title="Xác nhận đặt lịch"
@@ -159,11 +159,11 @@ const Booking = () => {
                 />
 
 
-            <Row>
+                <Row>
 
 
-            </Row>
-        </Container>
+                </Row>
+            </Container>
         </>
     );
 }
@@ -175,7 +175,7 @@ export default Booking;
 
 
 
-    
+
 //     return (
 //         <Container fluid className="p-0">
 //             <Row className="justify-content-center custom-row-primary mt-4">

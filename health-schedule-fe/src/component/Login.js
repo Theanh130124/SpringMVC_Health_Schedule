@@ -5,6 +5,7 @@ import cookie from 'react-cookies'
 import { useNavigate } from "react-router-dom";
 import MySpinner from "./layout/MySpinner";
 import { MyDipatcherContext } from "../configs/MyContexts";
+import toast from "react-hot-toast";
 
 const Login = () => {
     //Phải là đối tượng rỗng
@@ -29,6 +30,7 @@ const Login = () => {
         e.preventDefault();
         try {
             setLoading(true);
+            setMsg(null);
             let res = await Apis.post(endpoint['login'], {
                 ...user
             });
@@ -60,10 +62,11 @@ const Login = () => {
                 "type": "login",
                 "payload": u.data
             });
-
+            toast.success("Đăng nhập thành công!");
             nav("/");
         } catch (ex) {
-            console.error(ex);
+            console.error("Lỗi đăng nhập:", ex);
+            setMsg("Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại!");
         } finally {
             setLoading(false);
         }

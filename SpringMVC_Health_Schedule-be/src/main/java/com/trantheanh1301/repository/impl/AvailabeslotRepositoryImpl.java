@@ -138,11 +138,12 @@ public class AvailabeslotRepositoryImpl implements AvailabeslotRepository {
         
      
         predicates.add(builder.equal(rA.get("doctorId"), doctor));
-        predicates.add(builder.lessThanOrEqualTo(rA.get("startTime"), time));
-        predicates.add(builder.greaterThanOrEqualTo(rA.get("endTime"), time));
+        //
+        predicates.add(builder.equal(rA.get("slotDate"), time));
+        predicates.add(builder.equal(rA.get("startTime"), time));
 
         predicates.add(builder.equal(rA.get("isBooked"), false));
-        query.select(rA).where(predicates.toArray(new Predicate[0]));
+        query.select(rA).where(builder.and(predicates.toArray(new Predicate[0])));
 
         Query q = s.createQuery(query);
 

@@ -22,7 +22,6 @@ import UploadLicense from './component/UploadLicense';
 import Appointment from './component/Appointment';
 import CallVideo from './component/CallVideo';
 import RoomChat from './component/RoomChat';
-import Chats from './component/Chats';
 
 
 
@@ -57,7 +56,6 @@ const App = () => {
 
 
               <Route path="/roomchat" element={<RoomChat/>} />
-              <Route path = "/chat" element={<Chats/>} />
               <Route path="/appointment" element={<Appointment />} />
               <Route path="/callvideo" element={<CallVideo/>} />
               <Route path="/uploadLicense" element={<UploadLicense />} />

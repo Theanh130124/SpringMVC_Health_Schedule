@@ -7,7 +7,7 @@ import { load } from "react-cookies";
 import MySpinner from "./layout/MySpinner";
 
 const Appointment = () => {
-//Phân trang cho thằng này
+    //Phân trang cho thằng này
     const [loading, setLoading] = useState(false);
     const [appointments, setAppointments] = useState([]);
     const [page, setPage] = useState(1);
@@ -110,43 +110,38 @@ const Appointment = () => {
                                     <Card.Title className="card-title"> Ngày hẹn : {new Date(a.appointmentTime).toLocaleDateString("vi-VN")}
                                     </Card.Title>
                                     <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
-
-
-                                        {user.role === "Patient" &&(<div>
-                                            <strong>Bác sĩ khám</strong> {a.doctorId.user.firstName} {a.doctorId.user.lastName}
-                                            <br />
-                                        </div>)
-                                        }
-                                        {user.role === "Doctor" && (<div>
-                                            <strong>Bệnh nhân khám</strong> {a.patientId.user.firstName} {a.patientId.user.lastName}
-                                            <br />
-                                        </div>)
-                                        }
-                                        <strong>Bệnh viện</strong> {a.clinicId.name}
+                                        {user.role === "Patient" && (
+                                            <>
+                                                <strong>Bác sĩ khám:</strong> {a.doctorId.user.firstName} {a.doctorId.user.lastName}
+                                                <br />
+                                            </>
+                                        )}
+                                        {user.role === "Doctor" && (
+                                            <>
+                                                <strong>Bệnh nhân khám:</strong> {a.patientId.user.firstName} {a.patientId.user.lastName}
+                                                <br />
+                                            </>
+                                        )}
+                                        <strong>Bệnh viện:</strong> {a.clinicId.name}
                                         <br />
-                                        <strong>Địa điểm khám</strong> {a.clinicId.address}
-                                        <br />
-                                        <strong>Thời gian bắt đầu khám</strong> {new Date(a.appointmentTime).toLocaleTimeString("vi-VN")}
+                                        <strong>Địa điểm khám:</strong> {a.clinicId.address}
                                         <br />
 
-                                        {/* Xử lý parse sau */}
-                                        {/* <strong>Thời gian </strong> {a.clinicId.appointmentTime} 
-                                        <br /> */}
 
-
-
-
+                                        {/* Thời gian bắt đấu nữa */}
                                     </Card.Text>
 
+
                                     <Card.Text className="card-text" style={{ fontSize: '0.85rem' }}>
+                                        <strong>Thời gian bắt đầu khám:</strong> {new Date(a.appointmentTime).toLocaleTimeString("vi-VN")}
+                                        <br />
                                         <strong>Thời lượng cuộc hẹn:</strong> {a.durationMinutes} phút
                                         <br />
                                         <strong>Lý do khám:</strong> {a.reason}
                                         <br />
                                         <strong>Trạng thái cuộc hẹn:</strong> {a.status}
                                         <br />
-                                        <strong>Loại cuộc hẹn:</strong> {a.consultationType}
-                                        <br />
+
                                     </Card.Text>
 
 
