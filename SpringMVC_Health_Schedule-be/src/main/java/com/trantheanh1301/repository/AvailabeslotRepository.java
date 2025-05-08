@@ -20,5 +20,5 @@ public interface AvailabeslotRepository {
     public List<Availableslot> findSlot(Map<String, String> params);
     public Availableslot getSlotbyDoctorId(int doctorId ,Date time);
     public Availableslot addOrUpdate(Availableslot slot);
-
+    public Availableslot getSlotOldByDoctorId(int doctorId, Date time);
 }
