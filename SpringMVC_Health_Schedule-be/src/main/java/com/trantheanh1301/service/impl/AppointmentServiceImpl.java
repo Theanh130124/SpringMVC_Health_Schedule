@@ -4,6 +4,7 @@
  */
 package com.trantheanh1301.service.impl;
 
+import com.trantheanh1301.formatter.DateFormatter;
 import com.trantheanh1301.pojo.Appointment;
 import com.trantheanh1301.pojo.Availableslot;
 import com.trantheanh1301.pojo.Clinic;
@@ -118,9 +119,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (appointment == null) {
             throw new RuntimeException("Không tìm thấy lịch hẹn trên");
         }
+        if (!params.containsKey("doctorId") || params.get("doctorId") == null) {
+            throw new RuntimeException("Thiếu thông tin bác sĩ (doctorId)");
+        }
 
         Integer doctorId = Integer.valueOf(params.get("doctorId"));
-
 
         if (appointment.getCreatedAt() != null) {
             Date date_now = new Date();
@@ -131,23 +134,24 @@ public class AppointmentServiceImpl implements AppointmentService {
             //Qúa 24h sẽ không cho sửa -> Nhưng phải thực hiện set lịch hiện tại về chưa book 
             //và lịch book thành đã book (theo thời gian đã chọn)
             if (cal.getTime().after(date_now)) {
-                if (params.containsKey("appointmentTime")) {
-
+                if (params.containsKey("time")) {
+                    String timeStr = params.get("time");
+                    Date newTime = DateFormatter.parseDateTime(timeStr); //format cho thời gian gửi lên server
                     //Time cũ
                     Date time_old = appointment.getAppointmentTime();
                     //Thực hiện update slot cũ về false -> chưa book
-                    Availableslot slot_old = slotRepo.getSlotbyDoctorId(doctorId, time_old);
-                    if (slot_old == null || slot_old.getIsBooked() == false) {
+                    Availableslot slot_old = slotRepo.getSlotOldByDoctorId(doctorId, time_old);
+                    if (slot_old == null) {
                         throw new RuntimeException("Lịch chưa được đặt nên không được sửa!");
                     }
                     slot_old.setIsBooked(false);
                     slotRepo.addOrUpdate(slot_old);
 
                     //(Time mới) appointment_time -> phải là thời gian trống còn lại của bác sĩ
-                    appointment.setAppointmentTime(new Date(params.get("appointmentTime")));
+                    appointment.setAppointmentTime(newTime);
                     //Thực hiện update slot mới -> cho lịch tương ứng
-                    Availableslot slot_new = slotRepo.getSlotbyDoctorId(doctorId, new Date(params.get("appointmentTime")));
-                    if (slot_new == null || slot_new.getIsBooked()) {
+                    Availableslot slot_new = slotRepo.getSlotbyDoctorId(doctorId, newTime);
+                    if (slot_new == null) {
                         throw new RuntimeException("Lịch đã được đặt!");
                     }
                     slot_new.setIsBooked(true);
@@ -157,8 +161,9 @@ public class AppointmentServiceImpl implements AppointmentService {
                     appointment.setReason(params.get("reason"));
                 }
 
+            } else {
+                throw new RuntimeException("Không thể sữa lịch hẹn quá 24 giờ");
             }
-            throw new RuntimeException("Không thể sữa lịch hẹn quá 24 giò");
         }
         //Cập nhật lịch khám
         appointmentRepo.addOrUpdate(appointment);

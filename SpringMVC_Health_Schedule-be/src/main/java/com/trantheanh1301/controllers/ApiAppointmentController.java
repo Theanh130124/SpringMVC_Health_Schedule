@@ -38,6 +38,7 @@ public class ApiAppointmentController {
             return new ResponseEntity<>(appointmentService.registerAppointment(params), HttpStatus.CREATED);
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
+            
             error.put("error", "Đã xảy ra lỗi" + ex.getMessage());
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }

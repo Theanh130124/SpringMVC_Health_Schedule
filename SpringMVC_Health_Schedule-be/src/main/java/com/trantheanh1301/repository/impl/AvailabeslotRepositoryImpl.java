@@ -56,7 +56,6 @@ public class AvailabeslotRepositoryImpl implements AvailabeslotRepository {
 
         LocalDate today = LocalDate.now(ZoneId.of("Asia/Ho_Chi_Minh"));
 
-
         if (params != null) {
             if (params.containsKey("doctorId") && params.get("doctorId") != null) {
                 int doctorId = Integer.parseInt(params.get("doctorId"));
@@ -135,14 +134,44 @@ public class AvailabeslotRepositoryImpl implements AvailabeslotRepository {
         //Tìm cái lịch như này đã 
         Doctor doctor = new Doctor();
         doctor.setDoctorId(doctorId);
-        
-     
+
         predicates.add(builder.equal(rA.get("doctorId"), doctor));
-        predicates.add(builder.lessThanOrEqualTo(rA.get("startTime"), time));
-        predicates.add(builder.greaterThanOrEqualTo(rA.get("endTime"), time));
+        //
+        predicates.add(builder.equal(rA.get("slotDate"), time));
+        predicates.add(builder.equal(rA.get("startTime"), time));
 
         predicates.add(builder.equal(rA.get("isBooked"), false));
-        query.select(rA).where(predicates.toArray(new Predicate[0]));
+        query.select(rA).where(builder.and(predicates.toArray(new Predicate[0])));
+
+        Query q = s.createQuery(query);
+
+        try {
+            return (Availableslot) q.getSingleResult(); // Trả về slot nếu có
+        } catch (NoResultException ex) {
+            return null; // Không có slot phù hợp
+        }
+
+    }
+
+    @Override
+    public Availableslot getSlotOldByDoctorId(int doctorId, Date time) {
+        Session s = factory.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<Availableslot> query = builder.createQuery(Availableslot.class);
+        Root<Availableslot> rA = query.from(Availableslot.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        //Tìm cái lịch như này đã 
+        Doctor doctor = new Doctor();
+        doctor.setDoctorId(doctorId);
+
+        predicates.add(builder.equal(rA.get("doctorId"), doctor));
+        //
+        predicates.add(builder.equal(rA.get("slotDate"), time));
+        predicates.add(builder.equal(rA.get("startTime"), time));
+
+        predicates.add(builder.equal(rA.get("isBooked"),true));
+        query.select(rA).where(builder.and(predicates.toArray(new Predicate[0])));
 
         Query q = s.createQuery(query);
 

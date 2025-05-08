@@ -28,4 +28,21 @@ public class DateFormatter {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         return sdf.format(date);
     }
+
+    // Parse theo định dạng yyyy-MM-dd HH:mm:ss (ngày + giờ)
+    public static Date parseDateTime(String input) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return sdf.parse(input);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Format ngày + giờ về dạng dd-MM-yyyy HH:mm:ss
+    public static String formatDateTime(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        return sdf.format(date);
+    }
 }
