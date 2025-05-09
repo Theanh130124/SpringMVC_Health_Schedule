@@ -87,4 +87,26 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         return query.getResultList();
 
     }
+
+    @Override
+    public List<Review> getReviewLists(Map<String, String> params) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Review> q = b.createQuery(Review.class);
+        
+        Root<Review> root = q.from(Review.class);
+        q.orderBy(b.desc(root.get("rating")));
+        Query query = s.createQuery(q);
+        if (params != null) {
+            String page = params.get("page");
+            if (page != null && !page.isEmpty()) {
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+                int p = Integer.parseInt(page);
+                int start = (p - 1) * pageSize;
+                query.setFirstResult(start);
+                query.setMaxResults(pageSize);
+            }
+        }        
+        return query.getResultList();
+    }
 }

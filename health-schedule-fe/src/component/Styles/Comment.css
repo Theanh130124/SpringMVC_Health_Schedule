@@ -1,124 +1,147 @@
-/* General Section Styling */
+/* Định dạng chung */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* Card bác sĩ */
+.card-doctor {
+  border: none;
+  margin-top: 20px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #ffffff;
+}
+
+.card-doctor:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-doctor img {
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 3px solid #007bff;
+}
+
+.card-doctor .card-body {
+  padding: 20px;
+  text-align: center;
+}
+
+.card-doctor .card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.card-doctor .card-text {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 15px;
+}
+
+.card-doctor .btn-primary {
+  background-color: #007bff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.card-doctor .btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Avatar */
+.review-avatar {
+  border: 2px solid #007bff;
+}
+
+/* Header đánh giá */
+.review-header {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.review-date {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* Nội dung bình luận */
+.comment-content {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+}
+
+/* Phản hồi bác sĩ */
+.reply-box {
+  background-color: #f1f9ff;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1e7ff;
+}
+
+.reply-box h6 {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #0d6efd;
+}
+
+.reply-box p {
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+/* Nút bấm */
+button {
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+/* Spinner */
+.spinner-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Phần tải thêm */
+button.btn-info {
+  background-color: #17a2b8;
+  border: none;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+}
+
+button.btn-info:hover {
+  background-color: #138496;
+}
+
+/* Phần hỏi đáp */
 .comment-section {
-    background-color: #f8fafd;
-    padding: 50px 0;
-    border-radius: 12px;
-  }
-  
-  /* Review Card Styling */
-  .card-comment {
-    background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-    padding: 20px;
-    transition: all 0.3s ease;
-  }
-  
-  .card-comment:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Avatar Image */
-  .review-avatar {
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ddd;
-  }
-  
-  /* Review Header */
-  .review-header {
-    font-weight: 600;
-    font-size: 1.05rem;
-    color: #333;
-  }
-  
-  .review-date {
-    font-size: 0.85rem;
-    color: #777;
-  }
-  
-  /* Comment Text */
-  .comment-content {
-    font-size: 1rem;
-    color: #444;
-    margin-top: 5px;
-    white-space: pre-wrap;
-  }
-  
-  /* Reply Box */
-  .reply-box {
-    background: #ecf4ff;
-    padding: 15px;
-    margin-top: 12px;
-    border-left: 4px solid #007bff;
-    border-radius: 12px;
-  }
-  
-  .reply-box .text-primary {
-    font-weight: 600;
-    font-size: 1rem;
-  }
-  
-  .reply-box p {
-    font-size: 0.95rem;
-    margin-bottom: 5px;
-    color: #333;
-  }
-  
-  /* Spinner */
-  .spinner-container {
-    text-align: center;
-    margin-top: 10px;
-  }
-  
-  /* Buttons */
-  .btn-save,
-  .btn-cancel {
-    margin-top: 10px;
-    padding: 8px 20px;
-    font-size: 0.9rem;
-    border-radius: 30px;
-    font-weight: 500;
-  }
-  
-  .btn-save {
-    background-color: #007bff;
-    color: white;
-    border: none;
-  }
-  
-  .btn-save:hover {
-    background-color: #0062cc;
-  }
-  
-  .btn-cancel {
-    background-color: #6c757d;
-    color: white;
-    border: none;
-    margin-left: 10px;
-  }
-  
-  .btn-cancel:hover {
-    background-color: #5a6268;
-  }
-  
-  /* Reply Button */
-  button.btn-link {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: 500;
-    padding: 0;
-  }
-  
-  button.btn-link:hover {
-    text-decoration: underline;
-  }
-  
-  /* Textarea */
-  .form-control {
-    border-radius: 10px;
-    font-size: 0.95rem;
-    padding: 10px;
-    resize: vertical;
-  }
-  
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comment-section h4 {
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 20px;
+}

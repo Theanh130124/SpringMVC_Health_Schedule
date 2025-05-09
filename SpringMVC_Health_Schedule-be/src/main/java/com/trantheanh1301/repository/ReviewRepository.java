@@ -17,4 +17,5 @@ public interface ReviewRepository {
     public Review updateResponseReview(Review view);
     public Review getReviewById(int id);
     public List<Review> getReviewListOfDoctor(int doctorId, Map<String, String> params);
+    public List<Review> getReviewLists(Map<String, String> params);
 }

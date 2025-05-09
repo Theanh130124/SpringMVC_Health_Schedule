@@ -75,4 +75,9 @@ public class ReviewServiceImpl implements ReviewService{
     public List<Review> getReviewListOfDoctor(int doctorId, Map<String, String> params){
         return this.reviewRepository.getReviewListOfDoctor(doctorId, params);
     }
+
+    @Override
+    public List<Review> getReviewLists(Map<String, String> params) {
+        return this.reviewRepository.getReviewLists(params);
+    }
 }

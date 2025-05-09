@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.trantheanh1301.mapperdto.DoctorMapper;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
@@ -32,32 +33,37 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RequestMapping("/api")
 @Transactional
 public class ApiDoctorController {
-    
+
     @Autowired
     private DoctorService doctorService;
-    
 
+    @GetMapping("/doctor")
+    public ResponseEntity<?> getListDoctor(@RequestParam Map<String, String> params) {
+        try {
+            List<Doctor> listDoctor = doctorService.getDoctor(params);
 
-@GetMapping("/doctor")
-public ResponseEntity<?> getListDoctor(@RequestParam Map<String, String> params) {
-    try {
-        List<Doctor> listDoctor = doctorService.getDoctor(params);
+            List<DoctorDTO> dtoList = listDoctor.stream()
+                    .map(DoctorMapper::toDoctorDTO) //tương đương  .map(d -> DoctorMapper.toDoctorDTO(d))
+                    .collect(Collectors.toList());   // bỏ vào list
 
-        List<DoctorDTO> dtoList = listDoctor.stream()
-                .map(DoctorMapper::toDoctorDTO)   //tương đương  .map(d -> DoctorMapper.toDoctorDTO(d))
-                .collect(Collectors.toList());   // bỏ vào list
+            return new ResponseEntity<>(dtoList, HttpStatus.OK);
 
-        return new ResponseEntity<>(dtoList, HttpStatus.OK);
-
-    } catch (Exception ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", "Đã xảy ra lỗi: " + ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Đã xảy ra lỗi: " + ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-}
+
+    @GetMapping("/doctor/{doctorId}")
+    public ResponseEntity<?> getDoctorById(@PathVariable ("doctorId") int id) {
+        try {                 
+            return new ResponseEntity<>(this.doctorService.getDoctorById(id), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Đã xảy ra lỗi: " + ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
-
-
-
-
