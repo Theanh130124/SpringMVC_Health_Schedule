@@ -9,17 +9,17 @@ import Register from './component/Register';
 import Login from './component/Login';
 import { Container } from 'react-bootstrap';
 import toast, { Toaster } from "react-hot-toast"
-import Finddoctor from './component/Finddoctor';
+import Finddoctor from './component/findDoctor/Finddoctor';
 import { generateToken, messaging } from './notifications/firebase';
 import { createContext, useEffect, useReducer } from "react"
 import { onMessage } from 'firebase/messaging';
 import MyUserReducer from './reducers/MyUserReducer';
 import { MyDipatcherContext, MyUserContext, MyDoctorContext } from './configs/MyContexts';
 import cookie from 'react-cookies'
-import Booking from './component/Booking';
-import Calendar from './component/Calendar';
+import Booking from './component/bookDoctor/Booking';
+import Calendar from './component/findDoctor/Calendar';
 import UploadLicense from './component/UploadLicense';
-import Appointment from './component/Appointment';
+import Appointment from './component/bookDoctor/Appointment';
 import CallVideo from './component/CallVideo';
 import RoomChat from './component/RoomChat';
 import Review from './component/Review';

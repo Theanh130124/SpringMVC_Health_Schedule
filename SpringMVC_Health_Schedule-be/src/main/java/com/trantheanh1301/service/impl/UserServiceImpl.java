@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
         u.setGender(params.get("gender"));
         u.setDateOfBirth(DateFormatter.parseDate(params.get("birthday")));
 
-        if (!avatar.isEmpty() && avatar != null) {
+        if (avatar != null && !avatar.isEmpty()) {
             try {
                 Map res = cloudinary.uploader().upload(avatar.getBytes(),
                         ObjectUtils.asMap("resource_type", "auto"));
@@ -108,6 +108,9 @@ public class UserServiceImpl implements UserService {
             } catch (IOException ex) {
                 Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
+            //AVATAR = null
+        }else {
+             u.setAvatar("https://res.cloudinary.com/dxiawzgnz/image/upload/v1744000840/qlrmknm7hfe81aplswy2.png");
         }
 
         String role = params.get("role");

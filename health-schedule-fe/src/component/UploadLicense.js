@@ -4,6 +4,7 @@ import Apis, { authApis, endpoint } from "../configs/Apis";
 import { Alert, Button, Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
 import MySpinner from "./layout/MySpinner";
 import cookie from 'react-cookies'
+import toast from "react-hot-toast";
 
 const UploadLicense = () => {
 // Nên thêm hình ảnh chứng chỉ
@@ -43,7 +44,7 @@ const UploadLicense = () => {
                     "doctorId": doctorId
                 }
             );
-            setMsg("Chứng chỉ hành nghề đã gửi thành công , vui lòng chờ duyệt!");
+            toast.success("Chứng chỉ hành nghề đã gửi thành công , vui lòng chờ duyệt!");
             sessionStorage.removeItem("doctorId");
             cookie.remove('token');
             nav("/login");

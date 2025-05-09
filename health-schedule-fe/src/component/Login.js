@@ -47,6 +47,7 @@ const Login = () => {
 
             if (u.data.role === "Doctor" && !u.data.isActive) {
                 sessionStorage.setItem("doctorId", u.data.userId); // không lưu user vì sẽ hiện header 
+                toast.info("Tài khoản chưa được kích hoạt. Vui lòng cung cấp chứng chỉ hành nghề cho admin để kích hoạt tài khoản!");
                 nav("/uploadLicense");
                 //gửi này bên form kia
                 // setMsg("Tài khoản chưa được kích hoạt. Vui lòng cung cấp chứng chỉ hành nghề cho admin để kích hoạt tài khoản!");

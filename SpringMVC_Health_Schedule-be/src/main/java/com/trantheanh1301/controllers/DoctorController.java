@@ -38,6 +38,7 @@ public class DoctorController {
     ) {
 
         params.put("role", "Doctor");
+        params.put("isActive" ,"0");
 
         if (avatar == null || avatar.isEmpty()) {
             avatar = null;

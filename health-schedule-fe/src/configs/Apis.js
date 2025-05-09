@@ -21,6 +21,7 @@ export const endpoint = {
     findDoctorById: (doctorId) => `/find_slot?doctorId=${doctorId}`,
     'listAppointment': '/appointment',
     'bookdoctor': '/book_doctor',
+    updateBookDoctor : (appointmentId) => `/book_doctor/${appointmentId}`,
     'reviews': '/reviews',
     'review': '/review',
 
