@@ -7,9 +7,11 @@ package com.trantheanh1301.service.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.trantheanh1301.formatter.DateFormatter;
+import com.trantheanh1301.pojo.Clinic;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.pojo.Patient;
 import com.trantheanh1301.pojo.User;
+import com.trantheanh1301.repository.ClinicRepository;
 import com.trantheanh1301.repository.DoctorRepository;
 import com.trantheanh1301.repository.PatientRepository;
 import com.trantheanh1301.repository.UserRepository;
@@ -46,6 +48,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private DoctorRepository doctorRepo;
+
+    @Autowired
+    private ClinicRepository clinicRepo;
 
     @Autowired
     private PatientRepository patientRepo;
@@ -109,12 +114,17 @@ public class UserServiceImpl implements UserService {
                 Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
             //AVATAR = null
-        }else {
-             u.setAvatar("https://res.cloudinary.com/dxiawzgnz/image/upload/v1744000840/qlrmknm7hfe81aplswy2.png");
+        } else {
+            u.setAvatar("https://res.cloudinary.com/dxiawzgnz/image/upload/v1744000840/qlrmknm7hfe81aplswy2.png");
         }
 
         String role = params.get("role");
         u.setRole(role);
+
+        //Bác sĩ chờ admin duyệt
+        if (role.equals("Doctor")) {
+            u.setIsActive(Boolean.FALSE); // Gán trước khi lưu
+        }
         //Lưu user
         this.userRepo.register(u);
 
@@ -125,9 +135,23 @@ public class UserServiceImpl implements UserService {
             doctor.setBio(params.get("bio"));
             doctor.setConsultationFee(new BigDecimal(params.get("consultationFee")));
             doctor.setAverageRating(new BigDecimal(params.get("averageRating")));
+            
+            doctor.setClinicSet(new HashSet<>());
+            String clinicIdStr = params.get("clinicId");
+            if (clinicIdStr != null && !clinicIdStr.isEmpty()) {
+                int clinicId = Integer.parseInt(clinicIdStr);
+                Clinic clinic = clinicRepo.getClinicById(clinicId);
+                System.out.println("clinicId = " + clinicId);
+                System.out.println("clinic = " + clinic);
+
+                if (clinic != null) {
+                    doctor.getClinicSet().add(clinic);
+                } else {
+                    throw new RuntimeException("Không tìm thấy phòng khám với ID: " + clinicId);
+                }
+            }
+//            doctor.setClinicSet(clinicSet);
             Doctor saveDoctor = this.doctorRepo.register(doctor); // Lưa bảng doctor
-            //Riêng bác sĩ sẽ khóa lại để cung cấp chứng chỉ hành nghề admin duyệt -> thì sẽ bật này lên lại
-            u.setIsActive(Boolean.FALSE);
             u.setDoctor(saveDoctor);
 
         }
@@ -144,12 +168,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean authenticate(String username, String password) {
+    public boolean authenticate(String username, String password
+    ) {
         return this.userRepo.authenticated(username, password);
     }
 
     @Override
-    public User getUserById(int id) {
+    public User getUserById(int id
+    ) {
         return this.userRepo.getUserbyId(id);
     }
 

@@ -42,6 +42,7 @@ com\trantheanh1301\repository\UserRepository.class
 com\trantheanh1301\dto\DoctorlicenseDTO.class
 com\trantheanh1301\dto\AvailableslotDTO.class
 com\trantheanh1301\repository\impl\PatientRepositoryImpl.class
+com\trantheanh1301\service\ClinicService.class
 com\trantheanh1301\service\DoctorService.class
 com\trantheanh1301\service\impl\DoctorLicenseServiceImpl.class
 com\trantheanh1301\service\AvailabeslotService.class
@@ -100,6 +101,8 @@ com\trantheanh1301\repository\impl\AvailabeslotRepositoryImpl.class
 com\trantheanh1301\pojo\Specialty.class
 com\trantheanh1301\repository\AvailabeslotRepository.class
 com\trantheanh1301\service\InvoiceService.class
+com\trantheanh1301\controllers\ClinicController.class
+com\trantheanh1301\service\impl\ClinicServiceImpl.class
 com\trantheanh1301\service\impl\AppointmentServiceImpl.class
 com\trantheanh1301\mapperdto\DoctorMapper.class
 com\trantheanh1301\service\UserService.class

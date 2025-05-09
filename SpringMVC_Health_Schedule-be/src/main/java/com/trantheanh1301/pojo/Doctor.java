@@ -26,6 +26,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -41,6 +42,8 @@ import java.util.Set;
     @NamedQuery(name = "Doctor.findByConsultationFee", query = "SELECT d FROM Doctor d WHERE d.consultationFee = :consultationFee"),
     @NamedQuery(name = "Doctor.findByAverageRating", query = "SELECT d FROM Doctor d WHERE d.averageRating = :averageRating")})
 public class Doctor implements Serializable {
+
+    //Tạo thêm constructor dùng cho viết gán giá trị trước để có thể truy vấn
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -63,9 +66,7 @@ public class Doctor implements Serializable {
         @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "specialty_id", referencedColumnName = "specialty_id", nullable = false)})
 
-    
     //Chiều được serializer
-    
     @JsonIgnore
     @ManyToMany
     private Set<Specialty> specialtySet;

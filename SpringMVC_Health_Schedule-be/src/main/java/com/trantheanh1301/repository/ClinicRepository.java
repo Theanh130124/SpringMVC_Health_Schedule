@@ -5,11 +5,14 @@
 package com.trantheanh1301.repository;
 
 import com.trantheanh1301.pojo.Clinic;
+import java.util.Set;
 
 /**
  *
  * @author LAPTOP
  */
+
 public interface ClinicRepository {
     public Clinic getClinicById (int id);
+    public Set<Clinic> getClinicAll();
 }

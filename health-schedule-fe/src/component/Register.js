@@ -57,8 +57,8 @@ const Register = () => {
         if (user.password !== user.confirm) {
             setMsg("Mật khẩu không khớp");
         }
-       
-        
+
+
         else {
             let form = new FormData();
             for (let key in user) {
@@ -67,7 +67,8 @@ const Register = () => {
             }
             if (avatar.current && avatar.current.files && avatar.current.files.length > 0) {
                 form.append("avatar", avatar.current.files[0]);
-            }
+            } 
+
             try {
                 setLoading(true);
                 await Apis.post(endpoint['register'], form, {
@@ -157,7 +158,7 @@ const Register = () => {
                                 </Row>
                                 <Row>
                                     <Col lg={12} className="mb-3">
-                                        <Form.Control ref={avatar} type="file" placeholder="Ảnh đại diện" required />
+                                        <Form.Control ref={avatar} type="file" placeholder="Ảnh đại diện" />
                                     </Col>
                                 </Row>
                                 <Button type="submit" variant="success" className="mt-3 w-100" disabled={loading}>

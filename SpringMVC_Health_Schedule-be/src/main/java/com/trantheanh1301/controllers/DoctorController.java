@@ -5,6 +5,7 @@
 package com.trantheanh1301.controllers;
 
 import com.trantheanh1301.pojo.User;
+import com.trantheanh1301.service.ClinicService;
 import com.trantheanh1301.service.UserService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +28,22 @@ public class DoctorController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ClinicService clinicService;
+
     @GetMapping("/registerdoctor")
-    public String register() {
+    public String register(Model model) {
+        model.addAttribute("clinics", clinicService.getClinicAll());
+        System.out.println("Clinics: " + clinicService.getClinicAll());
         return "registerdoctor";
     }
 
     @PostMapping("/registerdoctor")
     public String registerDoctor(Model model, @RequestParam Map<String, String> params,
-             RedirectAttributes redirectAttrs ,@RequestParam(value = "avatar", required = false) MultipartFile avatar
+            RedirectAttributes redirectAttrs, @RequestParam(value = "avatar", required = false) MultipartFile avatar
     ) {
 
         params.put("role", "Doctor");
-        params.put("isActive" ,"0");
 
         if (avatar == null || avatar.isEmpty()) {
             avatar = null;

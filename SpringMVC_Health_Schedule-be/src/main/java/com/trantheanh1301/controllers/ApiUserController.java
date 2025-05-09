@@ -37,12 +37,11 @@ public class ApiUserController {
     
 
 
-
-    //Try catch chỗ này cho nó hiện lỗi chi tiết là gì đỡ vào log check
+    //required = false không bắt buộc lấy avatar trong RequestPârams
     @PostMapping(path = "/users", consumes = MediaType.MULTIPART_FORM_DATA)
     // trả ? để in đc error
     public ResponseEntity<?> register(@RequestParam Map<String, String> params,
-            @RequestParam(value = "avatar") MultipartFile avatar) {
+            @RequestParam(value = "avatar" ) MultipartFile avatar) {
         try {
             User u = this.userDetailsService.register(params, avatar);
             return new ResponseEntity<>(u, HttpStatus.CREATED);
