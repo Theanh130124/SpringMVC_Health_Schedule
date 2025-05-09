@@ -8,6 +8,7 @@ import RatingIcon from "../utils/RattingIcon";
 import { useContext } from "react";
 import { MyDoctorContext } from "../configs/MyContexts";
 import { toast } from "react-hot-toast";
+import MyConfigs from "../configs/MyConfigs";
 const Finddoctor = () => {
 
 
@@ -71,7 +72,7 @@ const Finddoctor = () => {
             else {
                 setDoctors(prev => [...prev, ...res.data]);
             }
-            if (res.data.length < 8) {
+            if (res.data.length < MyConfigs.PAGE_SIZE) {
                 setHasMore(false);
             }
 
@@ -181,7 +182,7 @@ const Finddoctor = () => {
 
                 <Row className="justify-content-center align-items-center g-4 mb-4 mt-4">
                     {hasMore && doctors.length > 0 && !loading && (
-                        <Col md={1} lg={1} xs={1}>
+                        <Col md={8} lg={6} xs={10}>
                             <Button variant="info" onClick={() => setPage(prev => prev + 1)} > Xem thêm</Button>
                         </Col>
                     )}

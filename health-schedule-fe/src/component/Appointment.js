@@ -5,6 +5,7 @@ import { Alert, Button, Card, Col, Container, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { load } from "react-cookies";
 import MySpinner from "./layout/MySpinner";
+import MyConfigs from "../configs/MyConfigs";
 
 const Appointment = () => {
     //Phân trang cho thằng này
@@ -13,10 +14,11 @@ const Appointment = () => {
     const [page, setPage] = useState(1);
     const user = useContext(MyUserContext);
     const [msg, setMsg] = useState("");
+    const [hasMore, setHasMore] = useState(true);
 
     const nav = useNavigate();
 
-    // Tạo roomchat
+    // Tạo roomchat -> làm này xem thêm
 
     const [room, setRoom] = useState();
 
@@ -70,8 +72,16 @@ const Appointment = () => {
                 }
             }
             const res = await authApis().get(url);
-            setAppointments(res.data);
+            if (page === 1) {
+                setAppointments(res.data);
+            }
+            else {
 
+                setAppointments(prev => [...prev, ...res.data]);
+            }
+            if (res.data.length < MyConfigs.PAGE_SIZE) {
+                setHasMore(false);
+            }
 
 
         } catch (ex) {
@@ -84,7 +94,16 @@ const Appointment = () => {
 
     }
 
+
     useEffect(() => {
+        setPage(1);
+        setHasMore(true);
+        setAppointments([]);
+    }, []);
+
+
+    useEffect(() => {
+
         loadAppointments();
     }, [page])
 
@@ -204,7 +223,13 @@ const Appointment = () => {
 
             </Row>
 
-
+            <Row className="justify-content-center align-items-center g-4 mb-4 mt-4">
+                {hasMore && appointments.length > 0 && !loading && (
+                    <Col md={8} lg={6} xs={10}>
+                        <Button variant="info" onClick={() => setPage((prev) => prev + 1)}>Xem thêm</Button>
+                    </Col>
+                )}
+            </Row>
             <Row className="mt-5 mb-4" ></Row>
 
 

@@ -7,7 +7,7 @@ const MyToaster = () => {
             position="top-right"
             reverseOrder={false} 
             toastOptions={{
-                duration: 6000, 
+                duration: 5000, 
                 style: {
                     background: "#333",
                     color: "#fff",

@@ -9,6 +9,7 @@ import "./Styles/Calendar.css";
 import { useHistory } from 'react-router-dom';
 import LoadMoreButton from "./layout/LoadMoreButton";
 import toast from "react-hot-toast";
+import MyConfigs from "../configs/MyConfigs";
 
 const Calendar = () => {
 
@@ -59,8 +60,8 @@ const Calendar = () => {
             else {
                 setSlots(prev => [...prev, ...res.data]);
             }
-            //1 trang 8 bác sĩ -> cái này xem fix lại 
-            if (res.data.length < 8) {
+            //dữ liệu cuối cùng gửi về < số lượng sp 1 trang
+            if (res.data.length < MyConfigs.PAGE_SIZE) {
                 setHasMore(false);
             }
         } catch (ex) {
