@@ -24,6 +24,8 @@ import CallVideo from './component/CallVideo';
 import RoomChat from './component/RoomChat';
 import Review from './component/Review';
 import { useState } from 'react';
+import PaymentMethod from './component/PaymentMethod';
+import VNPayReturn from './component/VNPayReturn';
 
 
 
@@ -68,6 +70,8 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/findDoctor" element={<Finddoctor />} />
               <Route path="/review" element={<Review />} />
+              <Route path="/payment-method" element={<PaymentMethod />} />
+              <Route path="/vnpay-return" element={<VNPayReturn />} />
             </Routes>
           </Container>
           <Footer />

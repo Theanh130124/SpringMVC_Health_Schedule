@@ -65,4 +65,14 @@ public class ApiReviewController {
             return new ResponseEntity<>(new ErrorResponseFormatter("Đã xảy ra lỗi: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/reviews")
+    public ResponseEntity<?> getReviewLists(@RequestParam Map<String, String> params) {
+        try {
+            List<Review> reviews = this.reviewService.getReviewLists(params);
+            return new ResponseEntity<>(reviews, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponseFormatter("Đã xảy ra lỗi: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

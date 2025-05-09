@@ -14,5 +14,5 @@ public class VNPayConfigs {
     public static String vnp_TmnCode = "NVKZ39WO";
     public static String vnp_HashSecret = "BZ6PKZQX44RERXQ01ICF6N6BHDBEJJF9";
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = "http://localhost:8080/SpringMVC_Health_Schedule/api/payment/vnpay-return";//Sau này lên reactJS thì thay đổi link này thành link component hiển thị kết qua
+    public static String vnp_ReturnUrl = "http://localhost:3000/vnpay-return";//Sau này lên reactJS thì thay đổi link này thành link component hiển thị kết qua
 }

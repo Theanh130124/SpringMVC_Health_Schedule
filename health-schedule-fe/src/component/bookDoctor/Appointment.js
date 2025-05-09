@@ -108,7 +108,12 @@ const Appointment = () => {
     }, [page])
 
 
-
+    const handlePaymentRedirect = (appointment) => {       
+        if (appointment) {
+            //Neu dung navigate thi nho bo {Link} o trong Button
+            nav("/payment-method", { state: { appointment } });
+        }
+    };
 
 
 
@@ -163,9 +168,9 @@ const Appointment = () => {
 
                                     </Card.Text>
 
-                                     <Card.Text className="card-text " style={{ fontSize: '0.85rem' , color: 'red' }}>
+                                    <Card.Text className="card-text " style={{ fontSize: '0.85rem', color: 'red' }}>
                                         <strong>Lịch khám được đặt vào ngày :</strong>  {new Date(a.createdAt).toLocaleDateString("vi-VN")}
-                                     </Card.Text>
+                                    </Card.Text>
 
 
 
@@ -214,6 +219,10 @@ const Appointment = () => {
 
                                         <Button variant="danger" as={Link} to="/" size="sm">
                                             Hủy lịch hẹn
+                                        </Button>
+
+                                        <Button variant="primary"  onClick={() => handlePaymentRedirect(a)} size="sm">
+                                            Thanh Toán
                                         </Button>
                                     </div>
                                 )}
