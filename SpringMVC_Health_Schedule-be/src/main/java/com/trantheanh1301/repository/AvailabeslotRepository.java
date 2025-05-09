@@ -18,7 +18,7 @@ import java.util.Map;
 public interface AvailabeslotRepository {
 
     public List<Availableslot> findSlot(Map<String, String> params);
-    public Availableslot getSlotbyDoctorId(int doctorId ,Date time);
+    public Availableslot getSlotByDoctorId(int doctorId ,Date time, boolean isBooked);
     public Availableslot addOrUpdate(Availableslot slot);
-    public Availableslot getSlotOldByDoctorId(int doctorId, Date time);
+
 }

@@ -72,7 +72,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Date time = Timestamp.valueOf(params.get("time"));
 
-        Availableslot slot = slotRepo.getSlotbyDoctorId(doctorId, time);
+        Availableslot slot = slotRepo.getSlotByDoctorId(doctorId, time , false);
         if (slot == null || slot.getIsBooked()) {
             throw new RuntimeException("Lịch đã được đặt!");
         }
@@ -140,7 +140,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     //Time cũ
                     Date time_old = appointment.getAppointmentTime();
                     //Thực hiện update slot cũ về false -> chưa book
-                    Availableslot slot_old = slotRepo.getSlotOldByDoctorId(doctorId, time_old);
+                    Availableslot slot_old = slotRepo.getSlotByDoctorId(doctorId, time_old , true);
                     if (slot_old == null) {
                         throw new RuntimeException("Lịch chưa được đặt nên không được sửa!");
                     }
@@ -150,7 +150,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     //(Time mới) appointment_time -> phải là thời gian trống còn lại của bác sĩ
                     appointment.setAppointmentTime(newTime);
                     //Thực hiện update slot mới -> cho lịch tương ứng
-                    Availableslot slot_new = slotRepo.getSlotbyDoctorId(doctorId, newTime);
+                    Availableslot slot_new = slotRepo.getSlotByDoctorId(doctorId, newTime, false);
                     if (slot_new == null) {
                         throw new RuntimeException("Lịch đã được đặt!");
                     }

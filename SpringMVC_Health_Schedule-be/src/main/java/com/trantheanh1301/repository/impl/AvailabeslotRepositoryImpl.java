@@ -123,8 +123,10 @@ public class AvailabeslotRepositoryImpl implements AvailabeslotRepository {
     }
 
 //bên đặt lịch truyền cả ngày giờ hẹn
+
+
     @Override
-    public Availableslot getSlotbyDoctorId(int doctorId, Date time) {
+    public Availableslot getSlotByDoctorId(int doctorId, Date time, boolean isBooked) {
         Session s = factory.getObject().getCurrentSession();
         CriteriaBuilder builder = s.getCriteriaBuilder();
         CriteriaQuery<Availableslot> query = builder.createQuery(Availableslot.class);
@@ -140,37 +142,7 @@ public class AvailabeslotRepositoryImpl implements AvailabeslotRepository {
         predicates.add(builder.equal(rA.get("slotDate"), time));
         predicates.add(builder.equal(rA.get("startTime"), time));
 
-        predicates.add(builder.equal(rA.get("isBooked"), false));
-        query.select(rA).where(builder.and(predicates.toArray(new Predicate[0])));
-
-        Query q = s.createQuery(query);
-
-        try {
-            return (Availableslot) q.getSingleResult(); // Trả về slot nếu có
-        } catch (NoResultException ex) {
-            return null; // Không có slot phù hợp
-        }
-
-    }
-
-    @Override
-    public Availableslot getSlotOldByDoctorId(int doctorId, Date time) {
-        Session s = factory.getObject().getCurrentSession();
-        CriteriaBuilder builder = s.getCriteriaBuilder();
-        CriteriaQuery<Availableslot> query = builder.createQuery(Availableslot.class);
-        Root<Availableslot> rA = query.from(Availableslot.class);
-        List<Predicate> predicates = new ArrayList<>();
-
-        //Tìm cái lịch như này đã 
-        Doctor doctor = new Doctor();
-        doctor.setDoctorId(doctorId);
-
-        predicates.add(builder.equal(rA.get("doctorId"), doctor));
-        //
-        predicates.add(builder.equal(rA.get("slotDate"), time));
-        predicates.add(builder.equal(rA.get("startTime"), time));
-
-        predicates.add(builder.equal(rA.get("isBooked"),true));
+        predicates.add(builder.equal(rA.get("isBooked"),isBooked));
         query.select(rA).where(builder.and(predicates.toArray(new Predicate[0])));
 
         Query q = s.createQuery(query);
