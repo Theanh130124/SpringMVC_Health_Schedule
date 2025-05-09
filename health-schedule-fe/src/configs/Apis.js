@@ -11,24 +11,26 @@ const BASE_URL = 'http://localhost:8080/SpringMVC_Health_Schedule/api/'
 
 
 export const endpoint = {
-    'users' : '/users',
+    'users': '/users',
     'doctor_license': '/doctor_license',
     'doctor': '/doctor',
-    'register':'/users',
-    'current_user':'/secure/profile',
-    'login':'/login',
+    'register': '/users',
+    'current_user': '/secure/profile',
+    'login': '/login',
     'findDoctor': '/find_slot',
+    findDoctorById: (doctorId) => `/find_slot?doctorId=${doctorId}`,
     'listAppointment': '/appointment',
     'bookdoctor': '/book_doctor',
     'reviews': '/reviews',
-    'review':'/review',
+    'review': '/review',
 
     // Cho firebase
     'chats': '/chats',
     'uploadImage': '/upload-image',
+
     chatMessages: (chatId) => `/chats/${chatId}/messages`,
-    
-   
+
+
 }
 
 
@@ -48,16 +50,16 @@ export const authApis = () => {
     return axios.create({
         baseURL: BASE_URL,
         headers: {
-            'Authorization' : `Bearer ${cookie.load('token')}`,
+            'Authorization': `Bearer ${cookie.load('token')}`,
             //Bổ sung để lưu from
-            'Content-Type' : 'application/json'
+            'Content-Type': 'application/json'
         }
     })
 }
 
 
 export default axios.create({
-    baseURL : BASE_URL
+    baseURL: BASE_URL
 })
 
 // export const authApis = () => {

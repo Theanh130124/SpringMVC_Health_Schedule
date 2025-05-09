@@ -22,8 +22,6 @@ import UploadLicense from './component/UploadLicense';
 import Appointment from './component/Appointment';
 import CallVideo from './component/CallVideo';
 import RoomChat from './component/RoomChat';
-
-import Chats from './component/Chats';
 import Review from './component/Review';
 import { useState } from 'react';
 

@@ -3,7 +3,7 @@ import Apis, { endpoint } from "../configs/Apis";
 import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { load } from "react-cookies";
 import MySpinner from "./layout/MySpinner";
-import { Link, unstable_HistoryRouter, useNavigate } from "react-router-dom";
+import { Link, unstable_HistoryRouter, useLocation, useNavigate } from "react-router-dom";
 import { MyUserContext } from "../configs/MyContexts";
 import "./Styles/Calendar.css";
 import { useHistory } from 'react-router-dom';
@@ -12,9 +12,12 @@ import toast from "react-hot-toast";
 
 const Calendar = () => {
 
+    const location = useLocation();
+    const initialSlots = location.state?.slots || [];
+    //Để lấy lịch từ xem lịch trống riêng bác sĩ
 
     const [loading, setLoading] = useState(false);
-    const [slots, setSlots] = useState([]);
+    const [slots, setSlots] = useState(initialSlots);
     const [page, setPage] = useState(1);
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
@@ -33,6 +36,15 @@ const Calendar = () => {
     const loadSlots = async () => {
         try {
             setLoading(true);
+            if (initialSlots.length > 0) {
+                setSlots(initialSlots);
+                setHasMore(false);
+                return;
+            }
+            if (location.state?.doctorId) {
+                url += `&doctorId=${location.state.doctorId}`;
+            }
+
             let url = `${endpoint['findDoctor']}?page=${page}`;
             if (formattedDate) {
                 url += `&slotDate=${formattedDate}`;
@@ -47,7 +59,7 @@ const Calendar = () => {
             else {
                 setSlots(prev => [...prev, ...res.data]);
             }
-            //1 trang 8 bác sĩ
+            //1 trang 8 bác sĩ -> cái này xem fix lại 
             if (res.data.length < 8) {
                 setHasMore(false);
             }
@@ -60,11 +72,18 @@ const Calendar = () => {
 
 
     useEffect(() => {
-        setPage(1);
-        setHasMore(true);
-        setSlots([]);
-
+        if (initialSlots.length > 0) {
+            setSlots(initialSlots);
+            setPage(1);
+            setHasMore(true);
+            setSlots([]);
+        } else {
+            setPage(1);
+            setHasMore(true);
+            setSlots([]);
+        }
     }, [date, time]);
+
 
 
     useEffect(() => {

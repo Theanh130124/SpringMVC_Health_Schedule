@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react"
 import { Alert, Button, Card, Col, Container, Form, Row, Spinner } from "react-bootstrap";
-import Apis, { endpoint } from "../configs/Apis";
-import { Link, useSearchParams } from "react-router-dom";
+import Apis, { authApis, endpoint } from "../configs/Apis";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MySpinner from "./layout/MySpinner";
 import RatingIcon from "../utils/RattingIcon";
 import { useContext } from "react";
 import { MyDoctorContext } from "../configs/MyContexts";
+import { toast } from "react-hot-toast";
 const Finddoctor = () => {
 
+
+    
     // Nhớ làm xem thêm
     const [loading, setLoading] = useState(false);
     const [doctors, setDoctors] = useState([]);
@@ -17,6 +20,8 @@ const Finddoctor = () => {
     const [hasMore, setHasMore] = useState(true);
 
     const [keyword, setKeyword] = useState("");
+
+    const nav = useNavigate();
 
     const [doctor, setDoctor] = useContext(MyDoctorContext);
     const handleClick =(d)=>{
@@ -29,6 +34,21 @@ const Finddoctor = () => {
         setKeyword(value);
         setQ({ keyword: value })
 
+    }
+
+    const handlerFinDoctor = async (doctorId) => {
+        try {
+            setLoading(true);
+            let res = await Apis.get(endpoint.findDoctorById(doctorId));   
+            nav("/calendar", { state: { slots: res.data }});
+            toast.success("Lấy lịch trống thành công!");
+        }catch (ex) {
+            console.error("Lỗi khi xem lịch trống"+ex);
+            
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
 
@@ -144,7 +164,7 @@ const Finddoctor = () => {
                                     </div>
                                     <div className="d-grid gap-1 mt-2">
                                         {/* Xem lịch trống là tìm lịch trống theo id doctor đó */}
-                                        <Button variant="primary" as={Link} to="/calendar" size="sm">Xem lịch trống</Button>
+                                        <Button variant="primary" onClick={ () => handlerFinDoctor(d.doctorId)} size="sm">Xem lịch trống</Button>
                                         <Button variant="danger" as={Link} to={`/review/?doctorId=${d.doctorId}`} onClick={()=>handleClick(d)} size="sm">Xem đánh giá</Button>
                                     </div>
                                 </Card.Body>
