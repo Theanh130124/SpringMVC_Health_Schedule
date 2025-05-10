@@ -7,17 +7,63 @@ Bài tập lớn PTHTWEB
 
 <h2>Features</h2>
 
-<ul>1. Authenticate & Authorize</ul>
-<li>Authenticated via JWT token</li>
-<li>Role-based authorize: ADMIN, DOCTOR, PATIENT</li>
+<h2>TOPIC : ONLINE HEALTH CHECKUP SCHEDULING APPLICATION</h2>
 
-<ul>2. Google Authenicate & Real-time chat</ul>
-<li>New user can sign in via Google Account</li>
-<li>Create/Find conversations with other users (sending images is supported)</li>
+<ul>Authentication and Authorization:</ul>
 
-<ul>3. Post management</ul>
-<li>Flow: LANDLORD uploads post --> ADMIN checks --> Activated posts are visible to all users </li>
-<li>Users can report posts if they find them unreliable (Spam, Fake news, Wrong coordinates, etc.). Once ADMIN notices a high report count, they can remove the post (make it invisible)</li>
+<li>Login and registration with roles: patient, doctor, and administrator.</li>
+
+<li>Doctors must be verified by the admin with a valid medical license before operating on the system.</li>
+
+<ul>Health Record Management:</ul>
+
+<li>Patients can create and manage personal health records (medical history, test results).</li>
+
+<li>Doctors are allowed to view and update the information after each consultation.</li>
+
+<ul>Appointment Scheduling:</ul>
+
+<li>Patients can search for doctors by specialty, hospital, or doctor’s name.</li>
+
+<li>Select available time slots and book appointments; the system sends confirmation emails.</li>
+
+<li>Allow appointment cancellations or rescheduling at least 24 hours in advance.</li>
+
+<ul>Online Consultation:</ul>
+
+<li>Integrate video call using WebRTC or Jitsi to support remote consultations.</li>
+
+<li>Patients and doctors can chat online before the in-person visit.</li>
+
+<ul>Service Payment:</ul>
+
+<li>Support online payment via VNPay, MoMo, Stripe.</li>
+
+<li>Record invoices and send payment success notifications via email.</li>
+
+<ul>Rating and Feedback:</ul>
+
+<li>Patients can rate doctors with stars (1-5) and leave comments.</li>
+
+<li>Doctors can respond to feedback to improve service quality.</li>
+
+<ul>Statistics and Reports:</ul>
+
+<li>Doctors can view the number of patients served and common diseases by month/quarter.</li>
+
+<li>Administrators monitor system activities, number of appointments, and revenue.</li>
+
+<ul>Reminders and Notifications:</ul>
+
+<li>The system sends appointment reminders via email and push notifications.</li>
+
+<li>Notifications about regular health checkup programs or special offers.</li>
+
+<ul>Real-time Chat Integration:</ul>
+
+<li>Use Firebase to enable direct chat between patients and doctors.</li>
+
+<li>Allow image and rapid test result file sharing.</li>
 
 
 # ChatRealTime_HealthSchedule

@@ -25,26 +25,22 @@ public class StatsController {
 
     @Autowired
     private StatsService statsService;
-    @Autowired 
+    @Autowired
     private UserService userService;
     //Xem lại permisstion viết ở controller có hợp lý không ?
-    
-   
+
     @GetMapping("/stats")
-    public String stats(Model model ,  @RequestParam Map<String, String> params , @AuthenticationPrincipal User user){
-        
+    public String stats(Model model, @RequestParam Map<String, String> params, @AuthenticationPrincipal User user) {
+
         List<Object[]> stats_admin = statsService.statsCountExaminedTotalAmount(params);
         List<Object[]> stats_doctor = statsService.statsDiagnosedCountExamined(params);
-        
-        model.addAttribute("stats_admin",stats_admin);
-        model.addAttribute("stats_doctor",stats_doctor);
-        model.addAttribute("params",params);
-        
-        
+
+        model.addAttribute("stats_admin", stats_admin);
+        model.addAttribute("stats_doctor", stats_doctor);
+        model.addAttribute("params", params);
+
         return "stats";
-        
-        
+
     }
-    
-    
+
 }

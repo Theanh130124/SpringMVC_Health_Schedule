@@ -76,7 +76,7 @@
                 <table class="table table-bordered table-striped">
                     <thead class="table-dark text-center">
                         <tr>
-                            <th>Tổng số bệnh nhân đã khám</th>
+
                             <th>Loại bệnh phổ biến</th>
                             <th>Năm</th>
                             <th>Quý</th>
@@ -84,15 +84,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <th:block th:if="${not #lists.isEmpty(stats_doctor)}">
                         <tr th:each="s_d : ${stats_doctor}" class="text-center">
-                            <td class="align-middle" th:text="${#lists.size(stats_doctor)}"></td>
-                            <td th:text="${s_d[1]}"></td> <td th:text="${s_d[2]}"></td> <td th:text="${s_d[3]}"></td> <td th:text="${s_d[4]}"></td> </tr>
-                    </th:block>
 
-                    <tr th:if="${#lists.isEmpty(stats_doctor)}">
-                        <td colspan="5" class="text-center">Không có dữ liệu thống kê bác sĩ.</td>
-                    </tr>
+                            <td th:text="${s_d[1]}"></td>
+                            <td th:text="${s_d[2]}"></td>
+                            <td th:text="${s_d[3]}"></td>
+                            <td th:text="${s_d[4]}"></td>
+                        </tr>
 
                     </tbody>
                 </table>
@@ -102,11 +100,17 @@
         <div sec:authorize="hasAuthority('Doctor')" class="chart-container">
             <h4 class="text-center">Các loại bệnh phổ biến</h4>
             <p class="text-center" th:if="${not #lists.isEmpty(stats_doctor)}">
-                <strong>Tổng số loại bệnh phổ biến:</strong> <span th:text="${#lists.size(stats_doctor)}"></span>
+                <!--Ở đây phải là size-->
+                <strong>Tổng số loại bệnh phổ biến:</strong>  <span th:text="${#lists.size(stats_doctor)}"></span>
             </p>
             <canvas id="doctorStatsChart"></canvas>
         </div>
 
+    </section>
+
+
+    <section class="container mt-5 mb-5">
+        <div class="mt-5 mb-5"></div>
     </section>
 
     <div th:replace="layout/footer :: footer"></div>

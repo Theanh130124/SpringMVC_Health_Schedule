@@ -80,14 +80,15 @@ public class StatsRepositoryImpl implements StatsRepository {
     }
 
     @Override
-    public List<Object[]> statsDiagnosedCountExamined(Map<String, String> params) {
+    public List<Object[]> statsDiagnosedCountExamined(Map<String, String> params
+    ) {
         Session session = factory.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
 
         Root<Appointment> rA = query.from(Appointment.class);
         //join Để lấy chuẩn đoán bệnh -> loại bệnh (theo tháng năm) -> không join không lấy theo tháng nằm được (vì đang groupby theo thằng kia)
-        Join<Appointment, Healthrecord> joinHealthRecord = rA.join("healthrecordSet", JoinType.INNER);
+       
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -98,12 +99,12 @@ public class StatsRepositoryImpl implements StatsRepository {
 
         query.multiselect(
                 builder.count(rA.get("appointmentId")),
-                joinHealthRecord.get("diagnosis"),
+                rA.get("reason"),
                 year, quarter, month
         );
         predicates.add(builder.equal(rA.get("status"), "Completed"));
         query.where(predicates.toArray(Predicate[]::new));
-        query.groupBy(year, quarter, month,joinHealthRecord.get("diagnosis"));
+        query.groupBy(year, quarter, month,rA.get("reason"));
         query.orderBy(builder.asc(year), builder.asc(month));
         Query q = session.createQuery(query);
 
@@ -111,7 +112,10 @@ public class StatsRepositoryImpl implements StatsRepository {
     }
 
     @Override
-    public void timePredicate(CriteriaBuilder builder, Root<?> root, List<Predicate> predicates, Map<String, String> params, String timeFieldName) {
+    public void timePredicate(CriteriaBuilder builder, Root< ?> root,
+             List<Predicate> predicates, Map<String, String> params,
+             String timeFieldName
+    ) {
         Expression<Integer> year = builder.function("YEAR", Integer.class, root.get(timeFieldName));
         Expression<Integer> month = builder.function("MONTH", Integer.class, root.get(timeFieldName));
         Expression<Integer> quarter = builder.function("QUARTER", Integer.class, root.get(timeFieldName));
