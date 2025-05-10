@@ -32,5 +32,10 @@ public class SpecialtyServiceImpl implements SpecialtyService{
     public Set<Specialty> getAllSpecialty() {
        return specialtyRepo.getAllSpecialty();
     }
+
+    @Override
+    public Specialty addOrUpdate(Specialty specialty) {
+       return specialtyRepo.addOrUpdate(specialty);
+    }
     
 }

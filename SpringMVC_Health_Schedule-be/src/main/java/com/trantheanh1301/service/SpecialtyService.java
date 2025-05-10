@@ -14,4 +14,5 @@ import java.util.Set;
 public interface SpecialtyService {
     Specialty getSpecialtyById(int id);
     Set<Specialty> getAllSpecialty();
+    Specialty addOrUpdate(Specialty specialty);
 }

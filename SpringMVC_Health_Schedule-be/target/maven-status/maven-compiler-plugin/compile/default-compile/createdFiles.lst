@@ -24,6 +24,7 @@ com\trantheanh1301\service\impl\HealthRecordServiceImpl.class
 com\trantheanh1301\pojo\Doctor.class
 com\trantheanh1301\controllers\ApiDoctorLicenseController.class
 com\trantheanh1301\service\SpecialtyService.class
+com\trantheanh1301\controllers\SpecialtyController.class
 com\trantheanh1301\dto\DoctorDTO.class
 com\trantheanh1301\service\impl\InvoiceServiceImpl.class
 com\trantheanh1301\controllers\ApiInvoiceController.class

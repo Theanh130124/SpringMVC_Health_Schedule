@@ -1,1 +1,47 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"> 
+
+    <head>
+        <title>Tạo chuyên khoa</title>
+    <th:block th:replace="layout/base :: styles"></th:block>
+</head>
+<body>
+
+    <div  th:replace="layout/header :: header"></div>
+
+    <h1 class="text-center mb-2 mt-4"> Tạo chuyên khoa</h1>
+    <!-- Hiển thị thông báo thành công -->
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+        <form class="container mt-5 mb-4" method="post" th:action="@{/addspecialty}" th:object="${specialty}">
+
+
+            <div class="col-md-12 mt-4 mb-4">
+                <label for="name" class="form-label">Tên chuyên khoa:</label>
+                <input type="text" class="form-control" id="name" placeholder="Tên chuyên khoa:" th:field="*{name}" required/>
+            </div>
+            <div class="col-md-12 mt-4 mb-4">
+                <label for="description" class="form-label">Mô tả :</label>
+                <input type="text" class="form-control" id="description" placeholder="Mô tả :" th:field="*{description}"  required/>
+            </div>
+          
+
+
+            <div class="col-md-12">
+                <input type="hidden" class="form-control" th:field="*{specialtyId}"  />
+                <button class="btn btn-success mt-1" type="submit">
+                    <span th:if="${specialty.specialtyId == null}">Thêm chuyên khoa</span>
+<!--                    <span th:unless="${clinic.clinicId == null}">Cập nhật </span>-->
+                </button>
+            </div>
+        </form>
+
+
+    <div th:replace="layout/footer :: footer"></div>
+
+</body>
+
+</html>
 
