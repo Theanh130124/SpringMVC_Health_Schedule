@@ -6,6 +6,7 @@ package com.trantheanh1301.controllers;
 
 import com.trantheanh1301.pojo.User;
 import com.trantheanh1301.service.ClinicService;
+import com.trantheanh1301.service.SpecialtyService;
 import com.trantheanh1301.service.UserService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,14 @@ public class DoctorController {
 
     @Autowired
     private ClinicService clinicService;
+    
+    @Autowired
+    private SpecialtyService specialtyService;
 
     @GetMapping("/registerdoctor")
     public String register(Model model) {
         model.addAttribute("clinics", clinicService.getClinicAll());
-        System.out.println("Clinics: " + clinicService.getClinicAll());
+        model.addAttribute("specialties", specialtyService.getAllSpecialty());
         return "registerdoctor";
     }
 

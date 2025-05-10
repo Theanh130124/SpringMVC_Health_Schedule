@@ -62,19 +62,20 @@ public class Doctor implements Serializable {
     private BigDecimal consultationFee;
     @Column(name = "average_rating", precision = 3, scale = 2)
     private BigDecimal averageRating;
+    
+        //Chiều được serializer
+    @JsonIgnore
     @JoinTable(name = "doctor_specialty", joinColumns = {
         @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "specialty_id", referencedColumnName = "specialty_id", nullable = false)})
-
-    //Chiều được serializer
-    @JsonIgnore
+        @JoinColumn(name = "specialty_id", referencedColumnName = "specialty_id", nullable = false)})    //Chiều được serializer
     @ManyToMany
     private Set<Specialty> specialtySet;
+    
+    
+    @JsonIgnore
     @JoinTable(name = "doctor_clinic", joinColumns = {
         @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id", nullable = false)})
-
-    @JsonIgnore
     @ManyToMany
     private Set<Clinic> clinicSet;
 

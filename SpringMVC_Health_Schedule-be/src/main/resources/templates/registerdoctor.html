@@ -86,7 +86,7 @@
                 <label for="averageRating" class="form-label">Điểm đánh giá trung bình</label>
                 <input type="number" step="0.1" class="form-control" name="averageRating" value="0.0" required>
             </div>
-            
+
             <div class="col-md-6">
                 <label for="clinicId" class="form-label">
                     Chọn phòng khám
@@ -96,7 +96,22 @@
                             th:value="${c.clinicId}"
                             th:text="${c.name}"
                             >
-                        
+
+                    </option>
+                </select>
+            </div>
+
+
+            <div class="col-md-6">
+                <label for="specialtyId" class="form-label">
+                    Chọn chuyên khoa
+                </label>
+                <select class="form-select" name="specialtyId" required>
+                    <option th:each="s: ${specialties}"
+                            th:value="${s.specialtyId}"
+                            th:text="${s.name}"
+                            >
+
                     </option>
                 </select>
             </div>

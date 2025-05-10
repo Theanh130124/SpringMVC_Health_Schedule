@@ -10,10 +10,12 @@ import com.trantheanh1301.formatter.DateFormatter;
 import com.trantheanh1301.pojo.Clinic;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.pojo.Patient;
+import com.trantheanh1301.pojo.Specialty;
 import com.trantheanh1301.pojo.User;
 import com.trantheanh1301.repository.ClinicRepository;
 import com.trantheanh1301.repository.DoctorRepository;
 import com.trantheanh1301.repository.PatientRepository;
+import com.trantheanh1301.repository.SpecialtyRepository;
 import com.trantheanh1301.repository.UserRepository;
 import com.trantheanh1301.service.UserService;
 import java.io.IOException;
@@ -54,6 +56,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PatientRepository patientRepo;
+    
+    @Autowired
+    private SpecialtyRepository specialtyRepo;
 
     @Autowired
     private BCryptPasswordEncoder passswordEncoder;
@@ -137,17 +142,25 @@ public class UserServiceImpl implements UserService {
             doctor.setAverageRating(new BigDecimal(params.get("averageRating")));
             
             doctor.setClinicSet(new HashSet<>());
+            doctor.setSpecialtySet(new HashSet<>());
+            String specialtyIdStr = params.get("specialtyId");
             String clinicIdStr = params.get("clinicId");
             if (clinicIdStr != null && !clinicIdStr.isEmpty()) {
                 int clinicId = Integer.parseInt(clinicIdStr);
                 Clinic clinic = clinicRepo.getClinicById(clinicId);
-                System.out.println("clinicId = " + clinicId);
-                System.out.println("clinic = " + clinic);
-
                 if (clinic != null) {
                     doctor.getClinicSet().add(clinic);
                 } else {
                     throw new RuntimeException("Không tìm thấy phòng khám với ID: " + clinicId);
+                }
+            }
+            if ( specialtyIdStr !=null && !specialtyIdStr.isEmpty()){
+                int specialtyId = Integer.parseInt(specialtyIdStr);
+                Specialty specialty = specialtyRepo.getSpecialtyById(specialtyId);
+                if(specialty !=null){
+                    doctor.getSpecialtySet().add(specialty);
+                }else {
+                    throw new RuntimeException("Không tìm thấy chuyên khoa với ID" + specialtyId);
                 }
             }
 //            doctor.setClinicSet(clinicSet);
