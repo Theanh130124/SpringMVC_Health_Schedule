@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button, Form, Alert, Spinner } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./Styles/PaymentMethod.css";
+import "./Styles/PaymentMethod.module.css";
 import { authApis } from "../configs/Apis";
 import cookie from 'react-cookies'
 

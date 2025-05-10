@@ -1,0 +1,53 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"> 
+
+    <head>
+        <title>Tạo phòng khám</title>
+    <th:block th:replace="layout/base :: styles"></th:block>
+</head>
+<body>
+
+    <div  th:replace="layout/header :: header"></div>
+
+    <h1 class="text-center mb-4 mt-2"> Tạo phòng khám</h1>
+    <!-- Hiển thị thông báo thành công -->
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <form class="container mt-5" method="post" th:action="@{/addclinic}" th:object="${clinic}">
+
+
+        <div class="col-md-6">
+            <label for="name" class="form-label">Tên bệnh viên , phòng khám :</label>
+            <input type="text" class="form-control" id="name" placeholder="Tên bệnh viên , phòng khám" th:field="*{name}" />
+        </div>
+        <div class="col-md-6">
+            <label for="address" class="form-label">Địa chỉ :</label>
+            <input type="text" class="form-control" id="address" placeholder="Địa chỉ" th:field="*{address}"  />
+        </div>
+        <div class="col-md-6">
+            <label for="phoneNumber" class="form-label">Số điện thoại</label>
+            <input type="text" class="form-control" id="phoneNumber" placeholder="Số điện thoại" th:field="*{phoneNumber}"  />
+        </div>
+        <div class="col-md-6">
+            <label for="website" class="form-label">Địa chỉ website </label>
+            <input type="text" class="form-control" id="website" placeholder="Địa chỉ website (nếu có)" th:field="*{website}"  />
+        </div>
+
+
+        <div class="col-md-6">
+            <input type="hidden" class="form-control" th:field="*{clinicId}"  />
+            <button class="btn btn-success mt-1" type="submit">
+                <span th:if="${clinic.clinicId == null}">Thêm bệnh viện, phòng khám</span>
+                <span th:unless="${clinic.clinicId == null}">Cập nhật </span>
+            </button>
+        </div>
+    </form>
+
+    <div th:replace="layout/footer :: footer"></div>
+
+</body>
+
+</html>
+

@@ -32,5 +32,10 @@ public class ClinicServiceImpl implements  ClinicService{
     public Set<Clinic> getClinicAll() {
         return clinicRepo.getClinicAll();
     }
+
+    @Override
+    public Clinic addOrUpdate(Clinic clinic) {
+        return clinicRepo.addOrUpdate(clinic);
+    }
     
 }

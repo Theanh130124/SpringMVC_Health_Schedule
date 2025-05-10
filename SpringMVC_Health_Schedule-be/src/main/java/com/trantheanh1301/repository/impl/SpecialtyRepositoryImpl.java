@@ -20,27 +20,35 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author thean
  */
-
 @Repository
 @Transactional
-public class SpecialtyRepositoryImpl implements SpecialtyRepository{
-    
+public class SpecialtyRepositoryImpl implements SpecialtyRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
 
     @Override
     public Specialty getSpecialtyById(int id) {
         Session s = factory.getObject().getCurrentSession();
-        return s.get(Specialty.class , id);
+        return s.get(Specialty.class, id);
     }
 
     @Override
     public Set<Specialty> getAllSpecialty() {
         Session s = factory.getObject().getCurrentSession();
-        List<Specialty> specialties = s.createQuery("FROM Specialty" , Specialty.class).getResultList();
+        List<Specialty> specialties = s.createQuery("FROM Specialty", Specialty.class).getResultList();
         return new HashSet<>(specialties);
     }
-    
-    
-    
+
+    @Override
+    public Specialty addOrUpdate(Specialty s) {
+        Session session = factory.getObject().getCurrentSession();
+        if (s.getSpecialtyId() == null) {
+            session.persist(s);
+        } else {
+            session.merge(s);
+        }
+        return s;
+    }
+
 }

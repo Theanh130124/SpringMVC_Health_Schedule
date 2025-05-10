@@ -28,6 +28,12 @@
                             <li class="nav-item" sec:authorize="hasAuthority('Admin')">
                                 <a class="nav-link" th:href="@{/license}">Xét duyệt</a>
                             </li>
+                            <li class="nav-item" sec:authorize="hasAuthority('Admin')">
+                                <a class="nav-link" th:href="@{/createclinic}">Tạo thêm phòng khám</a>
+                            </li>
+                            <li class="nav-item" sec:authorize="hasAuthority('Admin')">
+                                <a class="nav-link" th:href="@{/createspecialty}">Tạo thêm chuyên khoa</a>
+                            </li>
 
                             <li class="nav-item" sec:authorize="hasAuthority('Admin')">
                                 <a class="nav-link" th:href="@{/registerdoctor}">Tạo tài khoản bác sĩ</a>

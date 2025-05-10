@@ -22,7 +22,7 @@ import UploadLicense from './component/UploadLicense';
 import Appointment from './component/bookDoctor/Appointment';
 import CallVideo from './component/CallVideo';
 import RoomChat from './component/RoomChat';
-import Review from './component/Review';
+import Review from './component/reviewDoctor/Review';
 import { useState } from 'react';
 import PaymentMethod from './component/PaymentMethod';
 import VNPayReturn from './component/VNPayReturn';

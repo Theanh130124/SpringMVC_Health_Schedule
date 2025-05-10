@@ -14,4 +14,5 @@ import java.util.Set;
 public interface ClinicService {
     Clinic getClinicById (int id);
     Set<Clinic> getClinicAll();
+    Clinic addOrUpdate(Clinic clinic);
 }

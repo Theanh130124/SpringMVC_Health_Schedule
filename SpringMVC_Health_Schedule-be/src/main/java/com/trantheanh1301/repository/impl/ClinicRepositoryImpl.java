@@ -41,4 +41,17 @@ public class ClinicRepositoryImpl implements ClinicRepository {
         return new HashSet<>(clinics);
     }
 
+    @Override
+    public Clinic addOrUpdate(Clinic clinic) {
+       Session s = factory.getObject().getCurrentSession();
+       if (clinic.getClinicId() == null){
+           s.persist(clinic);
+       }else{
+           
+           s.merge(clinic);
+       }
+       return clinic;
+       
+    }
+
 }
