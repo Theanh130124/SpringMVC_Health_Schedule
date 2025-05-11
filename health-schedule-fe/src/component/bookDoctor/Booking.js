@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { MyUserContext } from "../../configs/MyContexts";
 import { Button, Card, Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
-import { authApis, endpoint } from "../../configs/Apis";
+import { authApis, authformdataApis, endpoint } from "../../configs/Apis";
 import toast from "react-hot-toast";
 import MyToaster from "../layout/MyToaster";
 import MyConfirm from "../layout/MyConfirm";
@@ -71,7 +71,7 @@ const Booking = () => {
 
         try {
             setLoading(true);
-            let res = await authApis().post(endpoint['bookdoctor'], {
+            let res = await authformdataApis().post(endpoint['bookdoctor'], {
 
                 patientId: user.userId,
                 doctorId: slot.doctorId.doctorId,
@@ -121,7 +121,7 @@ const Booking = () => {
 
     return (
         <>
-            <MyToaster />
+           
             <Container fluid className="p-0">
 
                 <Row className="justify-content-center custom-row-primary mt-4">

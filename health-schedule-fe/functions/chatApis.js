@@ -45,9 +45,10 @@ app.post('/chats', async (req, res) => {
 
             });
             const docRef = await chatRef.collection('messages').add({});
+            const createdDoc = await docRef.get();
             return res.status(201).send({
                 chatId: docRef.id,
-                ...docRef.data()
+                ...createdDoc.data()
             });
         } else {
             return res.status(200).send({ chatId, message: 'Cuộc trò chuyện đã tồn tại' });

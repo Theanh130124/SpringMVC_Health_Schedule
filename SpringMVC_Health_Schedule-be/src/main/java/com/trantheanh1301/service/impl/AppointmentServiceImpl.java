@@ -134,6 +134,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             //Qúa 24h sẽ không cho sửa -> Nhưng phải thực hiện set lịch hiện tại về chưa book 
             //và lịch book thành đã book (theo thời gian đã chọn)
             if (cal.getTime().after(date_now)) {
+                
                 if (params.containsKey("time")) {
                     String timeStr = params.get("time");
                     Date newTime = DateFormatter.parseDateTime(timeStr); //format cho thời gian gửi lên server

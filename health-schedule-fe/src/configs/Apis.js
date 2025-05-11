@@ -25,6 +25,7 @@ export const endpoint = {
     'reviews': '/reviews',
     'review': '/review',
 
+    
     // Cho firebase
     'chats': '/chats',
     'uploadImage': '/upload-image',
@@ -46,7 +47,7 @@ export const fbApis = () => {
     })
 };
 
-
+//json
 export const authApis = () => {
     return axios.create({
         baseURL: BASE_URL,
@@ -54,6 +55,18 @@ export const authApis = () => {
             'Authorization': `Bearer ${cookie.load('token')}`,
             //Bổ sung để lưu from
             'Content-Type': 'application/json'
+        }
+    })
+}
+
+
+export const authformdataApis = () => {
+    return axios.create({
+        baseURL: BASE_URL,
+        headers: {
+            'Authorization': `Bearer ${cookie.load('token')}`,
+            //Bổ sung để lưu from
+            'Content-Type' : 'application/x-www-form-urlencoded'
         }
     })
 }

@@ -27,6 +27,7 @@ import { useState } from 'react';
 import PaymentMethod from './component/PaymentMethod';
 import VNPayReturn from './component/VNPayReturn';
 import Invoice from './component/Invoice';
+import AppointmentUpdate from './component/bookDoctor/AppointmentUpdate';
 
 
 const App = () => {
@@ -48,7 +49,7 @@ const App = () => {
   }
     , [])
   return (
-    <MyDoctorContext.Provider value={[doctor,setDoctor]}>
+
     <MyUserContext.Provider value={user}>
       <MyDipatcherContext.Provider value={dispatch}>
         <BrowserRouter>
@@ -56,12 +57,12 @@ const App = () => {
           <Container fluid >
             <MyToaster />
             <Routes>
-{/* Permission lại bên BE */}
+              {/* Permission lại bên BE */}
 
-
-              <Route path="/roomchat" element={<RoomChat/>} />
+              <Route path="/updateAppointment" element={<AppointmentUpdate />} />
+              <Route path="/roomchat" element={<RoomChat />} />
               <Route path="/appointment" element={<Appointment />} />
-              <Route path="/callvideo" element={<CallVideo/>} />
+              <Route path="/callvideo" element={<CallVideo />} />
               <Route path="/uploadLicense" element={<UploadLicense />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/booking" element={<Booking />} />
@@ -79,7 +80,7 @@ const App = () => {
         </BrowserRouter>
       </MyDipatcherContext.Provider>
     </MyUserContext.Provider>
-    </MyDoctorContext.Provider>
+
 
   )
 }
