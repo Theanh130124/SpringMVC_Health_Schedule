@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,7 +64,7 @@ public class ApiAppointmentController {
 
     @PreAuthorize("hasAuthority('Patient')")
     @PatchMapping("/book_doctor/{id}")
-    public ResponseEntity<?> updateBookDoctor(@RequestParam Map<String, String> params, @PathVariable(value ="id") int id) {
+    public ResponseEntity<?> updateBookDoctor(@RequestBody Map<String, String> params, @PathVariable(value ="id") int id) {
         try {
             
             return new ResponseEntity<>(appointmentService.updateAppointment(id, params) , HttpStatus.OK);

@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { load } from "react-cookies";
 import MySpinner from "../layout/MySpinner";
 import MyConfigs from "../../configs/MyConfigs";
+import toast from "react-hot-toast";
 
 const Appointment = () => {
     //Phân trang cho thằng này
@@ -108,7 +109,32 @@ const Appointment = () => {
     }, [page])
 
 
-    const handlePaymentRedirect = (appointment) => {       
+    const handleNavUpdate = (appointment) => {
+        try {
+            setLoading(true);
+            const now = new Date().getTime();
+            const createdAt = new Date(appointment.createdAt).getTime();
+            const diffInMilliseconds = now - createdAt;
+            if (diffInMilliseconds <= 24 * 60 * 60 * 1000) {
+                nav("/updateAppointment", {
+                    state: {
+                        appointment
+                    }
+                });
+            }else {
+                toast.error("Bạn không thể sửa lịch hẹn sau 24 giờ!");
+            }
+
+        } catch (ex) {
+             console.error("Lỗi khi kiểm tra thời gian:", ex);
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
+
+    const handlePaymentRedirect = (appointment) => {
         if (appointment) {
             //Neu dung navigate thi nho bo {Link} o trong Button
             nav("/payment-method", { state: { appointment } });
@@ -152,7 +178,7 @@ const Appointment = () => {
                                         <br />
 
 
-                                        {/* Thời gian bắt đấu nữa */}
+
                                     </Card.Text>
 
 
@@ -213,7 +239,7 @@ const Appointment = () => {
                                             </Button>
                                         )}
 
-                                        <Button variant="primary" as={Link} to="/" size="sm">
+                                        <Button variant="primary" onClick={() => handleNavUpdate(a)} size="sm">
                                             Sửa lịch hẹn
                                         </Button>
 
@@ -221,7 +247,7 @@ const Appointment = () => {
                                             Hủy lịch hẹn
                                         </Button>
 
-                                        <Button variant="primary"  onClick={() => handlePaymentRedirect(a)} size="sm">
+                                        <Button variant="primary" onClick={() => handlePaymentRedirect(a)} size="sm">
                                             Thanh Toán
                                         </Button>
                                     </div>

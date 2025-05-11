@@ -101,7 +101,7 @@
             <h4 class="text-center">Các loại bệnh phổ biến</h4>
             <p class="text-center" th:if="${not #lists.isEmpty(stats_doctor)}">
                 <!--Ở đây phải là size-->
-                <strong>Tổng số loại bệnh phổ biến:</strong>  <span th:text="${#lists.size(stats_doctor)}"></span>
+                <strong>Tổng số lượt bệnh nhân đã khám:</strong>  <span th:text="${#lists.size(stats_doctor)}"></span>
             </p>
             <canvas id="doctorStatsChart"></canvas>
         </div>
