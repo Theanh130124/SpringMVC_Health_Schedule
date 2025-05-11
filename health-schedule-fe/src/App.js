@@ -26,8 +26,8 @@ import Review from './component/reviewDoctor/Review';
 import { useState } from 'react';
 import PaymentMethod from './component/PaymentMethod';
 import VNPayReturn from './component/VNPayReturn';
+import Invoice from './component/Invoice';
 import AppointmentUpdate from './component/bookDoctor/AppointmentUpdate';
-
 
 
 const App = () => {
@@ -73,6 +73,7 @@ const App = () => {
               <Route path="/review" element={<Review />} />
               <Route path="/payment-method" element={<PaymentMethod />} />
               <Route path="/vnpay-return" element={<VNPayReturn />} />
+              <Route path="/invoice" element={<Invoice />} />
             </Routes>
           </Container>
           <Footer />

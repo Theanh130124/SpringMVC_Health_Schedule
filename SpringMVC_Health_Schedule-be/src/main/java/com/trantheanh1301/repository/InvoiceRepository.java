@@ -16,4 +16,5 @@ public interface InvoiceRepository {
     public Invoice addInvoice(Invoice invoice);
     public Invoice updatePaymentStatusInvoice(Invoice invoice);
     public Invoice getInvoiceById(int id);
+    public Invoice getInvoiceByAppointmentId(int id);
 }

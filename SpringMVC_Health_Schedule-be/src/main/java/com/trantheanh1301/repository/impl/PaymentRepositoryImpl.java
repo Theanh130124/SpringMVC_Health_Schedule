@@ -4,9 +4,15 @@
  */
 package com.trantheanh1301.repository.impl;
 
+import com.trantheanh1301.pojo.Invoice;
 import com.trantheanh1301.pojo.Payment;
 import com.trantheanh1301.repository.PaymentRepository;
 import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import java.util.List;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -19,11 +25,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class PaymentRepositoryImpl implements PaymentRepository{
+public class PaymentRepositoryImpl implements PaymentRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
-    
+
     @Override
     public Payment addPayment(Payment payment) {
         Session s = this.factory.getObject().getCurrentSession();
@@ -47,5 +53,35 @@ public class PaymentRepositoryImpl implements PaymentRepository{
         q.setParameter("paymentId", id);
         return (Payment) q.getSingleResult();
     }
-    
+
+    @Override
+    public Payment getPaymentByInvoiceId(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Payment> query = b.createQuery(Payment.class);
+        Root<Payment> root = query.from(Payment.class);
+
+        Predicate predicate = b.equal(root.get("invoiceId").get("invoiceId"), id);//Them dieu kien so sanh appointmentId cua invoice = id truyen vao
+        query.select(root).where(predicate);
+
+        Query q = s.createQuery(query);
+
+        return (Payment) q.getSingleResult();
+    }
+
+    @Override
+    public Payment getPaymentByTransactionId(String id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Payment> query = b.createQuery(Payment.class);
+        Root<Payment> root = query.from(Payment.class);
+        Predicate predicate = b.equal(root.get("transactionId"), id);//Them dieu kien so sanh 
+        query.select(root).where(predicate);
+        Query q = s.createQuery(query);
+        List<Payment> results = q.getResultList();
+        if (results.isEmpty()) {
+            return null;
+        }
+        return results.get(0);
+    }
 }
