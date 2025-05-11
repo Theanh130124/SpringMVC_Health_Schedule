@@ -4,16 +4,11 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import "./Styles/Header.css";
 import { useContext } from "react";
 import { MyDipatcherContext, MyUserContext } from "../../configs/MyContexts";
-
 const Header = () => {
 
 
     const user = useContext(MyUserContext);
     const dispatch = useContext(MyDipatcherContext);
-
-
-
-
 
     return (
         <Navbar collapseOnSelect expand="lg" variant="light" bg="light" className="custom-header">
@@ -81,8 +76,27 @@ const Header = () => {
                             </Button>
                         </> : <>
                             <Link to="/" className="nav-link text-danger">
-                                <img src={user.avatar} width="40" className="rounded-circle" />
-                                Chào {user.username}!
+                                <NavDropdown
+                                    title={
+                                        <span>
+                                            <img src={user.avatar} width="40" className="rounded-circle" alt="Avatar" />
+                                            Chào {user.username}!
+                                        </span>
+                                    }
+                                    id="user-dropdown"
+                                    align="end"
+                                >
+                                    <NavDropdown.Item as={Link} to="/editProfile">
+                                        Sửa thông tin cá nhân
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/change-password">
+                                        Đổi mật khẩu
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item onClick={() => dispatch({ type: "logout" })} as={Link} to="/login">
+                                        Đăng xuất
+                                    </NavDropdown.Item>
+                                </NavDropdown>
                             </Link>
                             <Button
                                 variant="danger"

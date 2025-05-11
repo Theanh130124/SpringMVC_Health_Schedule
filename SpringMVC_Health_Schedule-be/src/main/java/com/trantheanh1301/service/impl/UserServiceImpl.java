@@ -192,4 +192,32 @@ public class UserServiceImpl implements UserService {
         return this.userRepo.getUserbyId(id);
     }
 
+    @Override
+    public User updateUser(String username, Map<String,String> params, MultipartFile avatar) {
+         
+        User u = this.userRepo.getUserByUsername(username);
+        u.setEmail(params.get("email"));
+        u.setFirstName(params.get("firstName"));
+        u.setLastName(params.get("lastName"));
+        u.setPhoneNumber(params.get("phoneNumber"));
+        u.setAddress(params.get("address"));
+        u.setDateOfBirth(DateFormatter.parseDate(params.get("dateOfBirth")));
+        u.setGender(params.get("gender"));
+        
+        if (avatar != null && !avatar.isEmpty()) {
+            try {
+                Map res = cloudinary.uploader().upload(avatar.getBytes(),
+                        ObjectUtils.asMap("resource_type", "auto"));
+                u.setAvatar(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //AVATAR = null
+        } else {
+            u.setAvatar("https://res.cloudinary.com/dxiawzgnz/image/upload/v1744000840/qlrmknm7hfe81aplswy2.png");
+        }
+        
+        return this.userRepo.updateUser(u);
+    }
+
 }

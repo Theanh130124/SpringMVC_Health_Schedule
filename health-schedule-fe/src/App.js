@@ -28,7 +28,7 @@ import PaymentMethod from './component/PaymentMethod';
 import VNPayReturn from './component/VNPayReturn';
 import Invoice from './component/Invoice';
 import AppointmentUpdate from './component/bookDoctor/AppointmentUpdate';
-
+import EditProfile from './component/EditProfile';
 
 const App = () => {
   //dispatch nhận action.type bên MyUserReducer.js -> F5 sẽ không mất vì đã lưu cookie
@@ -74,6 +74,7 @@ const App = () => {
               <Route path="/payment-method" element={<PaymentMethod />} />
               <Route path="/vnpay-return" element={<VNPayReturn />} />
               <Route path="/invoice" element={<Invoice />} />
+              <Route path="/editProfile" element={<EditProfile />} />
             </Routes>
           </Container>
           <Footer />

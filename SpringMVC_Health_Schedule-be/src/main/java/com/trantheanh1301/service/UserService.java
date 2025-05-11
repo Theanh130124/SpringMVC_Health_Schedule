@@ -19,4 +19,5 @@ public interface UserService extends UserDetailsService{
     User register(Map<String, String> params, MultipartFile avatar);
     boolean authenticate(String username, String password);
     User getUserById(int id);
+    User updateUser(String username, Map<String,String> params,MultipartFile avatar);
 }
