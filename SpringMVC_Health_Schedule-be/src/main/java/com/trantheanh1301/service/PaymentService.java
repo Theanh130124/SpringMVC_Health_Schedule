@@ -15,5 +15,6 @@ public interface PaymentService {
     public Payment addPayment(Map<String,String> params);
     public Payment updatePayment(int id, Map<String,String>params);
     public Payment getPaymentById(int id);
-    
+    public Payment getPaymentByInvoiceId(int id);
+    public Payment getPaymentByTransactionId(String id);
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,4 +48,14 @@ public class ApiInvoiceController {
             return new ResponseEntity<>(new ErrorResponseFormatter("Đã xảy ra lỗi: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }       
     }
+    
+    @GetMapping("/invoice/{appointmentId}")
+    public ResponseEntity<?> getInvoiceByAppointmentId(@PathVariable ("appointmentId") int id){
+        try {            
+            return new ResponseEntity<>(invoiceService.getInvoiceByAppointmentId(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponseFormatter("Đã xảy ra lỗi: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }       
+    }
+    
 }

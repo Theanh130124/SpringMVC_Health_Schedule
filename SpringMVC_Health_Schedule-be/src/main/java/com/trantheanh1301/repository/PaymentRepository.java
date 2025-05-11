@@ -14,4 +14,6 @@ public interface PaymentRepository {
     public Payment addPayment(Payment payment);
     public Payment updatePayment(Payment payment);
     public Payment getPaymentById(int id);
+    public Payment getPaymentByInvoiceId(int id);
+    public Payment getPaymentByTransactionId(String id);
 }

@@ -32,6 +32,40 @@ const Booking = () => {
     //của patient
     const user = useContext(MyUserContext);
 
+    const addInvoice = async () => {
+        setLoading(true);
+        try {
+            const today = new Date().toISOString().split("T")[0];
+
+            // Tạo đối tượng FormData
+            const formData = new FormData();
+            formData.append("amount", appointment.doctorId.consultationFee);
+            formData.append("dueDate", today);
+            formData.append("appointmentId", appointment.appointmentId);
+
+            // Gửi yêu cầu với FormData
+            const response = await authApis().post(`invoice`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data", // Đặt header cho form-data
+                },
+            });
+
+            if (response.data) {
+                return response.data.invoiceId;
+            }
+            else {
+                console.log("Không thể tạo hóa đơn . Vui lòng thử lại.");
+                return null;
+            }
+        } catch (error) {
+            console.error("Lỗi khi tạo hóa đơn:", error);
+            console.log("Đã xảy ra lỗi. Vui lòng thử lại.");
+            return null;
+        }
+        finally {
+            setLoading(false);
+        }
+    }
 
     const Booking = async () => {
 
@@ -50,9 +84,8 @@ const Booking = () => {
             });
 
             setAppointment(res); // không . data vì res là 1 object
-
-
-
+            //Đặt lịch xong thì tạo hóa đơn
+            await addInvoice();
             toast.success("Đặt lịch thành công!");
             nav("/appointment"); //Đặt xong về xem lịch hẹn
         } catch (ex) {
@@ -61,7 +94,7 @@ const Booking = () => {
             console.log(slot.doctorId.clinics[0].clinicId);
             console.log(fullTime);
             console.log(appointment.reason);
-            
+
             console.error(ex);
             toast.error("Đặt lịch thất bại!");
         } finally {

@@ -51,4 +51,14 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment getPaymentById(int id) {
         return this.paymentRepository.getPaymentById(id);
     }
+
+    @Override
+    public Payment getPaymentByInvoiceId(int id) {
+        return this.paymentRepository.getPaymentByInvoiceId(id);
+    }
+
+    @Override
+    public Payment getPaymentByTransactionId(String id) {
+        return this.paymentRepository.getPaymentByTransactionId(id);
+    }
 }

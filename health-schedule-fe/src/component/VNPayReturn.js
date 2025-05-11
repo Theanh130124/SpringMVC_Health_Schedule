@@ -16,9 +16,11 @@ const VNPayReturn = () => {
             const queryParams = new URLSearchParams(location.search);
 
             // Lấy các tham số từ query string
+            
             const vnp_Amount = queryParams.get("vnp_Amount");
             const vnp_ResponseCode = queryParams.get("vnp_ResponseCode");
             const vnp_OrderInfo = queryParams.get("vnp_OrderInfo");//OrderInfo la invoiceId
+            const [invoiceId, paymentId] = vnp_OrderInfo.split("-"); // Tách invoiceId và paymentId 
             const vnp_TransactionNo = queryParams.get("vnp_TransactionNo");
             const vnp_TransactionStatus = queryParams.get("vnp_TransactionStatus");
 
@@ -29,12 +31,13 @@ const VNPayReturn = () => {
                 vnp_OrderInfo,
                 vnp_TransactionNo,
                 vnp_TransactionStatus,
+                paymentId,
+                invoiceId,
             });
 
             const updateInvoiceStatus = async (status) => {
                 try {
-
-                    const response = await authApis().post(`invoice/${vnp_OrderInfo}`, {
+                    const response = await authApis().post(`invoice/${invoiceId}`, {
                         status: status, // Cập nhật trạng thái thanh toán
                     });
 
@@ -47,43 +50,10 @@ const VNPayReturn = () => {
                 }
             }
 
-            const addPayment = async () => {
-                setLoading(true);
-                try {
-                    const vnp_Amount = parseInt(queryParams.get("vnp_Amount"), 10); // Chuyển đổi sang số nguyên
-                    const amount = vnp_Amount / 100; // Chuyển đổi sang số tiền thực tế
-                    const formData = new FormData();
-                    formData.append("invoiceId", vnp_OrderInfo);
-                    formData.append("paymentMethod", 'VNPay');
-                    formData.append("transactionId", vnp_TransactionNo);
-                    formData.append("notes", "Thanh toán qua VNPay");
-                    formData.append("amount", amount);
+            
 
-                    const response = await authApis().post(`payments`, formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data", // Đặt header cho form-data
-                        },
-                    });
-
-                    if (response.data && response.data.paymentId) {
-                        return response.data.paymentId;
-                    } else {
-                        console.error("Không thể thêm thanh toán. Dữ liệu trả về không hợp lệ.");
-                        return null;
-                    }
-                }
-                catch (error) {
-                    console.error("Lỗi khi thêm thanh toán:", error);
-                    return null;
-                }
-                finally {
-                    setLoading(false);
-                }
-            }
-
-            const updatePaymentStatus = async (paymentId, statuss) => {
-                console.log("paymentId", paymentId);
-                console.log("statuss", statuss);
+            const updatePaymentStatus = async (statuss) => {
+                console.log(paymentId);
                 try {
                     const response = await authApis().patch(`payments/${paymentId}`, {
                         status: statuss,
@@ -103,20 +73,16 @@ const VNPayReturn = () => {
                 setPaymentStatus("success"); // Thanh toán thành công
                 // Gọi API để cập nhật trạng thái thanh toán của hóa đơnđơn
                 await updateInvoiceStatus("Paid");
-                // Thêm dữ liệu vào bảng Payment
-                let paymentId = await addPayment();
 
                 // Cập nhật trạng thái thanh toán
-                await updatePaymentStatus(paymentId, "Completed");
+                await updatePaymentStatus("Completed");
 
             } else {
                 setPaymentStatus("failure"); // Thanh toán thất bại
                 await updateInvoiceStatus("'Cancelled'");
-                // Thêm dữ liệu vào bảng Payment
-                let paymentId = await addPayment();
 
                 // Cập nhật trạng thái thanh toán
-                await updatePaymentStatus(paymentId, "Failed");
+                await updatePaymentStatus("Failed");
             }
 
             setLoading(false); // Kết thúc loading
@@ -147,7 +113,7 @@ const VNPayReturn = () => {
                         })}
                     </p>
                     <p>Mã giao dịch: {paymentData.vnp_TransactionNo}</p>
-                    <p>Thông tin đơn hàng: {paymentData.vnp_OrderInfo}</p>
+                    <p>Thông tin đơn hàng: {paymentData.invoiceId}</p>
                     <Button variant="primary" onClick={handleBackToHome}>
                         Quay về trang chủ
                     </Button>

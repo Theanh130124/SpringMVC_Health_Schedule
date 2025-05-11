@@ -53,4 +53,10 @@ public class InvoiceServiceImpl implements InvoiceService {
         return this.invoiceRepository.updatePaymentStatusInvoice(invoice);
     }
 
+    @Override
+    public Invoice getInvoiceByAppointmentId(int id) {
+         
+        return  this.invoiceRepository.getInvoiceByAppointmentId(id);
+    }
+
 }
