@@ -107,12 +107,6 @@ const Appointment = () => {
         loadAppointments();
     }, [page])
 
-
-<<<<<<< HEAD
-
-    //Truyen appointmentId sang Invoice
-    const handleInvoiceRedirect = (appointment) => {       
-=======
     const handleNavUpdate = (appointment) => {
         try {
             setLoading(true);
@@ -138,8 +132,7 @@ const Appointment = () => {
     }
 
 
-    const handlePaymentRedirect = (appointment) => {
->>>>>>> c5418e2685e46aed2fa0a4f84cbcc2684d1ed9e2
+    const handleInvoiceRedirect = (appointment) => {
         if (appointment) {
             //Neu dung navigate thi nho bo {Link} o trong Button
             nav("/invoice", { state: { appointment } });
@@ -252,13 +245,10 @@ const Appointment = () => {
                                             Hủy lịch hẹn
                                         </Button>
 
-<<<<<<< HEAD
+
                                         <Button variant="primary"  onClick={() => handleInvoiceRedirect(a)} size="sm">
                                             Xem hóa đơn
-=======
-                                        <Button variant="primary" onClick={() => handlePaymentRedirect(a)} size="sm">
-                                            Thanh Toán
->>>>>>> c5418e2685e46aed2fa0a4f84cbcc2684d1ed9e2
+
                                         </Button>
                                     </div>
                                 )}
