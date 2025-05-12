@@ -16,4 +16,6 @@ public interface AppointmentRepository {
     public Appointment addOrUpdate(Appointment a);
     public Appointment getAppointmentById(int id);
     public List<Appointment> getListAppointment(Map<String,String> params);
+    public void delete(Appointment a);
+
 }

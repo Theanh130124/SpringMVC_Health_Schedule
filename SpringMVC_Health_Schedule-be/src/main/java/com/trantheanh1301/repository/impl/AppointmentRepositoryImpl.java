@@ -119,4 +119,13 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         return s.get(Appointment.class, id);
     }
 
+    @Override
+    public void delete(Appointment a) {
+        Session s = factory.getObject().getCurrentSession();
+        s.remove(a);
+                   
+    }
+    
+    
+
 }

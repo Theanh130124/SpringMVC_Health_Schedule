@@ -72,7 +72,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Date time = Timestamp.valueOf(params.get("time"));
 
-        Availableslot slot = slotRepo.getSlotByDoctorId(doctorId, time , false);
+        Availableslot slot = slotRepo.getSlotByDoctorId(doctorId, time, false);
         if (slot == null || slot.getIsBooked()) {
             throw new RuntimeException("Lịch đã được đặt!");
         }
@@ -134,14 +134,14 @@ public class AppointmentServiceImpl implements AppointmentService {
             //Qúa 24h sẽ không cho sửa -> Nhưng phải thực hiện set lịch hiện tại về chưa book 
             //và lịch book thành đã book (theo thời gian đã chọn)
             if (cal.getTime().after(date_now)) {
-                
+
                 if (params.containsKey("time")) {
                     String timeStr = params.get("time");
                     Date newTime = DateFormatter.parseDateTime(timeStr); //format cho thời gian gửi lên server
                     //Time cũ
                     Date time_old = appointment.getAppointmentTime();
                     //Thực hiện update slot cũ về false -> chưa book
-                    Availableslot slot_old = slotRepo.getSlotByDoctorId(doctorId, time_old , true);
+                    Availableslot slot_old = slotRepo.getSlotByDoctorId(doctorId, time_old, true);
                     if (slot_old == null) {
                         throw new RuntimeException("Lịch chưa được đặt nên không được sửa!");
                     }
@@ -163,7 +163,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 }
 
             } else {
-                throw new RuntimeException("Không thể sữa lịch hẹn quá 24 giờ");
+                throw new RuntimeException("Không thể xóa lịch hẹn quá 24 giờ");
             }
         }
         //Cập nhật lịch khám
@@ -175,6 +175,39 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointment.getAppointmentTime().toString());
 
         return appointment;
+    }
+
+    @Override
+    public void deleteAppointment(Map<String, String> params, int id) {
+        Appointment a = appointmentRepo.getAppointmentById(id);
+        if (a == null) {
+            throw new RuntimeException("Không tìm thấy appointment trên để xóa");
+        }
+        Integer doctorId = Integer.valueOf(params.get("doctorId"));
+        Doctor doctor = doctorRepo.getDoctorById(doctorId);
+        if (doctor == null) {
+            throw new RuntimeException("Không tìm thấy bác sĩ");
+        }
+        //Xóa lịch cũng cần cập nhật slot trổng đó cho người khác đăt
+        if (a.getCreatedAt() != null) {
+            Date date_now = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(a.getCreatedAt());
+            cal.add(Calendar.HOUR_OF_DAY, 24);
+
+            if (cal.getTime().after(date_now)) {
+                Date time_old = a.getAppointmentTime();
+                Availableslot slot_old = slotRepo.getSlotByDoctorId(doctorId, time_old, true);
+                if (slot_old == null) {
+                    throw new RuntimeException("Lịch chưa được đặt nên không thể hủy lịch!");
+                }
+                slot_old.setIsBooked(false);
+                slotRepo.addOrUpdate(slot_old);
+            } else {
+                throw new RuntimeException("Không thể sữa lịch hẹn quá 24 giờ");
+            }
+        }
+        appointmentRepo.delete(a);
     }
 
 }
