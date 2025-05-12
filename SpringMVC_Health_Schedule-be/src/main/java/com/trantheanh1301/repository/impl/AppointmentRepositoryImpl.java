@@ -16,6 +16,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.hibernate.Session;
@@ -74,15 +75,10 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
             }
 
             query.select(rA);
-            
-            
-            
 
             //Truyền 1 params doctorId hoặc 1 patientId thôi
             query.select(rA).where(builder.or(predicates.toArray(Predicate[]::new)));
 
-            
-            
             query.orderBy(builder.desc(rA.get("appointmentTime")));
         }
         Query q = s.createQuery(query);
@@ -123,9 +119,18 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     public void delete(Appointment a) {
         Session s = factory.getObject().getCurrentSession();
         s.remove(a);
-                   
+
     }
-    
-    
+
+    @Override
+    public List<Appointment> findAppointmentBetween(Date start, Date end) {
+        Session s = factory.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<Appointment> query = builder.createQuery(Appointment.class);
+        Root<Appointment> rA = query.from(Appointment.class);
+        Predicate beetweenPre = builder.between(rA.get("appointmentTime"), start, end);
+        query.select(rA).where(beetweenPre);
+        return s.createQuery(query).getResultList();
+    }
 
 }

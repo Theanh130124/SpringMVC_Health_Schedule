@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 @EnableGlobalMethodSecurity(prePostEnabled = true) //dùng cho PreAuthorize phải bật cả bên WebAppContext nữa
 @EnableTransactionManagement
+@EnableScheduling
 @ComponentScan(basePackages = {
     "com.trantheanh1301.controllers",
     "com.trantheanh1301.repository",

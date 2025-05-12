@@ -5,6 +5,7 @@
 package com.trantheanh1301.repository;
 
 import com.trantheanh1301.pojo.Appointment;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,5 +18,7 @@ public interface AppointmentRepository {
     public Appointment getAppointmentById(int id);
     public List<Appointment> getListAppointment(Map<String,String> params);
     public void delete(Appointment a);
+    public List<Appointment> findAppointmentBetween(Date start , Date end);
+    
 
 }

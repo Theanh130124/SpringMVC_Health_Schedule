@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
@@ -208,6 +209,31 @@ public class AppointmentServiceImpl implements AppointmentService {
             }
         }
         appointmentRepo.delete(a);
+    }
+//Phần nhắc nhở lịch hẹn
+
+    @Override
+    @Scheduled(fixedRate = 3600000) // mỗi 1 tiếng ktra
+    public void sendAppoinmetReminders() {
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.HOUR, 24);// kiểm tra lịch trong 24h tới
+        Date nextDay = calendar.getTime();
+
+        List<Appointment> appoinments = appointmentRepo.findAppointmentBetween(now, nextDay);
+        for (Appointment appt : appoinments) {
+            //Lịch nếu đang ở Schedule
+            if ("Scheduled".equals(appt.getStatus())) {
+                String email = appt.getPatientId().getUser().getEmail();
+                String subject = "Nhắc nhỏ lịch khám bệnh của" + appt.getPatientId().getUser().getFirstName() + appt.getPatientId().getUser().getLastName();
+                String content = "Bạn có lịch hẹn vào lúc" + appt.getAppointmentTime();
+
+                emailService.sendAppointmentConfirmation(email, subject,
+                        appt.getDoctorId().getUser().getFirstName() + appt.getDoctorId().getUser().getLastName(),
+                        content);
+            }
+        }
     }
 
 }

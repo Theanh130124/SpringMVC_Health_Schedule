@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -35,7 +36,7 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 @Configuration
 @EnableWebSecurity
 @EnableTransactionManagement
-
+@EnableScheduling
 @EnableGlobalMethodSecurity(prePostEnabled = true) // dùng cho PreAuthorize phải bật cả bên WebAppContext nữa
 
 @ComponentScan(basePackages = {
