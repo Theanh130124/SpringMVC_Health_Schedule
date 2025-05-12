@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MyUserContext } from "../configs/MyContexts";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { endpoint, fbApis } from "../configs/Apis";
@@ -7,6 +7,7 @@ import "./Styles/RoomChat.css";
 
 import { onSnapshot, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../configs/FirebaseConfigs";
+import CallVideo from "./CallVideo";
 
 const RoomChat = () => {
   const location = useLocation();
@@ -16,9 +17,10 @@ const RoomChat = () => {
   const [page, setPage] = useState(1);
   const user = useContext(MyUserContext);
   const messagesEndRef = useRef(null);
+  const [showCall, setShowCall] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [imageFile, setImageFile] = useState(null);
-
+  const nav = useNavigate();
   const doctor = appointment?.doctorId?.user;
   const patient = appointment?.patientId?.user;
   const otherUser = user.userId === doctor.userId ? patient : doctor;
@@ -27,6 +29,8 @@ const RoomChat = () => {
   const currentAvatar = isDoctor ? appointment.doctorId.user.avatar : appointment.patientId.user.avatar;
   const otherAvatar = isDoctor ? appointment.patientId.user.avatar : appointment.doctorId.user.avatar;
 
+
+  const remotePeerId = otherUser?.peerId;
   const chatId = room?.chatId;
 
 
@@ -94,6 +98,9 @@ const RoomChat = () => {
   }, [chatId]);
 
 
+
+  const handleStartCall = () => setShowCall(true);
+  const handleCloseCall = () => setShowCall(false);
   //Cuon xuống cuối khi có tin nhắn mới
 
   useEffect(() => {
@@ -118,8 +125,28 @@ const RoomChat = () => {
               {otherUser?.firstName} {otherUser?.lastName}
             </h5>
           </div>
+          <div className="d-flex justify-content-end">
+            <Button onClick={handleStartCall} className="call-btn" variant="success">
+              <i className="bi bi-telephone-fill me-2"></i>
+              Gọi Video
+            </Button>
+          </div>
         </Col>
+
       </Row>
+      {/* Hiển thị CallVideo nếu showCall = true */}
+      {showCall && (
+        <div className="callvideo-wrapper">
+          <CallVideo remotePeerId={remotePeerId} />
+          <div className="d-flex justify-content-end mt-2">
+            <Button variant="secondary" onClick={handleCloseCall}>
+              Đóng Video Call
+            </Button>
+          </div>
+        </div>
+      )}
+
+
 
       {/* Chat Messages */}
       <Row className="chat-box">
@@ -201,6 +228,8 @@ const RoomChat = () => {
           </Button>
         </Col>
       </Row>
+
+
     </Container>
   );
 };
