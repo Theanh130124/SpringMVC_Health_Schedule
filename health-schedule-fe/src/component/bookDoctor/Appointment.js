@@ -7,6 +7,7 @@ import { load } from "react-cookies";
 import MySpinner from "../layout/MySpinner";
 import MyConfigs from "../../configs/MyConfigs";
 import toast from "react-hot-toast";
+import MyConfirm from "../layout/MyConfirm";
 
 const Appointment = () => {
     //Phân trang cho thằng này
@@ -16,7 +17,12 @@ const Appointment = () => {
     const user = useContext(MyUserContext);
     const [msg, setMsg] = useState("");
     const [hasMore, setHasMore] = useState(true);
-
+    const [showConfirm, setShowConfirm] = useState({
+        show: false,
+        appointmentId: null,
+        doctorId: null,
+        createdAt: null,
+    });
     const nav = useNavigate();
 
     // Tạo roomchat -> làm này xem thêm
@@ -55,6 +61,38 @@ const Appointment = () => {
             setLoading(prev => ({ ...prev, [appointment.appointmentId]: false }));
         }
     }
+
+    const deleteAppointment = async (appointmentId, doctorId, createdAt) => {
+        try {
+            setLoading(true);
+
+            // Kiểm tra thời gian tạo lịch hẹn
+            const now = new Date().getTime();
+            const createdTime = new Date(createdAt).getTime();
+            const diffInMilliseconds = now - createdTime;
+
+            if (diffInMilliseconds > 24 * 60 * 60 * 1000) {
+                toast.error("Bạn không thể hủy lịch hẹn sau 24 giờ!");
+                return; // Dừng thực hiện nếu quá 24 giờ
+            }
+
+            // Gửi yêu cầu xóa lịch hẹn
+            await authApis().delete(endpoint['deleteBookDoctor'](appointmentId), {
+                data: { doctorId: doctorId },
+            });
+
+            await loadAppointments();
+            toast.success("Hủy lịch thành công!");
+        } catch (ex) {
+            toast.error("Hủy lịch thất bại!");
+            console.error("Lỗi khi hủy lịch:", ex);
+        } finally {
+            setLoading(false);
+            setShowConfirm(false);
+        }
+    };
+
+
 
 
     const loadAppointments = async () => {
@@ -119,12 +157,12 @@ const Appointment = () => {
                         appointment
                     }
                 });
-            }else {
+            } else {
                 toast.error("Bạn không thể sửa lịch hẹn sau 24 giờ!");
             }
 
         } catch (ex) {
-             console.error("Lỗi khi kiểm tra thời gian:", ex);
+            console.error("Lỗi khi kiểm tra thời gian:", ex);
         }
         finally {
             setLoading(false);
@@ -138,7 +176,18 @@ const Appointment = () => {
             nav("/invoice", { state: { appointment } });
         }
     };
+    const handleConfirm = (appointmentId, doctorId, createdAt) => {
+        setShowConfirm({
+            show: true,
+            appointmentId,
+            doctorId,
+            createdAt,
+        });
+    };
 
+    const handleClose = () => {
+        setShowConfirm(false);
+    };
 
 
     return (
@@ -193,7 +242,7 @@ const Appointment = () => {
                                     </Card.Text>
 
                                     <Card.Text className="card-text " style={{ fontSize: '0.85rem', color: 'red' }}>
-                                        <strong>Lịch khám được đặt vào ngày :</strong>  {new Date(a.createdAt).toLocaleDateString("vi-VN")}
+                                        <strong>Lịch khám được đặt vào ngày :</strong>  {new Date(a.createdAt).toLocaleString("vi-VN")}
                                     </Card.Text>
 
 
@@ -241,12 +290,17 @@ const Appointment = () => {
                                             Sửa lịch hẹn
                                         </Button>
 
-                                        <Button variant="danger" as={Link} to="/" size="sm">
+                                        <Button
+                                            variant="danger"
+                                            disabled={loading}
+                                            onClick={() => handleConfirm(a.appointmentId, a.doctorId.doctorId, a.createdAt)}
+                                            size="sm"
+                                        >
                                             Hủy lịch hẹn
                                         </Button>
 
 
-                                        <Button variant="primary"  onClick={() => handleInvoiceRedirect(a)} size="sm">
+                                        <Button variant="primary" disabled={loading} onClick={() => handleInvoiceRedirect(a)} size="sm">
                                             Xem hóa đơn
 
                                         </Button>
@@ -256,12 +310,29 @@ const Appointment = () => {
                             </Card.Body>
                         </Card>
 
+                        <MyConfirm
+                            show={showConfirm.show}
+                            onHide={handleClose}
+                            onConfirm={() =>
+                                deleteAppointment(
+                                    showConfirm.appointmentId,
+                                    showConfirm.doctorId,
+                                    showConfirm.createdAt
+                                )
+                            }
+                            loading={loading}
+                            title="Xác nhận hủy lịch"
+                            body="Bạn có chắc chắn muốn hủy lịch hẹn này không?"
+                        />
+
 
                     </Col>
                 ))}
 
 
             </Row>
+
+
 
             <Row className="justify-content-center align-items-center g-4 mb-4 mt-4">
                 {hasMore && appointments.length > 0 && !loading && (

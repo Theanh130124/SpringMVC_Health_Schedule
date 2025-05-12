@@ -22,6 +22,7 @@ export const endpoint = {
     'listAppointment': '/appointment',
     'bookdoctor': '/book_doctor',
     updateBookDoctor : (appointmentId) => `/book_doctor/${appointmentId}`,
+    deleteBookDoctor : (appointmentId) => `/delete_booking/${appointmentId}`,
     'reviews': '/reviews',
     'review': '/review',
 

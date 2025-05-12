@@ -89,19 +89,18 @@ const Booking = () => {
             toast.success("Đặt lịch thành công!");
             nav("/appointment"); //Đặt xong về xem lịch hẹn
         } catch (ex) {
-            console.log(user.userId);
-            console.log(slot.doctorId.doctorId);
-            console.log(slot.doctorId.clinics[0].clinicId);
-            console.log(fullTime);
-            console.log(appointment.reason);
+            // console.log(user.userId);
+            // console.log(slot.doctorId.doctorId);
+            // console.log(slot.doctorId.clinics[0].clinicId);
+            // console.log(fullTime);
+            // console.log(appointment.reason);
 
-            console.error(ex);
+            // console.error(ex);
             toast.error("Đặt lịch thất bại!");
         } finally {
             setLoading(false);
             setShowConfirm(false);
         }
-
 
     }
 
@@ -114,14 +113,17 @@ const Booking = () => {
         setShowConfirm(false);
     };
 
+   
 
 
+
+    
 
 
 
     return (
         <>
-           
+
             <Container fluid className="p-0">
 
                 <Row className="justify-content-center custom-row-primary mt-4">
