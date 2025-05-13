@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Alert, Button, Col, Container, FloatingLabel, Form, Row } from "react-bootstrap"
 import Apis, { authApis, endpoint } from "../configs/Apis";
 import cookie from 'react-cookies'
@@ -7,6 +7,8 @@ import MySpinner from "./layout/MySpinner";
 import { MyDipatcherContext } from "../configs/MyContexts";
 import toast from "react-hot-toast";
 import { showCustomToast } from "./layout/MyToaster";
+import { useLocation } from "react-router-dom";
+import "./Styles/Login.css";
 
 const Login = () => {
     //Phải là đối tượng rỗng
@@ -15,6 +17,18 @@ const Login = () => {
     const [msg, setMsg] = useState();
     const dispatch = useContext(MyDipatcherContext);
     const nav = useNavigate();
+
+    const location = useLocation();
+    const [message, setMessage] = useState(location.state?.message || "");
+
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => {
+                setMessage("");
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
 
     const info = [
         { label: "Tên đăng nhập", field: "username", type: "text" },
@@ -84,6 +98,11 @@ const Login = () => {
     return (
 
         <Container fluid className="p-0">
+            {message && (
+                <div className="fade-out-message">
+                    {message}
+                </div>
+            )}
             <Row className="justify-content-center custom-row-primary mt-4">
                 <Col lg={6} md={4} sm={12} >
                     <h1 className="text-center text-success mb-4">ĐĂNG NHẬP</h1>

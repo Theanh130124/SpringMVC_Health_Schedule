@@ -75,7 +75,7 @@ const Header = () => {
                                 Đăng nhập
                             </Button>
                         </> : <>
-                            <Link to="/" className="nav-link text-danger">
+                            <div className="nav-link text-danger">
                                 <NavDropdown
                                     title={
                                         <span>
@@ -97,7 +97,7 @@ const Header = () => {
                                         Đăng xuất
                                     </NavDropdown.Item>
                                 </NavDropdown>
-                            </Link>
+                            </div>
                             <Button
                                 variant="danger"
                                 className="logout-btn d-flex align-items-center"

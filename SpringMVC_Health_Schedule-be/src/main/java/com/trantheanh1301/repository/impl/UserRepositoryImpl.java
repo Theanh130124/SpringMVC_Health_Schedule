@@ -12,10 +12,13 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,8 +95,6 @@ public class UserRepositoryImpl implements UserRepository {
         return this.passwordEncoder.matches(password, u.getPassword());
     }
 
-    
-    
     @Override
     public User updateUser(User u) {
         Session s = factory.getObject().getCurrentSession();
@@ -101,14 +102,40 @@ public class UserRepositoryImpl implements UserRepository {
         s.merge(u);
         return u;
 
-}
+    }
     //dùng truyền id trong license vào để cập nhật trạng thại tài khoản doctor
 
     @Override
     public User getUserbyId(int id) {
-         Session s = factory.getObject().getCurrentSession();
-         return s.get(User.class, id);
+        Session s = factory.getObject().getCurrentSession();
+        return s.get(User.class, id);
     }
-    
-    
+
+    @Override
+    public Map<String, Object> changePassword(String username, String currentPassword, String newPassword) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Map<String, Object> res = new HashMap<>();//Dung de tra ra ket qua de ben font-end de xu ly
+        User u = this.getUserByUsername(username);
+
+        if (u == null) {
+            res.put("success", false);
+            res.put("message", "User không tồn tại");
+            return res;
+        }
+
+        if (!this.passwordEncoder.matches(currentPassword, u.getPassword())) {
+            res.put("success", false);
+            res.put("message", "Sai mật khẩu");
+            return res;
+        }
+
+        u.setPassword(passwordEncoder.encode(newPassword));
+        s.update(u);
+
+        res.put("success", true);
+        res.put("message", "Đổi mật khẩu thành công");
+        return res;
+
+    }
+
 }

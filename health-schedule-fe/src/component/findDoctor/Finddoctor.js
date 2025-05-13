@@ -24,12 +24,6 @@ const Finddoctor = () => {
 
     const nav = useNavigate();
 
-    const [doctor, setDoctor] = useContext(MyDoctorContext);
-    const handleClick =(d)=>{
-        setDoctor(d)    
-        console.log(doctor)
-    }
-
     const handleKeywordChange = (e) => {
         let value = e.target.value;
         setKeyword(value);
@@ -166,7 +160,7 @@ const Finddoctor = () => {
                                     <div className="d-grid gap-1 mt-2">
                                         {/* Xem lịch trống là tìm lịch trống theo id doctor đó */}
                                         <Button variant="primary" onClick={ () => handlerFinDoctor(d.doctorId)} size="sm">Xem lịch trống</Button>
-                                        <Button variant="danger" as={Link} to={`/review/?doctorId=${d.doctorId}`} onClick={()=>handleClick(d)} size="sm">Xem đánh giá</Button>
+                                        <Button variant="danger" as={Link} to={`/review/?doctorId=${d.doctorId}`} size="sm">Xem đánh giá</Button>
                                     </div>
                                 </Card.Body>
                             </Card>
