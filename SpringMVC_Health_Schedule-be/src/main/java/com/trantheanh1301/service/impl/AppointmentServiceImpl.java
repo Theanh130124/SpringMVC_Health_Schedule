@@ -95,7 +95,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         //Cập nhật lịch khám
         appointmentRepo.addOrUpdate(appointment);
 
-        emailService.sendAppointmentConfirmation(patient.getUser().getEmail(),
+        emailService.sendAppointmentConfirmation(patient.getUser().getEmail(), "Xác nhận đặt lịch hẹn",
                 patient.getUser().getFirstName() + patient.getUser().getLastName(),
                 doctor.getUser().getFirstName() + doctor.getUser().getLastName(),
                 appointment.getAppointmentTime().toString());
@@ -170,7 +170,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         //Cập nhật lịch khám
         appointmentRepo.addOrUpdate(appointment);
 
-        emailService.sendAppointmentConfirmation(appointment.getPatientId().getUser().getEmail(),
+        emailService.sendAppointmentConfirmation(appointment.getPatientId().getUser().getEmail(), "Xác nhận sửa lịch hẹn",
                 appointment.getPatientId().getUser().getFirstName() + appointment.getPatientId().getUser().getLastName(),
                 appointment.getDoctorId().getUser().getFirstName() + appointment.getDoctorId().getUser().getLastName(),
                 appointment.getAppointmentTime().toString());
@@ -213,23 +213,27 @@ public class AppointmentServiceImpl implements AppointmentService {
 //Phần nhắc nhở lịch hẹn
 
     @Override
-    @Scheduled(fixedRate = 3600000) // mỗi 1 tiếng ktra
+    @Scheduled(fixedRate = 12 * 60 * 60 * 1000) // chạy mỗi 12 giờ
     public void sendAppoinmetReminders() {
         Date now = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(now);
-        calendar.add(Calendar.HOUR, 24);// kiểm tra lịch trong 24h tới
-        Date nextDay = calendar.getTime();
+        Calendar startCal = Calendar.getInstance();
+        startCal.add(Calendar.DAY_OF_YEAR, 1); // bắt đầu từ ngày mai
+        Date start = startCal.getTime();
 
-        List<Appointment> appoinments = appointmentRepo.findAppointmentBetween(now, nextDay);
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTime(now);
+        endCal.add(Calendar.DAY_OF_YEAR, 2); // đến ngày kia
+        Date end = endCal.getTime();
+
+        List<Appointment> appoinments = appointmentRepo.findAppointmentBetween(start, end);
         for (Appointment appt : appoinments) {
             //Lịch nếu đang ở Schedule
             if ("Scheduled".equals(appt.getStatus())) {
                 String email = appt.getPatientId().getUser().getEmail();
-                String subject = "Nhắc nhỏ lịch khám bệnh của" + appt.getPatientId().getUser().getFirstName() + appt.getPatientId().getUser().getLastName();
+                String subject = "Nhắc nhở lịch khám bệnh của bạn";
                 String content = "Bạn có lịch hẹn vào lúc" + appt.getAppointmentTime();
 
-                emailService.sendAppointmentConfirmation(email, subject,
+                emailService.sendAppointmentConfirmation(email, subject, appt.getPatientId().getUser().getFirstName() + appt.getPatientId().getUser().getLastName(),
                         appt.getDoctorId().getUser().getFirstName() + appt.getDoctorId().getUser().getLastName(),
                         content);
             }

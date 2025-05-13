@@ -37,18 +37,19 @@ const RoomChat = () => {
 
   const handleSendMessage = async () => {
     try {
+
+      
       if (!messageText && !imageFile) return;
       setLoading(true);
 
       let imageUrl = null;
+      
 
       if (imageFile) {
         const formData = new FormData();
-        formData.append("file", imageFile);
+        formData.append("image", imageFile);
 
-        let res = await fbApis().post(endpoint.uploadFile, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        let res = await fbApis().post(endpoint.uploadImage, formData);
         imageUrl = res.data.imageUrl;
       }
       await fbApis().post(endpoint.chatMessages(chatId), {
@@ -61,6 +62,8 @@ const RoomChat = () => {
       setImageFile(null);
     } catch (error) {
       console.error("Lỗi khi gửi tin nhắn:", error);
+
+      console.log(imageFile)
     } finally {
       setLoading(false);
     }
@@ -214,6 +217,7 @@ const RoomChat = () => {
         <Col xs={2}>
           <input
             type="file"
+            name="image"
             onChange={(e) => setImageFile(e.target.files[0])}
             className="image-input"
           />
