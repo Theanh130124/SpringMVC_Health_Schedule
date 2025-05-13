@@ -32,13 +32,40 @@ import org.springframework.transaction.annotation.Transactional;
 @PropertySource("classpath:configs.properties")
 @Transactional
 public class DoctorAvailabilityRepositoryImpl implements DoctorAvailabilityRepository {
-
+    
     @Autowired
     private LocalSessionFactoryBean factory;
-
-    @Autowired
-    private Environment env;
-
-   
+    
+    @Override
+    public Doctoravailability addOrUpdate(Doctoravailability dvt) {
+        Session s = factory.getObject().getCurrentSession();
+        if (dvt.getAvailabilityId() == null) {
+            s.persist(dvt);
+        } else {
+            s.merge(dvt);
+        }
+        
+        return dvt;
+        
+    }
+    
+    @Override
+    public Doctoravailability findDoctorAvailabilityById(int id) {
+        Session s = factory.getObject().getCurrentSession();
+        return s.get(Doctoravailability.class, id);
+    }
+    
+    @Override
+    public List<Doctoravailability> listAvailability(int doctorId) {
+        Session s = factory.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<Doctoravailability> query = builder.createQuery(Doctoravailability.class);
+        Root<Doctoravailability> rD = query.from(Doctoravailability.class);
+        
+        Predicate predicate = builder.equal(rD.get("doctorId").as(Integer.class), doctorId);
+        
+        query.select(rD).where(predicate);
+        return s.createQuery(query).getResultList();
+    }
     
 }

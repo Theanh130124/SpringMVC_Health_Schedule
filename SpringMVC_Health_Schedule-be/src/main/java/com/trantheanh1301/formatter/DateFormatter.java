@@ -45,4 +45,20 @@ public class DateFormatter {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         return sdf.format(date);
     }
+
+    public static Date parseTime(String input) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        try {
+            return sdf.parse(input);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+// Format java.util.Date thành chuỗi giờ (HH:mm:ss)
+    public static String formatTime(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        return sdf.format(date);
+    }
 }

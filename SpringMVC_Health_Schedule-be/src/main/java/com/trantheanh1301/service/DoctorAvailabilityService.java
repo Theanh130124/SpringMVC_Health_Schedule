@@ -13,5 +13,8 @@ import java.util.Map;
  * @author LAPTOP
  */
 public interface DoctorAvailabilityService {
-   
+    
+    Doctoravailability registerDoctorAvailability(Map<String,String> params);
+    Doctoravailability updateDoctorAvailability(int id , Map<String, String> params);
+    List<Doctoravailability> getAvailability(Map<String,String> params) ;
 }
