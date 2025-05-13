@@ -30,6 +30,8 @@ import Invoice from './component/Invoice';
 import AppointmentUpdate from './component/bookDoctor/AppointmentUpdate';
 import EditProfile from './component/EditProfile';
 import ChangePassword from './component/ChangePassword';
+import DoctorAvailability from './component/bookDoctor/DoctorAvailability';
+
 
 const App = () => {
   //dispatch nhận action.type bên MyUserReducer.js -> F5 sẽ không mất vì đã lưu cookie
@@ -58,7 +60,9 @@ const App = () => {
             <MyToaster />
             <Routes>
               {/* Permission lại bên BE */}
-              <Route path="/callvideo" element={<CallVideo/>}/>
+             
+              <Route path="/doctorAvailability" element={<DoctorAvailability />} />
+              <Route path="/callvideo" element={<CallVideo />} />
               <Route path="/updateAppointment" element={<AppointmentUpdate />} />
               <Route path="/roomchat" element={<RoomChat />} />
               <Route path="/appointment" element={<Appointment />} />

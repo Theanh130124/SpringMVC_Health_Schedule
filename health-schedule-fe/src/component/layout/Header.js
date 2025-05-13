@@ -203,6 +203,12 @@ const Header = () => {
                                     <NavDropdown.Item as={Link} to="/editProfile">
                                         Sửa thông tin cá nhân
                                     </NavDropdown.Item>
+
+                                    {user.role === "Doctor" ? <> <NavDropdown.Item as={Link} to="/doctorAvailability">
+                                        Lịch làm việc của bạn
+                                    </NavDropdown.Item>
+                                    </> : <></>}
+
                                     <NavDropdown.Item as={Link} to="/change-password">
                                         Đổi mật khẩu
                                     </NavDropdown.Item>

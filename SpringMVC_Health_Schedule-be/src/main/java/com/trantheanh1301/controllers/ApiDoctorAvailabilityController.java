@@ -35,11 +35,11 @@ public class ApiDoctorAvailabilityController {
     private DoctorAvailabilityService doctoravailabilityService;
 
     @PreAuthorize("hasAuthority('Doctor')")
-    @GetMapping("/doctor_availability")
-    public ResponseEntity<?> getAvailability(@RequestBody Map<String,String> params) {
+    @GetMapping("/doctor_availability/{doctorId}")
+    public ResponseEntity<?> getAvailability(@PathVariable(value = "doctorId") int doctorId) {
         try {
 
-            return new ResponseEntity<>(doctoravailabilityService.getAvailability(params), HttpStatus.OK);
+            return new ResponseEntity<>(doctoravailabilityService.getAvailability(doctorId), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Đã xảy ra lỗi" + ex.getMessage());

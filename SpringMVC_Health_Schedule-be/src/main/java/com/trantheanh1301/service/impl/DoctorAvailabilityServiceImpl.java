@@ -69,8 +69,8 @@ public class DoctorAvailabilityServiceImpl implements DoctorAvailabilityService 
     }
 
     @Override
-    public List<Doctoravailability> getAvailability(Map<String,String> params) {
-        Integer doctorId = Integer.valueOf(params.get("doctorId"));
+    public List<Doctoravailability> getAvailability(int doctorId) {
+        
         Doctor doctor = doctorRepo.getDoctorById(doctorId);
         if (doctor == null) {
             throw new RuntimeException("Không tìm thấy bác sĩ !");
