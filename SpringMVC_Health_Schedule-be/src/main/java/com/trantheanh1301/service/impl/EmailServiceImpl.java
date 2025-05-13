@@ -23,7 +23,7 @@ public class EmailServiceImpl implements EmailService{
     private final String username = "theanhtran13012004@gmail.com";
     private final String password = "mxia nuqr klzf owdk"; // App password nếu dùng Gmail
 
-    public void sendAppointmentConfirmation(String toEmail, String patientName, String doctorName, String time) {
+    public void sendAppointmentConfirmation(String toEmail, String subject, String patientName, String doctorName, String time) {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -41,7 +41,7 @@ public class EmailServiceImpl implements EmailService{
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username, "Phòng khám trực tuyến"));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
-            message.setSubject("Xác nhận lịch hẹn khám bệnh");
+            message.setSubject(subject);
 
             String emailContent = String.format("""
                 Xin chào %s,

@@ -1,0 +1,19 @@
+.video-call-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.video-player {
+    width: 100%;
+    height: auto;
+    background-color: black;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.call-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}

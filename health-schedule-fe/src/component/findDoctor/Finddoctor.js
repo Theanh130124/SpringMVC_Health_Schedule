@@ -6,13 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MySpinner from "../layout/MySpinner";
 import RatingIcon from "../../utils/RattingIcon";
 import { useContext } from "react";
-import { MyDoctorContext } from "../../configs/MyContexts";
+
 import { toast } from "react-hot-toast";
 import MyConfigs from "../../configs/MyConfigs";
-const Finddoctor = () => {
 
 
-    
+const Finddoctor = () => {    
     // Nhớ làm xem thêm
     const [loading, setLoading] = useState(false);
     const [doctors, setDoctors] = useState([]);
@@ -23,6 +22,7 @@ const Finddoctor = () => {
     const [keyword, setKeyword] = useState("");
 
     const nav = useNavigate();
+
 
     const handleKeywordChange = (e) => {
         let value = e.target.value;
@@ -35,7 +35,7 @@ const Finddoctor = () => {
         try {
             setLoading(true);
             let res = await Apis.get(endpoint.findDoctorById(doctorId));   
-            nav("/calendar", { state: { slots: res.data }});
+            nav("/calendar", { state: { slots: res.data || [] } });
             toast.success("Lấy lịch trống thành công!");
         }catch (ex) {
             console.error("Lỗi khi xem lịch trống"+ex);
@@ -72,6 +72,7 @@ const Finddoctor = () => {
 
         } catch (ex) {
             console.error(ex);
+          
         }
         finally {
             setLoading(false)
@@ -123,7 +124,7 @@ const Finddoctor = () => {
                         </div>
                     )}
                     {doctors.length === 0 && <Alert variant="info" className="m-2 text-center">Không tìm thấy bác sĩ nào!</Alert>}
-                    {doctors.map(d => (
+                    {doctors?.map(d => (
                         <Col key={d.doctorId} xs={12} sm={6} md={4} lg={3} >
                             <Card className="card-doctor shadow-sm">
                                 <Card.Img variant="top" src={d.userDTO.avatar}  />
@@ -134,13 +135,13 @@ const Finddoctor = () => {
 
                                         {/*  */}
 
-                                        {d.specialties.map(s => (<Card.Text key={s.specialtyId} className="card-text" style={{ fontSize: '0.85rem' }}>
+                                        {d.specialties?.map(s => (<Card.Text key={s.specialtyId} className="card-text" style={{ fontSize: '0.85rem' }}>
                                             <strong>Chuyên khoa:</strong> {s.name}
                                         </Card.Text>))}
 
 
 
-                                        {d.clinics.map(c => (<Card.Text key={c.clinicId} className="card-text" style={{ fontSize: '0.85rem' }}>
+                                        {d.clinics?.map(c => (<Card.Text key={c.clinicId} className="card-text" style={{ fontSize: '0.85rem' }}>
                                             <strong>Bệnh viên : </strong>{c.name} <br />
                                             <strong>Địa chỉ: </strong>{c.address}
                                         </Card.Text>

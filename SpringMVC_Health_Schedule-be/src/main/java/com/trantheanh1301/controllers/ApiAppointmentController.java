@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,16 +40,14 @@ public class ApiAppointmentController {
             return new ResponseEntity<>(appointmentService.registerAppointment(params), HttpStatus.CREATED);
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
-            
+
             error.put("error", "Đã xảy ra lỗi" + ex.getMessage());
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
-    
-    
+
     //Nen permission dung nguoi thi moi xem duoc cua nguoi do theo token 
-    
     @PreAuthorize("hasAnyAuthority('Patient', 'Doctor')")
     @GetMapping("/appointment")
     public ResponseEntity<?> getListAppointment(@RequestParam Map<String, String> params) {
@@ -64,10 +63,23 @@ public class ApiAppointmentController {
 
     @PreAuthorize("hasAuthority('Patient')")
     @PatchMapping("/book_doctor/{id}")
-    public ResponseEntity<?> updateBookDoctor(@RequestBody Map<String, String> params, @PathVariable(value ="id") int id) {
+    public ResponseEntity<?> updateBookDoctor(@RequestBody Map<String, String> params, @PathVariable(value = "id") int id) {
         try {
-            
-            return new ResponseEntity<>(appointmentService.updateAppointment(id, params) , HttpStatus.OK);
+
+            return new ResponseEntity<>(appointmentService.updateAppointment(id, params), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Đã xảy ra lỗi" + ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('Patient')")
+    @DeleteMapping("/delete_booking/{id}")
+    public ResponseEntity<?> deleteBookDoctor(@RequestBody Map<String, String> params, @PathVariable(value = "id") int id) {
+        try {
+            appointmentService.deleteAppointment(params, id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Đã xảy ra lỗi" + ex.getMessage());

@@ -9,6 +9,6 @@ package com.trantheanh1301.service;
  * @author LAPTOP
  */
 public interface EmailService {
-    public void sendAppointmentConfirmation(String toEmail, String patientName, String doctorName, String time);
+    public void sendAppointmentConfirmation(String toEmail,String subject, String patientName, String doctorName, String time);
     
 }

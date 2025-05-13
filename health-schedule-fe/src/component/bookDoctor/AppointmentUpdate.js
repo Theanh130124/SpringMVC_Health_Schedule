@@ -5,6 +5,7 @@ import { ConvertToVietnamTime } from "../../utils/ConvertToVietnamTime";
 import toast from "react-hot-toast";
 import MySpinner from "../layout/MySpinner";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import MyConfirm from "../layout/MyConfirm";
 
 
 
@@ -14,6 +15,8 @@ import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 const AppointmentUpdate = () => {
 
     const [slots, setSlots] = useState([]);
+    const [showConfirm, setShowConfirm] = useState(false);
+
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const appointments = location.state?.appointment;
@@ -59,7 +62,7 @@ const AppointmentUpdate = () => {
                 payload.time = fullTime;
             }
 
-            
+
             await authApis().patch(endpoint["updateBookDoctor"](appointmentId), payload);
             nav("/appointment")
             toast.success("Cập nhật lịch hẹn thành công!");
@@ -75,8 +78,17 @@ const AppointmentUpdate = () => {
         }
         finally {
             setLoading(false);
+            setShowConfirm(false);
         }
     }
+
+    const handleConfirm = () => {
+        setShowConfirm(true);
+    };
+
+    const handleClose = () => {
+        setShowConfirm(false);
+    };
 
 
     useEffect(() => {
@@ -106,7 +118,7 @@ const AppointmentUpdate = () => {
                                             <option value="">-- Chọn thời gian  --</option>
                                             {slots.map((slot) => (
                                                 <option key={slot.slotId} value={slot.slotId}>
-                                                     {` Ngày : ${ConvertToVietnamTime(slot.slotDate)} - Thời gian bắt đầu : ${slot.startTime}`}
+                                                    {` Ngày : ${ConvertToVietnamTime(slot.slotDate)} - Thời gian bắt đầu : ${slot.startTime}`}
                                                 </option>
                                             ))}
                                         </Form.Select>
@@ -121,12 +133,10 @@ const AppointmentUpdate = () => {
                                             onChange={(e) => setReason(e.target.value)}
                                         />
                                     </Form.Group>
-                                    <Button
-                                        variant="primary"
+
+                                    <Button variant="primary"
                                         className="mt-3"
-                                        onClick={() => handleUpdateAppointment(appointments.appointmentId)}
-                                        disabled={loading}
-                                    >
+                                        onClick={handleConfirm} disabled={loading}>
                                         Cập nhật lịch hẹn
                                     </Button>
                                 </Card.Body>
@@ -134,6 +144,15 @@ const AppointmentUpdate = () => {
                         )}
                     </Col>
                 </Row>
+
+                <MyConfirm
+                    show={showConfirm}
+                    onHide={handleClose}
+                    onConfirm={() => handleUpdateAppointment(appointments.appointmentId)}
+                    loading={loading}
+                    title="Xác nhận sửa lịch đặt lịch"
+                    body="Bạn có chắc chắn muốn sửa lịch hẹn này không?"
+                />
             </Container>
         </>
     )

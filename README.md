@@ -300,6 +300,11 @@ Admin : tta1301 - 123456
 
 Cd ve docker file
 
+
+Cors cho phần gửi ảnh firebase và fe
+npm install cors
+
+
 docker build -t springmvc-health-tomcat11 .
 
 

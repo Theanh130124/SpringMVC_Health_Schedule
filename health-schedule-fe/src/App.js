@@ -58,7 +58,7 @@ const App = () => {
             <MyToaster />
             <Routes>
               {/* Permission lại bên BE */}
-
+              <Route path="/callvideo" element={<CallVideo/>}/>
               <Route path="/updateAppointment" element={<AppointmentUpdate />} />
               <Route path="/roomchat" element={<RoomChat />} />
               <Route path="/appointment" element={<Appointment />} />

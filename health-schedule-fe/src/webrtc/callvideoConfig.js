@@ -1,59 +1,24 @@
-const callVideo = () => { 
 
-    const openStream = () => {
+import Peer from "peerjs";
 
-        const config = { audio: false, video: true };
+export const openStream = () => {
+    const config = { audio: true, video: true }; // Bật cả âm thanh và video
+    return navigator.mediaDevices.getUserMedia(config);
+};
 
-        return navigator.mediaDevices.getUserMedia(config)
-    }
-
-
-    //Mở cam
-    const playStream = (idVideoTag, stream) => {
-
-
-        const video = document.getElementById(idVideoTag);
+export const playStream = (idVideoTag, stream) => {
+    const video = document.getElementById(idVideoTag);
+    if (video) {
         video.srcObject = stream;
         video.play();
     }
+};
 
-    openStream().then(stream => playStream('localStream', stream));
-
-    //Mở server tạo id ngẫu nhiên
-    const peer = new Peer({
-        host: '192.168.1.10',
+export const createPeer = () => {
+    return new Peer({
+        host: '192.168.1.10', // Địa chỉ server PeerJS
         port: 9000,
         path: '/myapp',
-        secure: false
+        secure: false,
     });
-
-    peer.on('open', id => {
-        $('#my-peer').text(`Your id: ${id}`);
-    });
-
-    //Người gọi
-
-    $('#btn-call').click(() => {
-
-        const id = $('#remoteId').val();
-        openStream().then(stream => {
-            playStream('localStream', stream);
-            const call = peer.call(id, stream);
-            call.on('stream', remoteStream => playStream('remoteStream', remoteStream));
-        })
-
-    });
-
-    //Người nhận
-    peer.on('call', call => {
-        openStream().then(stream => {
-            playStream('localStream', stream);
-            call.answer(stream);
-            call.on('stream', remoteStream => playStream('remoteStream', remoteStream));
-        })
-
-    })
-
-    }
-
-export default callVideo;
+};

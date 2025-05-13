@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
@@ -72,7 +73,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Date time = Timestamp.valueOf(params.get("time"));
 
-        Availableslot slot = slotRepo.getSlotByDoctorId(doctorId, time , false);
+        Availableslot slot = slotRepo.getSlotByDoctorId(doctorId, time, false);
         if (slot == null || slot.getIsBooked()) {
             throw new RuntimeException("Lịch đã được đặt!");
         }
@@ -94,7 +95,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         //Cập nhật lịch khám
         appointmentRepo.addOrUpdate(appointment);
 
-        emailService.sendAppointmentConfirmation(patient.getUser().getEmail(),
+        emailService.sendAppointmentConfirmation(patient.getUser().getEmail(), "Xác nhận đặt lịch hẹn",
                 patient.getUser().getFirstName() + patient.getUser().getLastName(),
                 doctor.getUser().getFirstName() + doctor.getUser().getLastName(),
                 appointment.getAppointmentTime().toString());
@@ -134,14 +135,14 @@ public class AppointmentServiceImpl implements AppointmentService {
             //Qúa 24h sẽ không cho sửa -> Nhưng phải thực hiện set lịch hiện tại về chưa book 
             //và lịch book thành đã book (theo thời gian đã chọn)
             if (cal.getTime().after(date_now)) {
-                
+
                 if (params.containsKey("time")) {
                     String timeStr = params.get("time");
                     Date newTime = DateFormatter.parseDateTime(timeStr); //format cho thời gian gửi lên server
                     //Time cũ
                     Date time_old = appointment.getAppointmentTime();
                     //Thực hiện update slot cũ về false -> chưa book
-                    Availableslot slot_old = slotRepo.getSlotByDoctorId(doctorId, time_old , true);
+                    Availableslot slot_old = slotRepo.getSlotByDoctorId(doctorId, time_old, true);
                     if (slot_old == null) {
                         throw new RuntimeException("Lịch chưa được đặt nên không được sửa!");
                     }
@@ -163,18 +164,80 @@ public class AppointmentServiceImpl implements AppointmentService {
                 }
 
             } else {
-                throw new RuntimeException("Không thể sữa lịch hẹn quá 24 giờ");
+                throw new RuntimeException("Không thể xóa lịch hẹn quá 24 giờ");
             }
         }
         //Cập nhật lịch khám
         appointmentRepo.addOrUpdate(appointment);
 
-        emailService.sendAppointmentConfirmation(appointment.getPatientId().getUser().getEmail(),
+        emailService.sendAppointmentConfirmation(appointment.getPatientId().getUser().getEmail(), "Xác nhận sửa lịch hẹn",
                 appointment.getPatientId().getUser().getFirstName() + appointment.getPatientId().getUser().getLastName(),
                 appointment.getDoctorId().getUser().getFirstName() + appointment.getDoctorId().getUser().getLastName(),
                 appointment.getAppointmentTime().toString());
 
         return appointment;
+    }
+
+    @Override
+    public void deleteAppointment(Map<String, String> params, int id) {
+        Appointment a = appointmentRepo.getAppointmentById(id);
+        if (a == null) {
+            throw new RuntimeException("Không tìm thấy appointment trên để xóa");
+        }
+        Integer doctorId = Integer.valueOf(params.get("doctorId"));
+        Doctor doctor = doctorRepo.getDoctorById(doctorId);
+        if (doctor == null) {
+            throw new RuntimeException("Không tìm thấy bác sĩ");
+        }
+        //Xóa lịch cũng cần cập nhật slot trổng đó cho người khác đăt
+        if (a.getCreatedAt() != null) {
+            Date date_now = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(a.getCreatedAt());
+            cal.add(Calendar.HOUR_OF_DAY, 24);
+
+            if (cal.getTime().after(date_now)) {
+                Date time_old = a.getAppointmentTime();
+                Availableslot slot_old = slotRepo.getSlotByDoctorId(doctorId, time_old, true);
+                if (slot_old == null) {
+                    throw new RuntimeException("Lịch chưa được đặt nên không thể hủy lịch!");
+                }
+                slot_old.setIsBooked(false);
+                slotRepo.addOrUpdate(slot_old);
+            } else {
+                throw new RuntimeException("Không thể sữa lịch hẹn quá 24 giờ");
+            }
+        }
+        appointmentRepo.delete(a);
+    }
+//Phần nhắc nhở lịch hẹn
+
+    @Override
+    @Scheduled(fixedRate = 12 * 60 * 60 * 1000) // chạy mỗi 12 giờ
+    public void sendAppoinmetReminders() {
+        Date now = new Date();
+        Calendar startCal = Calendar.getInstance();
+        startCal.add(Calendar.DAY_OF_YEAR, 1); // bắt đầu từ ngày mai
+        Date start = startCal.getTime();
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTime(now);
+        endCal.add(Calendar.DAY_OF_YEAR, 2); // đến ngày kia
+        Date end = endCal.getTime();
+
+        List<Appointment> appoinments = appointmentRepo.findAppointmentBetween(start, end);
+        for (Appointment appt : appoinments) {
+            //Lịch nếu đang ở Schedule
+            if ("Scheduled".equals(appt.getStatus())) {
+                String email = appt.getPatientId().getUser().getEmail();
+                String subject = "Nhắc nhở lịch khám bệnh của bạn";
+                String content = "Bạn có lịch hẹn vào lúc" + appt.getAppointmentTime();
+
+                emailService.sendAppointmentConfirmation(email, subject, appt.getPatientId().getUser().getFirstName() + appt.getPatientId().getUser().getLastName(),
+                        appt.getDoctorId().getUser().getFirstName() + appt.getDoctorId().getUser().getLastName(),
+                        content);
+            }
+        }
     }
 
 }

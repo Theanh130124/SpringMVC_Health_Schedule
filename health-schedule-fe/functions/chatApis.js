@@ -5,17 +5,19 @@ const express = require("express");
 const app = express();
 const multer = require('multer');
 const FormData = require('form-data');
-const upload = multer({ storage: multer.memoryStorage() });
-
+const upload = multer();
+const cors = require("cors");
 
 //Cấp quyền dùng db
 const { db } = require("./configs/FirebaseConfigs");
+//middleware
 
+app.use(express.urlencoded({ extended: true }));
 
 
 //parse json
 app.use(express.json())
-
+app.use(cors({ origin: true })); // hoặc origin: 'http://localhost:3000'
 
 
 
@@ -188,19 +190,24 @@ app.post('/chats/:chatId/messages', async (req, res) => {
 app.post('/upload-image', upload.single('image'), async (req, res) => {
     try {
         const file = req.file;
-        if (!file) return res.status(400).send({ error: 'Chưa có file ảnh' });
+        if (!file) return res.status(400).json({ error: 'Chưa có file ảnh' });
 
         const cloudinaryPreset = 'healthapp';
         const cloudName = 'dxiawzgnz';
 
         const formData = new FormData();
-        formData.append('file', file.buffer, file.originalname);
+        formData.append("file", file.buffer, { filename: file.originalname });
         formData.append('upload_preset', cloudinaryPreset);
 
         const cloudRes = await axios.post(
             `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
             formData,
-            { headers: formData.getHeaders() }
+            {
+                headers:
+                {
+                    ...formData.getHeaders()
+                }
+            }
         );
 
         return res.status(200).send({ imageUrl: cloudRes.data.secure_url });
@@ -209,6 +216,8 @@ app.post('/upload-image', upload.single('image'), async (req, res) => {
         return res.status(500).send({ error: 'Không thể upload ảnh' });
     }
 });
+
+
 
 
 
