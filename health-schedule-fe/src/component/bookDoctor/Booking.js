@@ -115,12 +115,6 @@ const Booking = () => {
 
    
 
-
-
-    
-
-
-
     return (
         <>
 

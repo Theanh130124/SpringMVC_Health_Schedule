@@ -189,29 +189,29 @@ const Header = () => {
                                 Đăng nhập
                             </Button>
                         </> : <>
-
-                            <NavDropdown
-                                title={
-                                    <span>
-                                        <img src={user.avatar} width="40" className="rounded-circle" alt="Avatar" />
-                                        Chào {user.username}!
-                                    </span>
-                                }
-                                id="user-dropdown"
-                                align="end"
-                            >
-                                <NavDropdown.Item as={Link} to="/editProfile">
-                                    Sửa thông tin cá nhân
-                                </NavDropdown.Item>
-                                <NavDropdown.Item as={Link} to="/change-password">
-                                    Đổi mật khẩu
-                                </NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={() => dispatch({ type: "logout" })} as={Link} to="/login">
-                                    Đăng xuất
-                                </NavDropdown.Item>
-                            </NavDropdown>
-
+                            <div className="nav-link text-danger">
+                                <NavDropdown
+                                    title={
+                                        <span>
+                                            <img src={user.avatar} width="40" className="rounded-circle" alt="Avatar" />
+                                            Chào {user.username}!
+                                        </span>
+                                    }
+                                    id="user-dropdown"
+                                    align="end"
+                                >
+                                    <NavDropdown.Item as={Link} to="/editProfile">
+                                        Sửa thông tin cá nhân
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/change-password">
+                                        Đổi mật khẩu
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item onClick={() => dispatch({ type: "logout" })} as={Link} to="/login">
+                                        Đăng xuất
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                            </div>
                             <Button
                                 variant="danger"
                                 className="logout-btn d-flex align-items-center"

@@ -220,4 +220,12 @@ public class UserServiceImpl implements UserService {
         return this.userRepo.updateUser(u);
     }
 
+    @Override
+    public Map<String, Object> changePassword(String username,Map<String,String> params) {
+        
+        String currentPassword = params.get("currentPassword");
+        String newPassword = params.get("newPassword");
+       return this.userRepo.changePassword(username, currentPassword, newPassword);
+    }
+
 }

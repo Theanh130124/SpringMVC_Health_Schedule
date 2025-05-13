@@ -97,4 +97,19 @@ public class ApiUserController {
     public ResponseEntity<User> getProfile(Principal principal) {
         return new ResponseEntity<>(this.userDetailsService.getUserByUsername(principal.getName()), HttpStatus.OK);
     }
+    
+    @PatchMapping("/user/change-password/{username}")
+    // trả ? để in đc error
+    public ResponseEntity<?> changePassword(@PathVariable ("username") String username,@RequestParam Map<String, String> params) {
+        try {
+            Map<String, Object> res = this.userDetailsService.changePassword(username, params);
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Đã xảy ra lỗi " + ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+    
 }

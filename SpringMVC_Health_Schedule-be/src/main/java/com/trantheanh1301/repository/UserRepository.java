@@ -5,6 +5,7 @@
 package com.trantheanh1301.repository;
 
 import com.trantheanh1301.pojo.User;
+import java.util.Map;
 
 /**
  *
@@ -18,5 +19,6 @@ public interface UserRepository  {
     public User getAdminbyRoleId(int adminId);
     public User updateUser(User u);
     public User getUserbyId(int id);
+    public Map<String, Object> changePassword(String username,String currentPassword,String newPassword);
     
 }
