@@ -310,3 +310,32 @@ docker build -t springmvc-health-tomcat11 .
 
 
 docker run -d -p 8080:8080 --name health_schedule_app springmvc-health-tomcat11
+
+
+
+
+
+
+
+reactbits 
+cài ts  npm install --save-dev typescript
+
+
+![image](https://github.com/user-attachments/assets/80734a00-3d31-48fa-802d-e2da9cbe754f)
+
+
+
+One-Time Installation
+JS + CSS
+
+npx jsrepo add https://reactbits.dev/default/TextAnimations/RotatingText
+JS + Tailwind
+
+npx jsrepo add https://reactbits.dev/tailwind/TextAnimations/RotatingText
+TS + CSS
+
+npx jsrepo add https://reactbits.dev/ts/default/TextAnimations/RotatingText
+TS + Tailwind
+
+npx jsrepo add https://reactbits.dev/ts/tailwind/TextAnimations/RotatingText
+
