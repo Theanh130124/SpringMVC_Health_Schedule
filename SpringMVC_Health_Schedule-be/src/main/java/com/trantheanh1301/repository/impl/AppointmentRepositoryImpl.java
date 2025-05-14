@@ -106,7 +106,8 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         } else {
             s.merge(a);
         }
-
+        
+        s.refresh(a);
         return a;
     }
 

@@ -80,4 +80,9 @@ public class ReviewServiceImpl implements ReviewService{
     public List<Review> getReviewLists(Map<String, String> params) {
         return this.reviewRepository.getReviewLists(params);
     }
+    
+    @Override
+    public Review getReviewByAppointmentId(int id){
+        return this.reviewRepository.getReviewByAppointmentId(id);
+    }
 }

@@ -28,7 +28,7 @@ const Appointment = () => {
     // Tạo roomchat -> làm này xem thêm
 
     const [room, setRoom] = useState();
-
+    const [reviewedAppointments, setReviewedAppointments] = useState({});
 
     //doctorId chỉ lấy 1 trong list appointment 
 
@@ -94,7 +94,6 @@ const Appointment = () => {
 
 
 
-
     const loadAppointments = async () => {
         try {
 
@@ -122,9 +121,34 @@ const Appointment = () => {
                 setHasMore(false);
             }
 
+            // Load review cho từng appointment
+            const reviewResults = {};
+            await Promise.all(res.data.map(async (a) => {
+                try {
+                    const reviewRes = await authApis().get(`reviews/appointment/${a.appointmentId}`);
+                    reviewResults[a.appointmentId] = !!reviewRes.data; // true nếu đã review
+                } catch {
+                    reviewResults[a.appointmentId] = false;
+                }
+            }));
+            setReviewedAppointments(prev => ({ ...prev, ...reviewResults }));
+
 
         } catch (ex) {
             setMsg(`Đã có lỗi xảy ra. Vui lòng thử lại! ${ex}`);
+            console.error(ex);
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
+    const loadReviewOfAppointment = async (appointmentId) => {
+        try {
+            setLoading(true);
+            const res = await authApis().get(`reviews/appointment/${appointmentId}`);
+            return res.data;
+        } catch (ex) {
             console.error(ex);
         }
         finally {
@@ -174,6 +198,13 @@ const Appointment = () => {
         if (appointment) {
             //Neu dung navigate thi nho bo {Link} o trong Button
             nav("/invoice", { state: { appointment } });
+        }
+    };
+
+    const handleReviewDoctorRedirect = (doctor, appointmentId, patientId) => {
+        if (doctor) {
+            //Neu dung navigate thi nho bo {Link} o trong Button
+            nav("/doctorReview", { state: { doctor, appointmentId, patientId } });
         }
     };
     const handleConfirm = (appointmentId, doctorId, createdAt) => {
@@ -286,21 +317,33 @@ const Appointment = () => {
                                             </Button>
                                         )}
 
-                                        <Button variant="primary" onClick={() => handleNavUpdate(a)} size="sm">
-                                            Sửa lịch hẹn
-                                        </Button>
+                                        {a.status === "Scheduled" && (
+                                            <div>
+                                                <Button variant="primary" onClick={() => handleNavUpdate(a)} size="sm">
+                                                    Sửa lịch hẹn
+                                                </Button>
 
-                                        <Button
-                                            variant="danger"
-                                            disabled={loading}
-                                            onClick={() => handleConfirm(a.appointmentId, a.doctorId.doctorId, a.createdAt)}
-                                            size="sm"
-                                        >
-                                            Hủy lịch hẹn
-                                        </Button>
+                                                <Button
+                                                    variant="danger"
+                                                    disabled={loading}
+                                                    onClick={() => handleConfirm(a.appointmentId, a.doctorId.doctorId, a.createdAt)}
+                                                    size="sm"
+                                                >
+                                                    Hủy lịch hẹn
+                                                </Button>
+                                            </div>)}
 
+                                        {a.status === "Completed" && !reviewedAppointments[a.appointmentId] ? (
+                                            <Button variant="primary" disabled={loading} onClick={() => handleReviewDoctorRedirect(a.doctorId, a.appointmentId, a.patientId.patientId)} size="sm">
+                                                Đánh giá bác sĩ
+                                            </Button>
+                                        ) : (
+                                            <Button variant="primary" disabled={loading} as={Link} to={`/review/?doctorId=${a.doctorId.doctorId}`} size="sm">
+                                                Xem đánh giá
+                                            </Button>
+                                        )}
 
-                                        <Button variant="primary" disabled={loading} onClick={() => handleInvoiceRedirect(a)} size="sm">
+                                        <Button variant="info" disabled={loading} onClick={() => handleInvoiceRedirect(a)} size="sm">
                                             Xem hóa đơn
 
                                         </Button>

@@ -240,4 +240,17 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    @Override
+    public Appointment updateStatusAppointment(int id, Map<String, String> params) {
+        Appointment a = this.appointmentRepo.getAppointmentById(id);
+        
+        if(a==null){
+            throw new RuntimeException("Không tìm thấy lịch hẹn");
+        }
+        
+        a.setStatus(params.get("status"));
+        
+        return this.appointmentRepo.addOrUpdate(a);
+    }
+
 }
