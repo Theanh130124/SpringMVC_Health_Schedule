@@ -10,5 +10,5 @@ package com.trantheanh1301.service;
  */
 public interface EmailService {
     public void sendAppointmentConfirmation(String toEmail,String subject, String patientName, String doctorName, String time);
-    
+    public void sendPaymentSuccessEmail(String toEmail, String patientName, String amount, String transactionId);
 }

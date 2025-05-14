@@ -49,6 +49,7 @@ com\trantheanh1301\service\DoctorService.class
 com\trantheanh1301\service\impl\DoctorLicenseServiceImpl.class
 com\trantheanh1301\service\AvailabeslotService.class
 com\trantheanh1301\mapperdto\AvailableslotMapper.class
+com\trantheanh1301\service\impl\EmailServiceImpl$2.class
 com\trantheanh1301\controllers\ApiDoctorController.class
 com\trantheanh1301\pojo\Healthrecord.class
 com\trantheanh1301\config\SpringSecurityConfigs.class
