@@ -177,6 +177,15 @@ const Appointment = () => {
         }
     };
     const handleConfirm = (appointmentId, doctorId, createdAt) => {
+        const now = new Date().getTime();
+        const createdTime = new Date(createdAt).getTime();
+        const diffInMilliseconds = now - createdTime;
+
+        if (diffInMilliseconds > 24 * 60 * 60 * 1000) {
+            toast.error("Bạn không thể hủy lịch hẹn sau 24 giờ!");
+            return;
+        }
+
         setShowConfirm({
             show: true,
             appointmentId,

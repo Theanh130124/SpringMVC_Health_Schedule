@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { Alert } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import RotatingText from "./reactbits/RotatingText";
+import ChatBot from "./ChatBot";
 
 
 const Home = () => {
@@ -69,7 +70,7 @@ const Home = () => {
                     <Col xs={12} md={5} lg={4} className="text-center mt-4 mt-md-0">
                         <Image src="/assets/images/doctor.jpg" alt="Doctor" className="doctor-image" />
                     </Col>
-                    
+
                 </Row>
 
                 <Row className="align-items-center justify-content-center mt-5">
@@ -130,6 +131,7 @@ const Home = () => {
 
                 </Row>
             </Container>
+            <ChatBot />
         </>
     );
 

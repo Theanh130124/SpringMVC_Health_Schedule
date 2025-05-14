@@ -2,8 +2,8 @@ import axios from "axios"
 import cookie from 'react-cookies'
 
 
-
-
+const AI_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const OPENROUTER_API_KEY = "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";
 const BASE_URL_FIREBASE = 'http://127.0.0.1:5001/healthapp-a5a6d/us-central1/app'
 
 //CÓ THAY ĐỔI 
@@ -21,16 +21,16 @@ export const endpoint = {
     findDoctorById: (doctorId) => `/find_slot?doctorId=${doctorId}`,
     'listAppointment': '/appointment',
     'bookdoctor': '/book_doctor',
-    updateBookDoctor : (appointmentId) => `/book_doctor/${appointmentId}`,
-    deleteBookDoctor : (appointmentId) => `/delete_booking/${appointmentId}`,
+    updateBookDoctor: (appointmentId) => `/book_doctor/${appointmentId}`,
+    deleteBookDoctor: (appointmentId) => `/delete_booking/${appointmentId}`,
     'reviews': '/reviews',
     'review': '/review',
 
-    'availability':'/doctor_availability',
-    updateAvailability : (availabilityId) => `/doctor_availability/${availabilityId}`,
-    getAvailability :(doctorId) => `/doctor_availability/${doctorId}`,
-    deleteAvailability : (availabilityId) => `/doctor_availability/${availabilityId}`,
-    
+    'availability': '/doctor_availability',
+    updateAvailability: (availabilityId) => `/doctor_availability/${availabilityId}`,
+    getAvailability: (doctorId) => `/doctor_availability/${doctorId}`,
+    deleteAvailability: (availabilityId) => `/doctor_availability/${availabilityId}`,
+
     // Cho firebase
     'chats': '/chats',
     'uploadImage': '/upload-image',
@@ -71,11 +71,27 @@ export const authformdataApis = () => {
         headers: {
             'Authorization': `Bearer ${cookie.load('token')}`,
             //Bổ sung để lưu from
-            'Content-Type' : 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
     })
 }
 
+
+export const apisAI = () => {
+    return axios.create({
+        baseURL: AI_URL,
+        timeout: 50000,
+        headers: {
+            "Authorization": "Bearer " + OPENROUTER_API_KEY,
+            "Content-Type": "application/json",
+            "X-Title": "HealthCare",
+            "HTTP-Referer": "http://localhost:3000/",
+
+        }
+    })
+
+
+}
 
 export default axios.create({
     baseURL: BASE_URL
