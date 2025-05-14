@@ -1,7 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { Alert, Button, Spinner } from "react-bootstrap";
 import { authApis } from "../configs/Apis";
+import { MyUserContext } from "../configs/MyContexts";
 
 const VNPayReturn = () => {
     const location = useLocation();
@@ -9,7 +10,7 @@ const VNPayReturn = () => {
     const [loading, setLoading] = useState(true); // Trạng thái loading
     const [paymentStatus, setPaymentStatus] = useState(null); // Trạng thái thanh toán
     const [paymentData, setPaymentData] = useState({}); // Dữ liệu thanh toán
-
+    const user = useContext(MyUserContext); // Lấy thông tin người dùng từ context
     useEffect(() => {
         const processPayment = async () => {
             // Lấy query string từ URL
@@ -68,6 +69,28 @@ const VNPayReturn = () => {
                 }
             };
 
+            const sendMailSuccess = async () => {
+                try {
+                    const formData = new FormData();
+                    formData.append("email", user.email); 
+                    formData.append("patientName", `${user.firstName} ${user.lastName}`); 
+                    formData.append("amount", vnp_Amount); 
+                    formData.append("transactionId", vnp_TransactionNo); 
+                    const response = await authApis().post(`/payment/send-mail`,formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                       
+                        },
+                    });
+
+                    if (response.status === 200) {
+                        console.log("Gửi email thành công");
+                    }
+                } catch (error) {
+                    console.error("Lỗi khi gửi email:", error);
+                }
+            }
+
             // Kiểm tra mã phản hồi từ VNPay
             if (vnp_ResponseCode === "00") {
                 setPaymentStatus("success"); // Thanh toán thành công
@@ -76,6 +99,7 @@ const VNPayReturn = () => {
 
                 // Cập nhật trạng thái thanh toán
                 await updatePaymentStatus("Completed");
+                await sendMailSuccess(); // Gửi email thông báo thanh toán thành công
 
             } else {
                 setPaymentStatus("failure"); // Thanh toán thất bại

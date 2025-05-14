@@ -5,6 +5,7 @@
 package com.trantheanh1301.controllers;
 
 import com.trantheanh1301.config.VNPayConfigs;
+import com.trantheanh1301.service.EmailService;
 import com.trantheanh1301.utils.VNPayUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -16,8 +17,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +35,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/api/payment")
 public class VNPayController {
-
+    
+    @Autowired
+    private EmailService emailService;
+    
     @GetMapping("/create-vnpay-url")
     @ResponseBody
     public String createVnpayPayment(@RequestParam("amount") int amount,
@@ -119,6 +128,7 @@ public class VNPayController {
         if (calculatedHash.equals(vnp_SecureHash)) {
             String responseCode = vnpParams.get("vnp_ResponseCode");
             if ("00".equals(responseCode)) {
+                this.emailService.sendPaymentSuccessEmail("khangvskiss@gmail.com", "Duy Khang",vnpParams.get("vnp_Amount") , vnpParams.get("vnp_TransactionNo"));
                 response.put("status", "success");
                 response.put("message", "Thanh toán thành công!");
             } else {
@@ -133,5 +143,14 @@ public class VNPayController {
         }
         return response;
     }
-
+    
+    @PostMapping("/send-mail")
+    public ResponseEntity<?> sendPaymentMail(@RequestParam Map<String,String> params) {
+        try {          
+            emailService.sendPaymentSuccessEmail(params.get("email"), params.get("patientName"), params.get("amount"), params.get("transactionId"));
+            return ResponseEntity.ok(Map.of("message", "Đã gửi email thành công"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Lỗi gửi mail: " + e.getMessage()));
+        }
+    }
 }
