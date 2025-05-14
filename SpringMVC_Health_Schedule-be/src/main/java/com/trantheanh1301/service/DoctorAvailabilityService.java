@@ -17,4 +17,5 @@ public interface DoctorAvailabilityService {
     Doctoravailability registerDoctorAvailability(Map<String,String> params);
     Doctoravailability updateDoctorAvailability(int id , Map<String, String> params);
     List<Doctoravailability> getAvailability(int doctorId) ;
+    void deleteAvailability (int id);
 }

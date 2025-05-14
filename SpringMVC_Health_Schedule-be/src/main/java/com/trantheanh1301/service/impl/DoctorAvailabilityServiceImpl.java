@@ -78,4 +78,14 @@ public class DoctorAvailabilityServiceImpl implements DoctorAvailabilityService 
         return doctorAvailablityRepo.listAvailability(doctorId);
     }
 
+    @Override
+    public void deleteAvailability(int id) {
+       Doctoravailability dvt = doctorAvailablityRepo.findDoctorAvailabilityById(id);
+       if(dvt==null){
+           throw new RuntimeException("Không tìm thấy lịch làm trên !");
+       }
+       doctorAvailablityRepo.deleteAvailability(dvt);
+       
+    }
+
 }

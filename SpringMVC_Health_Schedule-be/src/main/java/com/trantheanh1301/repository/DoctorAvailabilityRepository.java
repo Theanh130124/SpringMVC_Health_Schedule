@@ -17,4 +17,5 @@ public interface DoctorAvailabilityRepository {
   public List<Doctoravailability> listAvailability(int doctorId);
   public Doctoravailability addOrUpdate(Doctoravailability dvt);
   public Doctoravailability findDoctorAvailabilityById(int id);
+  public void deleteAvailability(Doctoravailability dvt);
 }

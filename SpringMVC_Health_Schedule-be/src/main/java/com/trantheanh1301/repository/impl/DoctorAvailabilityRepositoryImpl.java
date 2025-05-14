@@ -68,4 +68,10 @@ public class DoctorAvailabilityRepositoryImpl implements DoctorAvailabilityRepos
         return s.createQuery(query).getResultList();
     }
     
+    @Override
+    public void deleteAvailability(Doctoravailability dvt) {
+        Session s = factory.getObject().getCurrentSession();
+        s.remove(dvt);
+    }
+    
 }

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,4 +81,17 @@ public class ApiDoctorAvailabilityController {
         }
     }
 
+    @PreAuthorize("hasAuthority('Doctor')")
+    @DeleteMapping("/doctor_availability/{id}")
+    public ResponseEntity<?> deleteAvailability(@PathVariable int id) {
+        try {
+            doctoravailabilityService.deleteAvailability(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Đã xảy ra lỗi " + ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
 }

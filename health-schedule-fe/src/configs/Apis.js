@@ -29,6 +29,7 @@ export const endpoint = {
     'availability':'/doctor_availability',
     updateAvailability : (availabilityId) => `/doctor_availability/${availabilityId}`,
     getAvailability :(doctorId) => `/doctor_availability/${doctorId}`,
+    deleteAvailability : (availabilityId) => `/doctor_availability/${availabilityId}`,
     
     // Cho firebase
     'chats': '/chats',

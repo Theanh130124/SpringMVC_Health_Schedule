@@ -17,6 +17,9 @@ const DoctorAvailability = () => {
     const [showEdit, setShowEdit] = useState(false);
     const [editData, setEditData] = useState({});
     const [showConfirm, setShowConfirm] = useState(false);
+    const [showDelete, setShowdelete] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+
 
     const daysOfWeek = [
         "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
@@ -29,6 +32,7 @@ const DoctorAvailability = () => {
     const normalizeTime = (t) => {
         if (!t) return "";
         return t.length === 5 ? t + ":00" : t  // "08:00" => "08:00:00"
+
 
     }
 
@@ -97,6 +101,8 @@ const DoctorAvailability = () => {
             setLoading(true);
             await authApis().patch(endpoint.updateAvailability(editData.availabilityId), {
                 doctorId: user.userId,
+                dayOfWeek: editData.dayOfWeek,
+                startTime: normalizeTime(editData.startTime),
                 endTime: normalizeTime(editData.endTime)
             });
             toast.success("Cập nhật thành công!");
@@ -105,6 +111,22 @@ const DoctorAvailability = () => {
         } catch (err) {
             toast.error("Cập nhật thất bại!");
         } finally {
+            setLoading(false);
+        }
+    }
+    const handleDelete = async() => {
+
+        try {
+            setShowdelete(false);
+            setLoading(true);
+            await authApis().delete(endpoint.deleteAvailability(deleteId));
+            toast.success("Xóa lịch làm việc thành công!")
+            loadAvailability();
+        } catch (error) {
+            console.log("Lỗi khi xóa lịch làm việc" + error)
+            toast.error("Xóa lịch làm việc thất bại !")
+        }
+        finally {
             setLoading(false);
         }
     }
@@ -233,6 +255,17 @@ const DoctorAvailability = () => {
                                     >
                                         <i className="bi bi-pencil-square"></i>Sửa lịch làm việc
                                     </Button>
+
+                                    <Button
+                                        variant="danger"
+                                        size="sm"
+                                        onClick={() => {
+                                            setDeleteId(a.availabilityId);
+                                            setShowdelete(true);
+                                        }}
+                                    >
+                                        <i className="bi bi-trash"></i> Xoá
+                                    </Button>
                                 </td>
                             </tr>
                         ))}
@@ -251,12 +284,31 @@ const DoctorAvailability = () => {
                 <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3">
+                            <Form.Label>Thứ</Form.Label>
+                            <Form.Select
+                                value={editData.dayOfWeek || ""}
+                                onChange={e => setEditData({ ...editData, dayOfWeek: e.target.value })}
+                            >
+                                <option value="">Chọn thứ</option>
+                                {daysOfWeek.map(day => (
+                                    <option key={day} value={day}>{day}</option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Giờ bắt đầu mới</Form.Label>
+                            <Form.Control
+                                type="time"
+                                value={editData.startTime || ""}
+                                onChange={e => setEditData({ ...editData, startTime: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
                             <Form.Label>Giờ kết thúc mới</Form.Label>
                             <Form.Control
                                 type="time"
                                 value={editData.endTime || ""}
                                 onChange={e => setEditData({ ...editData, endTime: e.target.value })}
-                                required
                             />
                         </Form.Group>
                     </Form>
@@ -271,6 +323,24 @@ const DoctorAvailability = () => {
                     >
                         <i className="bi bi-check-circle me-2"></i>
                         Xác nhận sửa
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Model xóa */}
+            <Modal show={showDelete} onHide={() => setShowdelete(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Xác nhận xóa lịch làm việc</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Bạn có chắc muốn xóa lịch làm việc không ?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowdelete(false)}>
+                        Hủy
+                    </Button>
+                    <Button variant="danger" onClick={handleDelete}>
+                        <i className="bi bi-trash"></i> Xoá
                     </Button>
                 </Modal.Footer>
             </Modal>
