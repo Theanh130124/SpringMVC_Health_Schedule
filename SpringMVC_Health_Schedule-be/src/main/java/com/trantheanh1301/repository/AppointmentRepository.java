@@ -19,6 +19,5 @@ public interface AppointmentRepository {
     public List<Appointment> getListAppointment(Map<String,String> params);
     public void delete(Appointment a);
     public List<Appointment> findAppointmentBetween(Date start , Date end);
-    
 
 }

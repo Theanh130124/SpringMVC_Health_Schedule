@@ -86,4 +86,17 @@ public class ApiAppointmentController {
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @PreAuthorize("hasAuthority('Doctor')")
+    @PatchMapping("/appointment/{appointmentId}")
+    public ResponseEntity<?> updateStatusAppointment(@RequestBody Map<String, String> params, @PathVariable(value = "appointmentId") int id) {
+        try {
+            
+            return new ResponseEntity<>(appointmentService.updateStatusAppointment(id, params),HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Đã xảy ra lỗi" + ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

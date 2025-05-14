@@ -109,4 +109,19 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         }        
         return query.getResultList();
     }
+
+    @Override
+    public Review getReviewByAppointmentId(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Review> q = b.createQuery(Review.class);
+        
+        Root<Review> root = q.from(Review.class);
+        
+        Predicate predicate = b.equal(root.get("appointmentId").get("appointmentId"), id);
+        q.select(root).where(predicate);
+        
+        Query query = s.createQuery(q);
+        return (Review) query.getSingleResult();
+    }
 }

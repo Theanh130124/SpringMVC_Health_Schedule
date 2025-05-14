@@ -41,7 +41,7 @@ const Review = () => {
                 console.error("Không thể lấy dữ liệu bác sĩ: ", error);
             }
         };
- 
+
         fetchDoctor();
     }, [q])//Fetch bac si khi id thay doi
 
@@ -210,100 +210,112 @@ const Review = () => {
                                     <Col md={8}>
                                         <h4 className="text-center mb-4">Hỏi đáp bác sĩ</h4>
                                         {reviews.length ? (
-                                            reviews.map((r) => (
-                                                <Card key={r.reviewId} className="card-comment mb-3 p-3">
-                                                    <div className="d-flex">
-                                                        <Image
-                                                            src={r.patientId.user.avatar || "/default-avatar.png"}
-                                                            roundedCircle
-                                                            width={50}
-                                                            height={50}
-                                                            className="me-3 review-avatar"
-                                                        />
-                                                        <div>
-                                                            <h6 className="review-header">
-                                                                {r.patientId.user.firstName} {r.patientId.user.lastName}{" "}
-                                                                <span className="review-date">- {formatDate(r.reviewDate)}</span>
-                                                            </h6>
-                                                            <p className="comment-content mb-2">{r.comment}</p>
+                                            reviews
+                                                .slice()
+                                                .sort((a, b) => {
+                                                    // Đưa comment của bạn lên đầu
+                                                    if (user && user.userId === a.patientId.user.userId) return -1;
+                                                    if (user && user.userId === b.patientId.user.userId) return 1;
+                                                    return 0;
+                                                }).map((r) => (
+                                                    <Card key={r.reviewId} className="card-comment mb-3 p-3">
+                                                        <div className="d-flex">
+                                                            <Image
+                                                                src={r.patientId.user.avatar || "/default-avatar.png"}
+                                                                roundedCircle
+                                                                width={50}
+                                                                height={50}
+                                                                className="me-3 review-avatar"
+                                                            />
+                                                            <div>
+                                                                <h6 className="review-header">
+                                                                    <strong>
+                                                                        {user && user.userId === r.patientId.user.userId
+                                                                            ? "Bạn"
+                                                                            : `${r.patientId.user.firstName} ${r.patientId.user.lastName}`
+                                                                        }
+                                                                    </strong>
+                                                                    <span className="review-date">- {formatDate(r.reviewDate)}</span>
+                                                                </h6>
+                                                                <p className="comment-content mb-2">{r.comment}</p>
 
-                                                            <div className="mt-3">
-                                                                {isEditing === r.reviewId ? (
-                                                                    <Form.Group controlId={`doctorResponse-${r.reviewId}`}>
-                                                                        <Form.Control
-                                                                            as="textarea"
-                                                                            rows={3}
-                                                                            value={editedResponses[r.reviewId] || ""}
-                                                                            onChange={(e) => handleReplyChange(r.reviewId, e.target.value)}
-                                                                        />
-                                                                        {updateLoading ? (
-                                                                            <div className="spinner-container">
-                                                                                <Spinner animation="border" />
-                                                                                <p>Đang cập nhật...</p>
-                                                                            </div>
-                                                                        ) : (
-                                                                            <Button variant="primary" onClick={() => handleSaveResponse(r.reviewId)}>Save</Button>
-                                                                        )}
-                                                                        <Button variant="secondary" onClick={() => setIsEditing(null)}>Cancel</Button>
-                                                                    </Form.Group>
-                                                                ) : (
-                                                                    r.doctorResponse ? (
-                                                                        <div className="reply-box">
-                                                                            <div className="d-flex">
-                                                                                <Image
-                                                                                    src={doctor.user.avatar}
-                                                                                    roundedCircle
-                                                                                    width={40}
-                                                                                    height={40}
-                                                                                    className="me-2"
-                                                                                />
-                                                                                <div>
-                                                                                    <h6 className="text-primary">
-                                                                                        Bác sĩ{" "} {doctor.user.firstName} {doctor.user.lastName}{" "}
-                                                                                        <span className="text-muted small">
-                                                                                            - {formatDate(r.responseDate)}
-                                                                                        </span>
-                                                                                    </h6>
-                                                                                    <p className="small">{r.doctorResponse}</p>
-                                                                                    {user && user.userId === doctor.user.id && (
-                                                                                        <Button
-                                                                                            variant="link"
-                                                                                            onClick={() => {
-                                                                                                setIsEditing(r.reviewId);
-                                                                                                setEditedResponses(prev => ({
-                                                                                                    ...prev,
-                                                                                                    [r.reviewId]: r.doctorResponse
-                                                                                                }));
-                                                                                            }}
-                                                                                        >
-                                                                                            Chỉnh sửa
-                                                                                        </Button>
-                                                                                    )}
+                                                                <div className="mt-3">
+                                                                    {isEditing === r.reviewId ? (
+                                                                        <Form.Group controlId={`doctorResponse-${r.reviewId}`}>
+                                                                            <Form.Control
+                                                                                as="textarea"
+                                                                                rows={3}
+                                                                                value={editedResponses[r.reviewId] || ""}
+                                                                                onChange={(e) => handleReplyChange(r.reviewId, e.target.value)}
+                                                                            />
+                                                                            {updateLoading ? (
+                                                                                <div className="spinner-container">
+                                                                                    <Spinner animation="border" />
+                                                                                    <p>Đang cập nhật...</p>
+                                                                                </div>
+                                                                            ) : (
+                                                                                <Button variant="primary" onClick={() => handleSaveResponse(r.reviewId)}>Save</Button>
+                                                                            )}
+                                                                            <Button variant="secondary" onClick={() => setIsEditing(null)}>Cancel</Button>
+                                                                        </Form.Group>
+                                                                    ) : (
+                                                                        r.doctorResponse ? (
+                                                                            <div className="reply-box">
+                                                                                <div className="d-flex">
+                                                                                    <Image
+                                                                                        src={doctor.user.avatar}
+                                                                                        roundedCircle
+                                                                                        width={40}
+                                                                                        height={40}
+                                                                                        className="me-2"
+                                                                                    />
+                                                                                    <div>
+                                                                                        <h6 className="text-primary">
+                                                                                            Bác sĩ{" "} {doctor.user.firstName} {doctor.user.lastName}{" "}
+                                                                                            <span className="text-muted small">
+                                                                                                - {formatDate(r.responseDate)}
+                                                                                            </span>
+                                                                                        </h6>
+                                                                                        <p className="small">{r.doctorResponse}</p>
+                                                                                        {user && user.userId === doctor.user.id && (
+                                                                                            <Button
+                                                                                                variant="link"
+                                                                                                onClick={() => {
+                                                                                                    setIsEditing(r.reviewId);
+                                                                                                    setEditedResponses(prev => ({
+                                                                                                        ...prev,
+                                                                                                        [r.reviewId]: r.doctorResponse
+                                                                                                    }));
+                                                                                                }}
+                                                                                            >
+                                                                                                Chỉnh sửa
+                                                                                            </Button>
+                                                                                        )}
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    ) : (
-                                                                        user && user.userId === doctor.user.id && (
-                                                                            <Button
-                                                                                variant="link"
-                                                                                onClick={() => {
-                                                                                    setIsEditing(r.reviewId);
-                                                                                    setEditedResponses(prev => ({
-                                                                                        ...prev,
-                                                                                        [r.reviewId]: ""
-                                                                                    }));
-                                                                                }}
-                                                                            >
-                                                                                Phản hồi
-                                                                            </Button>
+                                                                        ) : (
+                                                                            user && user.userId === doctor.user.id && (
+                                                                                <Button
+                                                                                    variant="link"
+                                                                                    onClick={() => {
+                                                                                        setIsEditing(r.reviewId);
+                                                                                        setEditedResponses(prev => ({
+                                                                                            ...prev,
+                                                                                            [r.reviewId]: ""
+                                                                                        }));
+                                                                                    }}
+                                                                                >
+                                                                                    Phản hồi
+                                                                                </Button>
+                                                                            )
                                                                         )
-                                                                    )
-                                                                )}
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </Card>
-                                            ))
+                                                    </Card>
+                                                ))
                                         ) : (
                                             <div>Chưa có đánh giá nào!</div>
                                         )}

@@ -25,5 +25,7 @@ public interface AppointmentService {
     void deleteAppointment(Map<String, String> params, int id);
 //Phần nhắc nhở lịch hẹn
     void sendAppoinmetReminders();
+    
+    Appointment updateStatusAppointment(int id, Map<String,String> params);
 
 }

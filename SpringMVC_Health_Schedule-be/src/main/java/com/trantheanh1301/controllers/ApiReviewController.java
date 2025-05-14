@@ -75,4 +75,13 @@ public class ApiReviewController {
             return new ResponseEntity<>(new ErrorResponseFormatter("Đã xảy ra lỗi: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/reviews/appointment/{id}")
+    public ResponseEntity<?> getReviewByAppointmentId(@PathVariable ("id") int id) {
+        try {
+            return new ResponseEntity<>(this.reviewService.getReviewByAppointmentId(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponseFormatter("Đã xảy ra lỗi: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
