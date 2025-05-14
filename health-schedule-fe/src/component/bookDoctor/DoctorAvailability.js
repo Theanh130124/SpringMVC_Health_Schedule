@@ -26,6 +26,11 @@ const DoctorAvailability = () => {
         startTime: "",
         endTime: ""
     });
+    const normalizeTime = (t) => {
+        if (!t) return "";
+        return t.length === 5 ? t + ":00" : t  // "08:00" => "08:00:00"
+
+    }
 
 
     const loadAvailability = async () => {
@@ -63,7 +68,9 @@ const DoctorAvailability = () => {
             setLoading(true);
             await authApis().post(endpoint.availability, {
                 doctorId: user.userId,
-                ...newAvailability
+                dayOfWeek: newAvailability.dayOfWeek,
+                startTime: normalizeTime(newAvailability.startTime),
+                endTime: normalizeTime(newAvailability.endTime)
             });
             toast.success("Tạo lịch làm việc thành công!")
             setNewAvailability({ dayOfWeek: "", startTime: "", endTime: "" });
@@ -90,7 +97,7 @@ const DoctorAvailability = () => {
             setLoading(true);
             await authApis().patch(endpoint.updateAvailability(editData.availabilityId), {
                 doctorId: user.userId,
-                endTime: editData.endTime
+                endTime: normalizeTime(editData.endTime)
             });
             toast.success("Cập nhật thành công!");
             setShowEdit(false);
@@ -200,6 +207,7 @@ const DoctorAvailability = () => {
                             <th>Giờ kết thúc</th>
                             <th>Trạng thái</th>
                             <th>Ngày tạo</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -216,6 +224,16 @@ const DoctorAvailability = () => {
                                     )}
                                 </td>
                                 <td>{new Date(a.createdAt).toLocaleString("vi-VN")}</td>
+                                <td>
+                                    <Button
+                                        variant="warning"
+                                        size="sm"
+                                        onClick={() => handleEdit(a)}
+                                        className="me-2"
+                                    >
+                                        <i className="bi bi-pencil-square"></i>Sửa lịch làm việc
+                                    </Button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

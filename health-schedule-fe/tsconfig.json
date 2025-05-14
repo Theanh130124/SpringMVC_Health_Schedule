@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "allowJs": true,         // ✅ Cho phép dùng JavaScript
+    "checkJs": false,        // ✅ Không kiểm tra lỗi trong file .js (nếu muốn kiểm tra thì để true)
+    "outDir": "./dist",      // ✅ Thư mục chứa file sau khi biên dịch
+    "rootDir": "./src"       // ✅ Thư mục chứa mã nguồn
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

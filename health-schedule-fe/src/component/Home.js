@@ -3,6 +3,7 @@ import "./Styles/Home.css"
 import { useLocation } from "react-router-dom";
 import { Alert } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import RotatingText from "./reactbits/RotatingText";
 
 
 const Home = () => {
@@ -45,11 +46,30 @@ const Home = () => {
                         <span>
                             Đặt khám với hơn 500 bác sĩ đã kết nối chính thức với HEALTH CARE để có số thứ tự và khung giờ khám trước
                         </span>
+                        <RotatingText
+                            texts={[
+                                "Đặt lịch khám dễ dàng",
+                                "Tư vấn sức khỏe trực tuyến",
+                                "Bác sĩ uy tín, tận tâm",
+                                "Hỗ trợ 24/7 cho bạn"
+                            ]}
+                            mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+                            staggerFrom={"last"}
+                            initial={{ y: "100%" }}
+                            animate={{ y: 0 }}
+                            exit={{ y: "-120%" }}
+                            staggerDuration={0.025}
+                            splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+                            transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                            rotationInterval={2000}
+                        />
                     </Col>
+
 
                     <Col xs={12} md={5} lg={4} className="text-center mt-4 mt-md-0">
                         <Image src="/assets/images/doctor.jpg" alt="Doctor" className="doctor-image" />
                     </Col>
+                    
                 </Row>
 
                 <Row className="align-items-center justify-content-center mt-5">

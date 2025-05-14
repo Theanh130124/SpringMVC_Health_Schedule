@@ -143,7 +143,7 @@ const Review = () => {
             ) : q.get("doctorId") === null ? (
                 <Row>
                     {Array.isArray(doctors) && doctors.map(d => (
-                        <Col key={d.id} md={4} className="mb-4">
+                        <Col key={d.doctorId} md={4} className="mb-4">
                             <Card className="card-doctor">
                                 <Card.Img src={d.userDTO.avatar} alt={`${d.userDTO.firstName} ${d.userDTO.lastName}`} />
                                 <Card.Body>

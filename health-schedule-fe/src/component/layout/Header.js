@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { MyDipatcherContext, MyUserContext } from "../../configs/MyContexts";
 import { generateToken, messaging } from "../../notifications/firebase";
 import { onMessage } from "firebase/messaging";
+import GlitchText from "../reactbits/GlitchText";
 const Header = () => {
 
 
@@ -71,10 +72,13 @@ const Header = () => {
             <Container className="p-0">
                 <Navbar.Brand as={Link} to="/" className="header-logo-link ">
 
-                    <h2 className="logo-title">
-                        <span className="logo-health">HEALTH</span>
-                        <span className="logo-care">CARE.</span>
-                    </h2>
+
+                        <h2 className="logo-title">
+                            <span className="logo-health">HEALTH</span>
+                            <span className="logo-care">CARE.</span>
+                        </h2>
+
+
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
