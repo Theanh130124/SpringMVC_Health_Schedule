@@ -5,6 +5,7 @@
 package com.trantheanh1301.service;
 
 import com.trantheanh1301.pojo.User;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,6 +20,6 @@ public interface UserService extends UserDetailsService{
     User register(Map<String, String> params, MultipartFile avatar);
     boolean authenticate(String username, String password);
     User getUserById(int id);
-    User updateUser(String username, Map<String,String> params,MultipartFile avatar);
-    public Map<String, Object> changePassword(String username,Map<String,String> params);
+    User updateUser(String username, Map<String,String> params,MultipartFile avatar , Principal principal);
+    public Map<String, Object> changePassword(String username,Map<String,String> params , Principal principal);
 }

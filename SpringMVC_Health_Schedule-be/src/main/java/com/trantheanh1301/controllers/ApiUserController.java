@@ -16,6 +16,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,14 +37,12 @@ public class ApiUserController {
 
     @Autowired
     private UserService userDetailsService;
-    
-
 
     //required = false không bắt buộc lấy avatar trong RequestPârams
     @PostMapping(path = "/users", consumes = MediaType.MULTIPART_FORM_DATA)
     // trả ? để in đc error
     public ResponseEntity<?> register(@RequestParam Map<String, String> params,
-            @RequestParam(value = "avatar" ) MultipartFile avatar) {
+            @RequestParam(value = "avatar") MultipartFile avatar) {
         try {
             User u = this.userDetailsService.register(params, avatar);
             return new ResponseEntity<>(u, HttpStatus.CREATED);
@@ -54,13 +53,17 @@ public class ApiUserController {
         }
 
     }
-    
+
     @PatchMapping(path = "/user/{username}", consumes = MediaType.MULTIPART_FORM_DATA)
     // trả ? để in đc error
-    public ResponseEntity<?> updateUser(@PathVariable ("username") String username,@RequestParam Map<String, String> params,@RequestParam(value = "avatar" ) MultipartFile avatar) {
+    public ResponseEntity<?> updateUser(@PathVariable("username") String username, @RequestParam Map<String, String> params, @RequestParam(value = "avatar") MultipartFile avatar, Principal principal) {
         try {
-            User u = this.userDetailsService.updateUser(username, params, avatar);
+            User u = this.userDetailsService.updateUser(username, params, avatar, principal);
             return new ResponseEntity<>(u, HttpStatus.OK);
+        } catch (AccessDeniedException ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.FORBIDDEN); //403
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Đã xảy ra lỗi " + ex.getMessage());
@@ -68,7 +71,6 @@ public class ApiUserController {
         }
 
     }
-    
 
     //lấy token
     @PostMapping("/login")
@@ -97,13 +99,18 @@ public class ApiUserController {
     public ResponseEntity<User> getProfile(Principal principal) {
         return new ResponseEntity<>(this.userDetailsService.getUserByUsername(principal.getName()), HttpStatus.OK);
     }
-    
+
     @PatchMapping("/user/change-password/{username}")
     // trả ? để in đc error
-    public ResponseEntity<?> changePassword(@PathVariable ("username") String username,@RequestParam Map<String, String> params) {
+    public ResponseEntity<?> changePassword(@PathVariable("username") String username, @RequestParam Map<String, String> params, Principal principal) {
         try {
-            Map<String, Object> res = this.userDetailsService.changePassword(username, params);
+            Map<String, Object> res = this.userDetailsService.changePassword(username, params, principal);
             return new ResponseEntity<>(res, HttpStatus.OK);
+
+        } catch (AccessDeniedException ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.FORBIDDEN); //403
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Đã xảy ra lỗi " + ex.getMessage());
@@ -111,5 +118,5 @@ public class ApiUserController {
         }
 
     }
-    
+
 }

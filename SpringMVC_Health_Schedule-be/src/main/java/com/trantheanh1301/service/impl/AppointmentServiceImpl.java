@@ -5,25 +5,34 @@
 package com.trantheanh1301.service.impl;
 
 import com.trantheanh1301.formatter.DateFormatter;
+import com.trantheanh1301.permission.Permission;
 import com.trantheanh1301.pojo.Appointment;
 import com.trantheanh1301.pojo.Availableslot;
 import com.trantheanh1301.pojo.Clinic;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.pojo.Patient;
+import com.trantheanh1301.pojo.User;
 import com.trantheanh1301.repository.AppointmentRepository;
 import com.trantheanh1301.repository.AvailabeslotRepository;
 import com.trantheanh1301.repository.ClinicRepository;
 import com.trantheanh1301.repository.DoctorRepository;
 import com.trantheanh1301.repository.PatientRepository;
 import com.trantheanh1301.service.AppointmentService;
+import com.trantheanh1301.service.UserService;
+
+import java.security.Principal;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,6 +41,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private AppointmentRepository appointmentRepo;
@@ -114,12 +126,16 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment updateAppointment(int id, Map<String, String> params) {
+    public Appointment updateAppointment(int id, Map<String, String> params, Principal principal) {
 
+        //Permission chi tiet
+        User current_user = userService.getUserByUsername(principal.getName());
         Appointment appointment = appointmentRepo.getAppointmentById(id);
         if (appointment == null) {
             throw new RuntimeException("Không tìm thấy lịch hẹn trên");
         }
+        Permission.OwnerAppointment(current_user, appointment);
+
         if (!params.containsKey("doctorId") || params.get("doctorId") == null) {
             throw new RuntimeException("Thiếu thông tin bác sĩ (doctorId)");
         }
@@ -179,8 +195,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void deleteAppointment(Map<String, String> params, int id) {
+    public void deleteAppointment(Map<String, String> params, int id, Principal principal) {
         Appointment a = appointmentRepo.getAppointmentById(id);
+        User current_user = userService.getUserByUsername(principal.getName());
         if (a == null) {
             throw new RuntimeException("Không tìm thấy appointment trên để xóa");
         }
@@ -190,6 +207,8 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new RuntimeException("Không tìm thấy bác sĩ");
         }
         //Xóa lịch cũng cần cập nhật slot trổng đó cho người khác đăt
+        
+         Permission.OwnerAppointment(current_user, a);
         if (a.getCreatedAt() != null) {
             Date date_now = new Date();
             Calendar cal = Calendar.getInstance();
@@ -243,13 +262,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Appointment updateStatusAppointment(int id, Map<String, String> params) {
         Appointment a = this.appointmentRepo.getAppointmentById(id);
-        
-        if(a==null){
+
+        if (a == null) {
             throw new RuntimeException("Không tìm thấy lịch hẹn");
         }
-        
+
         a.setStatus(params.get("status"));
-        
+
         return this.appointmentRepo.addOrUpdate(a);
     }
 

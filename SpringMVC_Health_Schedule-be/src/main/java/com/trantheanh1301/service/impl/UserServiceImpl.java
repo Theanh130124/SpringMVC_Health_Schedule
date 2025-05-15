@@ -7,6 +7,7 @@ package com.trantheanh1301.service.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.trantheanh1301.formatter.DateFormatter;
+import com.trantheanh1301.permission.Permission;
 import com.trantheanh1301.pojo.Clinic;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.pojo.Patient;
@@ -20,6 +21,7 @@ import com.trantheanh1301.repository.UserRepository;
 import com.trantheanh1301.service.UserService;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
@@ -47,6 +49,9 @@ public class UserServiceImpl implements UserService {
     private Cloudinary cloudinary;
     @Autowired
     private UserRepository userRepo;
+    
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private DoctorRepository doctorRepo;
@@ -193,8 +198,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(String username, Map<String,String> params, MultipartFile avatar) {
-         
+    public User updateUser(String username, Map<String,String> params, MultipartFile avatar ,Principal principal) {
+        
+        User current_user  = userService.getUserByUsername(principal.getName());
+        
+        
+        
         User u = this.userRepo.getUserByUsername(username);
         u.setEmail(params.get("email"));
         u.setFirstName(params.get("firstName"));
@@ -203,7 +212,7 @@ public class UserServiceImpl implements UserService {
         u.setAddress(params.get("address"));
         u.setDateOfBirth(DateFormatter.parseDate(params.get("dateOfBirth")));
         u.setGender(params.get("gender"));
-        
+        Permission.Personal(current_user, u);
         if (avatar != null && !avatar.isEmpty()) {
             try {
                 Map res = cloudinary.uploader().upload(avatar.getBytes(),
@@ -221,7 +230,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, Object> changePassword(String username,Map<String,String> params) {
+    public Map<String, Object> changePassword(String username,Map<String,String> params, Principal principal) {
+        
         
         String currentPassword = params.get("currentPassword");
         String newPassword = params.get("newPassword");

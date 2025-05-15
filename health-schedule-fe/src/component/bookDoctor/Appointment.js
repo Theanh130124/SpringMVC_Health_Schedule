@@ -333,18 +333,15 @@ const Appointment = () => {
                                             </Button>
                                         )}
 
-<<<<<<< Updated upstream
+
                                         {a.status === "Scheduled" && (
                                             <div>
-                                                <Button variant="primary" onClick={() => handleNavUpdate(a)} size="sm">
+
+                                                <Button variant="primary" onClick={() => handleNavUpdate(a)} size="sm"
+                                                    disabled={loading}>
                                                     Sửa lịch hẹn
                                                 </Button>
-=======
-                                        <Button variant="primary" onClick={() => handleNavUpdate(a)} size="sm"
-                                           disabled={loading}>
-                                            Sửa lịch hẹn
-                                        </Button>
->>>>>>> Stashed changes
+
 
                                                 <Button
                                                     variant="danger"

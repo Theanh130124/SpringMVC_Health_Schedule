@@ -5,6 +5,7 @@
 package com.trantheanh1301.service;
 
 import com.trantheanh1301.pojo.Appointment;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +21,9 @@ public interface AppointmentService {
 
     Appointment getAppointmentById(int id);
 
-    Appointment updateAppointment(int id, Map<String, String> params);
+    Appointment updateAppointment(int id, Map<String, String> params,Principal principal);
 
-    void deleteAppointment(Map<String, String> params, int id);
+    void deleteAppointment(Map<String, String> params, int id,Principal principal);
 //Phần nhắc nhở lịch hẹn
     void sendAppoinmetReminders();
     
