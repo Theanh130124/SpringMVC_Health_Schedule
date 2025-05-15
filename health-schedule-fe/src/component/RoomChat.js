@@ -4,7 +4,8 @@ import { MyUserContext } from "../configs/MyContexts";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { endpoint, fbApis } from "../configs/Apis";
 import "./Styles/RoomChat.css";
-
+import axios from "axios";
+import { CLOUDINARY_PRESET, CLOUDINARY_URL } from "../configs/Apis";
 import { onSnapshot, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../configs/FirebaseConfigs";
 import CallVideo from "./CallVideo";
@@ -38,19 +39,25 @@ const RoomChat = () => {
   const handleSendMessage = async () => {
     try {
 
-      
+
       if (!messageText && !imageFile) return;
       setLoading(true);
 
       let imageUrl = null;
-      
+
 
       if (imageFile) {
         const formData = new FormData();
-        formData.append("image", imageFile);
+        formData.append("file", imageFile);
+        formData.append("upload_preset", CLOUDINARY_PRESET);
 
-        let res = await fbApis().post(endpoint.uploadImage, formData);
-        imageUrl = res.data.imageUrl;
+        // Upload trực tiếp lên Cloudinary
+        const res = await fetch(CLOUDINARY_URL, {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        imageUrl = data.secure_url;
       }
       await fbApis().post(endpoint.chatMessages(chatId), {
         senderId: user.userId,
@@ -183,7 +190,10 @@ const RoomChat = () => {
                     {msg.imageUrl && (
                       <img
                         src={msg.imageUrl}
+                        className="message-image"
                         alt="Hình ảnh"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => window.open(msg.imageUrl, "_blank")}
                         className="message-image"
                       />
                     )}
@@ -204,31 +214,65 @@ const RoomChat = () => {
       </Row>
 
       {/* Input Row */}
-      <Row className="input-row">
-        <Col xs={8}>
-          <Form.Control
-            type="text"
-            placeholder="Nhập tin nhắn..."
-            value={messageText}
-            onChange={(e) => setMessageText(e.target.value)}
-            className="message-input"
-          />
-        </Col>
-        <Col xs={2}>
+      <Row className="input-row align-items-center py-2" style={{ background: "#f8f9fa", borderRadius: 12 }}>
+        <Col xs={1} className="d-flex justify-content-center">
+          <label htmlFor="image-upload" style={{ cursor: "pointer", marginBottom: 0 }}>
+            <i className="bi bi-image" style={{ fontSize: 24, color: "#0d6efd" }} title="Gửi hình ảnh"></i>
+          </label>
           <input
+            id="image-upload"
             type="file"
-            name="image"
-            onChange={(e) => setImageFile(e.target.files[0])}
-            className="image-input"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={e => setImageFile(e.target.files[0])}
           />
         </Col>
-        <Col xs={2}>
+        <Col xs={9}>
+          <div className="d-flex align-items-center">
+            <Form.Control
+              type="text"
+              placeholder="Soạn tin nhắn..."
+              value={messageText}
+              onChange={e => setMessageText(e.target.value)}
+              className="message-input"
+              style={{ borderRadius: 20, paddingLeft: 16, paddingRight: 40 }}
+              autoFocus
+            />
+            {imageFile && (
+              <span className="ms-2" style={{ position: "relative" }}>
+                <i className="bi bi-file-earmark-image" style={{ fontSize: 20, color: "#198754" }}></i>
+                <span style={{
+                  position: "absolute",
+                  top: -8,
+                  right: -8,
+                  background: "#dc3545",
+                  color: "#fff",
+                  borderRadius: "50%",
+                  fontSize: 12,
+                  width: 18,
+                  height: 18,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer"
+                }}
+                  title="Xóa ảnh"
+                  onClick={() => setImageFile(null)}
+                >×</span>
+              </span>
+            )}
+          </div>
+        </Col>
+        <Col xs={2} className="d-flex justify-content-center">
           <Button
             onClick={handleSendMessage}
-            disabled={loading}
-            className="send-btn"
+            disabled={loading || (!messageText && !imageFile)}
+            className="send-btn d-flex align-items-center justify-content-center"
+            style={{ borderRadius: "50%", width: 40, height: 40, fontSize: 20 }}
+            variant="primary"
+            title="Gửi"
           >
-            Gửi
+            <i className="bi bi-send"></i> 
           </Button>
         </Col>
       </Row>

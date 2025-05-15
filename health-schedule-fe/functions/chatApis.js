@@ -5,19 +5,66 @@ const express = require("express");
 const app = express();
 const multer = require('multer');
 const FormData = require('form-data');
-const upload = multer();
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // giới hạn 5MB
+});
+
 const cors = require("cors");
+const axios = require("axios");
 
 //Cấp quyền dùng db
 const { db } = require("./configs/FirebaseConfigs");
 //middleware
+app.use(cors({ origin: true })); // hoặc origin: 'http://localhost:3000'
+
+
+
+
+// //Upload ảnh lên cloudinary
+
+// app.post('/upload-image', upload.single('image'), async (req, res) => {
+//     try {
+//         const file = req.file;
+//         console.log('File nhận được:', file);
+
+//         if (!file) return res.status(400).json({ error: 'Chưa có file ảnh' });
+
+//         const cloudinaryPreset = 'healthapp';
+//         const cloudName = 'dxiawzgnz';
+
+
+
+//         const formData = new FormData();
+//         formData.append("file", file.buffer, { filename: file.originalname });
+//         formData.append('upload_preset', cloudinaryPreset);
+
+
+
+//         const cloudRes = await axios.post(
+//             `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+//             formData,
+//             {
+//                 headers:
+//                 {
+//                     ...formData.getHeaders()
+//                 }
+//             }
+//         );
+
+//         return res.status(200).send({ imageUrl: cloudRes.data.secure_url });
+//     } catch (err) {
+//         console.log('File nhận được:', file);
+//         console.error('Lỗi khi upload ảnh:', err.message);
+//         return res.status(500).send({ error: 'Không thể upload ảnh' });
+//     }
+// });
 
 app.use(express.urlencoded({ extended: true }));
-
-
 //parse json
 app.use(express.json())
-app.use(cors({ origin: true })); // hoặc origin: 'http://localhost:3000'
+
 
 
 
@@ -135,6 +182,16 @@ app.get('/chats/:chatId/participants', async (req, res) => {
     }
 });
 
+
+const isValidUrl = (url) => {
+    try{
+        new URL(url);
+        return true;
+    }catch(e){
+        return false;
+    }
+}
+
 //để có permisstion những người trong phòng chat mới được nhắn
 app.post('/chats/:chatId/messages', async (req, res) => {
     try {
@@ -185,42 +242,18 @@ app.post('/chats/:chatId/messages', async (req, res) => {
     }
 })
 
-//Upload ảnh lên cloudinary
 
-app.post('/upload-image', upload.single('image'), async (req, res) => {
-    try {
-        const file = req.file;
-        if (!file) return res.status(400).json({ error: 'Chưa có file ảnh' });
 
-        const cloudinaryPreset = 'healthapp';
-        const cloudName = 'dxiawzgnz';
 
-        const formData = new FormData();
-        formData.append("file", file.buffer, { filename: file.originalname });
-        formData.append('upload_preset', cloudinaryPreset);
 
-        const cloudRes = await axios.post(
-            `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-            formData,
-            {
-                headers:
-                {
-                    ...formData.getHeaders()
-                }
-            }
-        );
 
-        return res.status(200).send({ imageUrl: cloudRes.data.secure_url });
-    } catch (err) {
-        console.error('Lỗi khi upload ảnh:', err.message);
-        return res.status(500).send({ error: 'Không thể upload ảnh' });
+app.use((err, req, res, next) => {
+    console.error("Global Error:", err);
+    if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ error: 'File quá lớn, giới hạn là 5MB' });
     }
+    res.status(500).json({ error: err.message || 'Đã xảy ra lỗi server.' });
 });
-
-
-
-
-
 
 
 exports.app = onRequest(app);

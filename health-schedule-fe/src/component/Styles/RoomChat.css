@@ -135,3 +135,10 @@
 .send-btn:hover {
   background-color: #0056b3;
 }
+
+.message-input {
+  border-radius: 20px !important;
+  padding-left: 16px !important;
+  padding-right: 40px !important;
+  font-size: 1rem;
+}

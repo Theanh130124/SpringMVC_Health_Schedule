@@ -6,6 +6,7 @@ package com.trantheanh1301.controllers;
 
 import com.trantheanh1301.pojo.User;
 import com.trantheanh1301.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,10 @@ public class IndexController {
     private UserService userService;
 
 //    Dùng chung nhiều trang
-
-    
-    
-
     @RequestMapping("/")
-    public String index(Model model,HttpSession session) {
+    public String index(Model model, HttpSession session) {
         // Lấy thông tin người dùng từ SecurityContextHolder
+      
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
             String username = auth.getName();
@@ -45,7 +43,7 @@ public class IndexController {
 
             if (user != null) {
                 model.addAttribute("currentUser", user);
-               session.setAttribute("adminId", user.getUserId()); 
+                session.setAttribute("adminId", user.getUserId());
             }
         }
         return "index";

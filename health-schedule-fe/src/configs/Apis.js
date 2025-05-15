@@ -3,11 +3,16 @@ import cookie from 'react-cookies'
 
 
 const AI_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_API_KEY = "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";
-const BASE_URL_FIREBASE = 'http://127.0.0.1:5001/healthapp-a5a6d/us-central1/app'
+const OPENROUTER_API_KEY = "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";
+export const BASE_URL_FIREBASE = 'http://127.0.0.1:5001/healthapp-a5a6d/us-central1/app'
 
 //CÓ THAY ĐỔI 
 const BASE_URL = 'http://localhost:8080/SpringMVC_Health_Schedule/api/'
+
+export const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dxiawzgnz/image/upload";
+export const CLOUDINARY_PRESET = "healthapp";
+
+
 
 
 export const endpoint = {
@@ -39,6 +44,8 @@ export const endpoint = {
 
 
 }
+
+
 
 
 export const fbApis = () => {

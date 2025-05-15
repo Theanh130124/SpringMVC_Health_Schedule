@@ -225,6 +225,7 @@ const Header = () => {
                             <Button
                                 variant="danger"
                                 className="logout-btn d-flex align-items-center"
+                                style={{ marginTop: "15px" , marginBottom: "15px" }}
                                 onClick={() => dispatch({ type: "logout" })}
                                 as={Link}
                                 to="/login"

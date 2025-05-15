@@ -304,6 +304,9 @@ const Appointment = () => {
                                                 variant="success"
                                                 onClick={() => createRoom(a.patientId.patientId, a)}
                                                 size="sm"
+                                                disabled={
+                                                    Object.values(loading).some(v => v) && !loading[a.appointmentId]
+                                                }
                                             >
                                                 Chat với bệnh nhân
                                             </Button>
@@ -321,16 +324,27 @@ const Appointment = () => {
                                                 variant="success"
                                                 onClick={() => createRoom(a.doctorId.doctorId, a)}
                                                 size="sm"
+                                                disabled={
+
+                                                    Object.values(loading).some(v => v) && !loading[a.appointmentId]
+                                                }
                                             >
                                                 Chat với bác sĩ
                                             </Button>
                                         )}
 
+<<<<<<< Updated upstream
                                         {a.status === "Scheduled" && (
                                             <div>
                                                 <Button variant="primary" onClick={() => handleNavUpdate(a)} size="sm">
                                                     Sửa lịch hẹn
                                                 </Button>
+=======
+                                        <Button variant="primary" onClick={() => handleNavUpdate(a)} size="sm"
+                                           disabled={loading}>
+                                            Sửa lịch hẹn
+                                        </Button>
+>>>>>>> Stashed changes
 
                                                 <Button
                                                     variant="danger"
