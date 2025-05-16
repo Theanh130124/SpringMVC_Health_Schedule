@@ -71,6 +71,7 @@ com\trantheanh1301\repository\DoctorAvailabilityRepository.class
 com\trantheanh1301\repository\DoctorLicenseRepository.class
 com\trantheanh1301\dto\ClinicDTO.class
 com\trantheanh1301\pojo\Testresult.class
+com\trantheanh1301\permission\Permission.class
 com\trantheanh1301\pojo\Review.class
 com\trantheanh1301\repository\StatsRepository.class
 com\trantheanh1301\pojo\Invoice.class

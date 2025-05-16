@@ -45,7 +45,9 @@ const Header = () => {
                 read: false //tin nhắn mới đều chưa đọc
             };
 
-            const updatedNotifications = [newNotification, ...notifications];
+            const saved = localStorage.getItem('notifications');
+            const oldNotifications = saved ? JSON.parse(saved) : [];
+            const updatedNotifications = [newNotification, ...oldNotifications];
             setNotifications(updatedNotifications);
             //Thông báo mới lưu vào localStorage
             localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
@@ -54,7 +56,7 @@ const Header = () => {
         });
 
         return () => unsubscribe();
-    }, [notifications]);
+    }, []);
 
 
     //Hmà đặt tất cả
@@ -73,10 +75,10 @@ const Header = () => {
                 <Navbar.Brand as={Link} to="/" className="header-logo-link ">
 
 
-                        <h2 className="logo-title">
-                            <span className="logo-health">HEALTH</span>
-                            <span className="logo-care">CARE.</span>
-                        </h2>
+                    <h2 className="logo-title">
+                        <span className="logo-health">HEALTH</span>
+                        <span className="logo-care">CARE.</span>
+                    </h2>
 
 
                 </Navbar.Brand>
@@ -225,7 +227,7 @@ const Header = () => {
                             <Button
                                 variant="danger"
                                 className="logout-btn d-flex align-items-center"
-                                style={{ marginTop: "15px" , marginBottom: "15px" }}
+                                style={{ marginTop: "15px", marginBottom: "15px" }}
                                 onClick={() => dispatch({ type: "logout" })}
                                 as={Link}
                                 to="/login"

@@ -302,13 +302,14 @@ const Appointment = () => {
                                         ) : (
                                             <Button
                                                 variant="success"
+                                                className="d-flex align-items-center justify-content-center mb-1"
                                                 onClick={() => createRoom(a.patientId.patientId, a)}
                                                 size="sm"
                                                 disabled={
                                                     Object.values(loading).some(v => v) && !loading[a.appointmentId]
                                                 }
                                             >
-                                                Chat với bệnh nhân
+                                                <i className="bi bi-chat-dots me-1"></i> Chat với bệnh nhân
                                             </Button>
                                         )}
                                     </div>
@@ -322,40 +323,48 @@ const Appointment = () => {
                                         ) : (
                                             <Button
                                                 variant="success"
+                                                className="d-flex align-items-center justify-content-center mb-1"
                                                 onClick={() => createRoom(a.doctorId.doctorId, a)}
                                                 size="sm"
                                                 disabled={
 
                                                     Object.values(loading).some(v => v) && !loading[a.appointmentId]
                                                 }
+                                                title="Chat với bác sĩ"
                                             >
-                                                Chat với bác sĩ
+                                                <i className="bi bi-chat-dots me-1"></i> Chat với bác sĩ
                                             </Button>
                                         )}
 
 
                                         {a.status === "Scheduled" && (
-                                            <div>
+                                            <div className="d-flex gap-1 mb-1">
 
                                                 <Button variant="primary" onClick={() => handleNavUpdate(a)} size="sm"
-                                                    disabled={loading}>
-                                                    Sửa lịch hẹn
+                                                    disabled={loading}
+                                                    className="d-flex align-items-center"
+                                                    title="Sửa lịch hẹn"
+                                                >
+
+                                                    <i className="bi bi-pencil-square me-1"></i> Sửa
                                                 </Button>
 
 
                                                 <Button
                                                     variant="danger"
                                                     disabled={loading}
+                                                    className="d-flex align-items-center"
                                                     onClick={() => handleConfirm(a.appointmentId, a.doctorId.doctorId, a.createdAt)}
                                                     size="sm"
+                                                    title="Hủy lịch hẹn"
                                                 >
-                                                    Hủy lịch hẹn
+                                                    <i className="bi bi-x-circle me-1"></i> Hủy
                                                 </Button>
                                             </div>)}
 
                                         {a.status === "Completed" && !reviewedAppointments[a.appointmentId] ? (
-                                            <Button variant="primary" disabled={loading} onClick={() => handleReviewDoctorRedirect(a.doctorId, a.appointmentId, a.patientId.patientId)} size="sm">
-                                                Đánh giá bác sĩ
+                                            <Button variant="primary"   title="Đánh giá bác sĩ"  className="d-flex align-items-center"  disabled={loading} onClick={() => handleReviewDoctorRedirect(a.doctorId, a.appointmentId, a.patientId.patientId)} size="sm">
+                                                 <i className="bi bi-star me-1"></i> Đánh giá
                                             </Button>
                                         ) : (
                                             <Button variant="primary" disabled={loading} as={Link} to={`/review/?doctorId=${a.doctorId.doctorId}`} size="sm">
@@ -363,8 +372,9 @@ const Appointment = () => {
                                             </Button>
                                         )}
 
-                                        <Button variant="info" disabled={loading} onClick={() => handleInvoiceRedirect(a)} size="sm">
-                                            Xem hóa đơn
+                                        <Button variant="info" disabled={loading} onClick={() => handleInvoiceRedirect(a)} size="sm"
+                                            title="Xem hóa đơn">
+                                            <i className="bi bi-receipt me-1"></i> Hóa đơn
 
                                         </Button>
                                     </div>
