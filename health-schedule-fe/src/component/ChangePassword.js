@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { authApis } from "../configs/Apis";
 import { MyUserContext } from "../configs/MyContexts";
 import { MyDipatcherContext } from "../configs/MyContexts";
-
 const ChangePassword = () => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");

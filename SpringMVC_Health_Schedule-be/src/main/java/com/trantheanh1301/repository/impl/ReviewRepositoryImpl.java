@@ -74,7 +74,8 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         Predicate predicate = b.equal(doctorJoin.get("doctorId"), doctorId);//Them dieu kien
         q.where(predicate).orderBy(b.desc(root.get("reviewDate")));
         Query query = s.createQuery(q);
-        if (params != null) {
+        
+        /*if (params != null) {
             String page = params.get("page");
             if (page != null && !page.isEmpty()) {
                 int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
@@ -83,7 +84,9 @@ public class ReviewRepositoryImpl implements ReviewRepository {
                 query.setFirstResult(start);
                 query.setMaxResults(pageSize);
             }
-        }       
+        }*/       
+        query.setFirstResult(0);
+        query.setMaxResults(2);
         return query.getResultList();
 
     }

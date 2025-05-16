@@ -213,11 +213,14 @@ const Header = () => {
                                     {user.role === "Doctor" ? <> <NavDropdown.Item as={Link} to="/doctorAvailability">
                                         Lịch làm việc của bạn
                                     </NavDropdown.Item>
-                                    </> : <></>}
+                                    </> : <NavDropdown.Item as={Link} to={`/healthRecord`}>
+                                        Hồ sơ sức khỏe
+                                    </NavDropdown.Item>}
 
                                     <NavDropdown.Item as={Link} to="/change-password">
                                         Đổi mật khẩu
                                     </NavDropdown.Item>
+
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item onClick={() => dispatch({ type: "logout" })} as={Link} to="/login">
                                         Đăng xuất

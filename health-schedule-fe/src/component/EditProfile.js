@@ -47,7 +47,7 @@ const EditProfile = () => {
         if (userData.avatar) {
             formData.append("avatar", userData.avatar);
         }
-
+        console.log("formData", formData);
         try {
             const response = await authApis().patch(`user/${thisUser.username}`, formData, {
                 headers: {

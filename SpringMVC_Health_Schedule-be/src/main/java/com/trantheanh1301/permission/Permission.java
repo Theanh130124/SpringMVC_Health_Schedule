@@ -5,6 +5,7 @@
 package com.trantheanh1301.permission;
 
 import com.trantheanh1301.pojo.Appointment;
+import com.trantheanh1301.pojo.Healthrecord;
 import com.trantheanh1301.pojo.User;
 import org.springframework.security.access.AccessDeniedException;
 
@@ -22,6 +23,13 @@ public class Permission {
         if (!user.getUserId().equals(currentUser.getUserId())){
             throw new AccessDeniedException("Bạn không có quyền thực hiện thao tác cập nhật thông tin cá nhân.");
         }
-        
+       
+    }
+    
+    //Dung de cap nhat
+    public static void OwnerHealthRecord(User currentUser, Healthrecord healthRecord){
+        if(!healthRecord.getUserId().getUserId().equals(currentUser.getUserId())){
+            throw new AccessDeniedException("Bạn không có quyền thực hiện thao tác này trên hồ sơ này.");
+        }
     }
 }
