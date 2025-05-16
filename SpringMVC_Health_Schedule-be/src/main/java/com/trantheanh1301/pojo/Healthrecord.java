@@ -82,7 +82,6 @@ public class Healthrecord implements Serializable {
     private Set<Testresult> testresultSet;
     @JoinColumn(name = "appointment_id", referencedColumnName = "appointment_id")
     @ManyToOne
-    @JsonIgnore
     private Appointment appointmentId;
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     @ManyToOne(optional = false)

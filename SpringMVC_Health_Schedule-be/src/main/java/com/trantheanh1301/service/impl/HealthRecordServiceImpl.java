@@ -6,15 +6,19 @@
 package com.trantheanh1301.service.impl;
 
 import com.trantheanh1301.formatter.DateFormatter;
+import com.trantheanh1301.permission.Permission;
 import com.trantheanh1301.pojo.Healthrecord;
+import com.trantheanh1301.pojo.User;
 import com.trantheanh1301.repository.HealthRecordRepository;
 import com.trantheanh1301.service.AppointmentService;
 import com.trantheanh1301.service.HealthRecordService;
 import com.trantheanh1301.service.PatientService;
 import com.trantheanh1301.service.UserService;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +56,7 @@ public class HealthRecordServiceImpl implements HealthRecordService {
         }
 
         h.setUserId(this.userService.getUserById(Integer.valueOf(params.get("userId"))));
-        LocalDate localDate = LocalDate.now(); 
+        LocalDate localDate = LocalDate.now();
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         h.setRecordDate(date);
         h.setSymptoms(params.get("symptoms"));
@@ -69,18 +73,40 @@ public class HealthRecordServiceImpl implements HealthRecordService {
     }
 
     @Override
-    public Healthrecord updateHealthRecord(int id, Map<String, String> params) {
+    public Healthrecord updateHealthRecord(int id, Map<String, String> params, Principal principal) {
 
         Healthrecord h = this.healthRecordRepository.getHealthRecordById(id);
-        LocalDate localDate = LocalDate.now(); 
+
+        User u = this.userService.getUserByUsername(principal.getName());
+
+        //Kiem tra quyen
+        Permission.OwnerHealthRecord(u, h);
+
+        LocalDate localDate = LocalDate.now();
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         h.setRecordDate(date);
-        h.setSymptoms(params.get("symptoms"));
-        h.setDiagnosis(params.get("diagnosis"));
-        h.setPrescription(params.get("prescription"));
-        h.setNotes(params.get("notes"));
+        if (params.get("symptoms") != null && !params.get("symptoms").isEmpty()) {
+            h.setSymptoms(params.get("symptoms"));
+        }
+        if (params.get("diagnosis") != null && !params.get("diagnosis").isEmpty()) {
+            h.setDiagnosis(params.get("diagnosis"));
+        }
+        if (params.get("prescription") != null && !params.get("prescription").isEmpty()) {
+            h.setPrescription(params.get("prescription"));
+        }
+        if (params.get("notes") != null && !params.get("notes").isEmpty()) {
+            h.setNotes(params.get("notes"));
+        }
         
         return this.healthRecordRepository.updateHealthRecord(h);
+    }
+
+    @Override
+    public List<Healthrecord> getHealthRecordListByUserId(Map<String, String> params, Principal principal) {
+
+        User u = this.userService.getUserByUsername(principal.getName());//Lay nguoi dung hien tai = principal
+
+        return this.healthRecordRepository.getHealthRecordListByUserId(u.getUserId(), params);
     }
 
 }

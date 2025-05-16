@@ -6,6 +6,8 @@
 package com.trantheanh1301.repository;
 
 import com.trantheanh1301.pojo.Healthrecord;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -15,5 +17,6 @@ public interface HealthRecordRepository {
     public Healthrecord addHealthRecord(Healthrecord healthRecord);
     public Healthrecord getHealthRecordById(int id);
     public Healthrecord updateHealthRecord(Healthrecord healthrecord);
+    public List<Healthrecord> getHealthRecordListByUserId(int id, Map<String,String> params);
 }
 

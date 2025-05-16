@@ -32,6 +32,7 @@ import EditProfile from './component/EditProfile';
 import ChangePassword from './component/ChangePassword';
 import DoctorAvailability from './component/bookDoctor/DoctorAvailability';
 import DoctorReview from './component/DoctorReview';
+import HealthRecord from './component/HealthRecord';
 
 const App = () => {
   //dispatch nhận action.type bên MyUserReducer.js -> F5 sẽ không mất vì đã lưu cookie
@@ -81,6 +82,7 @@ const App = () => {
               <Route path="/editProfile" element={<EditProfile />} />
               <Route path="/change-password" element={<ChangePassword />} />
               <Route path="/doctorReview" element={<DoctorReview />} />
+              <Route path="/healthRecord" element={<HealthRecord />} />
             </Routes>
           </Container>
           <Footer />
