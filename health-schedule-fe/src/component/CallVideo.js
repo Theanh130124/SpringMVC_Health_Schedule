@@ -5,10 +5,10 @@ import "./Styles/CallVideo.css";
 import { useLocation } from "react-router-dom";
 
 //Chỉ nhận remotePeerId qua props:
-const CallVideo = ({ remotePeerId }) => {
+const CallVideo = ({ remotePeerId, peer ,onEndCall }) => {
 
 
-    const [peer, setPeer] = useState(null);
+
     const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
     const [callActive, setCallActive] = useState(false);
@@ -16,47 +16,44 @@ const CallVideo = ({ remotePeerId }) => {
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
 
+    // Phía nhận: lắng nghe cuộc gọi đến
     useEffect(() => {
-        // Tạo Peer khi component được mount
-        const newPeer = createPeer();
-        setPeer(newPeer);
-
-        newPeer.on("open", (id) => {
-            console.log("Peer ID:", id);
-        });
-
-        // Xử lý khi nhận cuộc gọi
-        newPeer.on("call", (call) => {
+        if (!peer) return;
+        const handleIncomingCall = (call) => {
             openStream().then((stream) => {
                 setLocalStream(stream);
                 playStream("localStream", stream);
-                call.answer(stream); // Trả lời cuộc gọi với stream của mình
+                call.answer(stream);
+                setCallActive(true);
                 call.on("stream", (remoteStream) => {
                     setRemoteStream(remoteStream);
                     playStream("remoteStream", remoteStream);
                 });
             });
-        });
-
-        return () => {
-            newPeer.destroy(); // Dọn dẹp Peer khi component bị unmount
         };
-    }, []);
+        peer.on("call", handleIncomingCall);
+        return () => {
+            peer.off("call", handleIncomingCall);
+        };
+    }, [peer]);
 
-    const handleCall = () => {
+    // Phía gọi: khi có remotePeerId, tự động gọi
+    useEffect(() => {
+        if (!peer || !remotePeerId) return;
         openStream().then((stream) => {
             setLocalStream(stream);
             playStream("localStream", stream);
-
-            const call = peer.call(remotePeerId, stream); // Gọi đến Peer ID của người nhận
+            const call = peer.call(remotePeerId, stream);
+            setCallActive(true);
             call.on("stream", (remoteStream) => {
                 setRemoteStream(remoteStream);
                 playStream("remoteStream", remoteStream);
             });
-
-            setCallActive(true);
         });
-    };
+    }, [peer, remotePeerId]);
+
+
+    
 
     const handleEndCall = () => {
         if (localStream) {
@@ -65,9 +62,13 @@ const CallVideo = ({ remotePeerId }) => {
         setLocalStream(null);
         setRemoteStream(null);
         setCallActive(false);
+        if (typeof onEndCall === "function") {
+      onEndCall();
+    }
+        
     };
 
-    return (
+        return (
         <>
             <Row className="video-call-section">
                 <Col xs={6}>
@@ -89,12 +90,7 @@ const CallVideo = ({ remotePeerId }) => {
                 </Col>
             </Row>
             <Row className="call-controls">
-                <Col xs={6}>
-                    <Button onClick={handleCall} disabled={callActive}>
-                        Gọi Video
-                    </Button>
-                </Col>
-                <Col xs={6}>
+                <Col xs={12}>
                     <Button variant="danger" onClick={handleEndCall} disabled={!callActive}>
                         Kết thúc
                     </Button>

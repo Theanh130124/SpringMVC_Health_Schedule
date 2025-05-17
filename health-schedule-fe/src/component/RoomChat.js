@@ -5,10 +5,12 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { endpoint, fbApis } from "../configs/Apis";
 import "./Styles/RoomChat.css";
 import axios from "axios";
+import { createPeer } from "../webrtc/callvideoConfig";
 import { CLOUDINARY_PRESET, CLOUDINARY_URL } from "../configs/Apis";
-import { onSnapshot, collection, query, orderBy } from "firebase/firestore";
+import { addDoc, updateDoc, doc, getDocs, collection, query, where, onSnapshot, orderBy } from "firebase/firestore";
 import { db } from "../configs/FirebaseConfigs";
 import CallVideo from "./CallVideo";
+import Modal from "react-bootstrap/Modal";
 
 const RoomChat = () => {
   const location = useLocation();
@@ -30,10 +32,28 @@ const RoomChat = () => {
   const currentAvatar = isDoctor ? appointment.doctorId.user.avatar : appointment.patientId.user.avatar;
   const otherAvatar = isDoctor ? appointment.patientId.user.avatar : appointment.doctorId.user.avatar;
 
-
-  const remotePeerId = otherUser?.peerId;
+  const [incomingCall, setIncomingCall] = useState(null);
+  const [showCallModal, setShowCallModal] = useState(false);
+  const [myPeerId, setMyPeerId] = useState(null);
+  const [peer, setPeer] = useState(null);
+  const [remotePeerId, setRemotePeerId] = useState(null);
+  // Định nghĩa userAId, userBId dựa vào user hiện tại và đối phương
+  const userAId = user.userId;
+  const userBId = otherUser.userId;
   const chatId = room?.chatId;
 
+
+
+
+  //Tạo peerId lúc vào component luôn
+  useEffect(() => {
+    if (!peer) {
+      const newPeer = createPeer();
+      setPeer(newPeer);
+      newPeer.on("open", (id) => setMyPeerId(id));
+    }
+
+  }, []);
 
 
   const handleSendMessage = async () => {
@@ -75,6 +95,37 @@ const RoomChat = () => {
       setLoading(false);
     }
   };
+  const handleEndCallBothSides = async () => {
+    // Tìm document cuộc gọi đang active (status: "accepted" hoặc "ringing")
+    const q = query(
+      collection(db, "videoCalls"),
+      where("roomId", "==", chatId),
+      where("status", "in", ["accepted", "ringing"])
+    );
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      const callDoc = snapshot.docs[0];
+      await updateDoc(doc(db, "videoCalls", callDoc.id), {
+        status: "ended"
+      });
+    }
+    setShowCall(false);
+  }
+
+  useEffect(() => {
+    if (!showCall) return;
+    const q = query(
+      collection(db, "videoCalls"),
+      where("roomId", "==", chatId),
+      where("status", "==", "ended")
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!snapshot.empty) {
+        setShowCall(false);
+      }
+    });
+    return () => unsubscribe();
+  }, [showCall, chatId]);
 
 
   useEffect(() => {
@@ -108,8 +159,14 @@ const RoomChat = () => {
   }, [chatId]);
 
 
+  const handleRejectCall = async () => {
+    if (!incomingCall) return;
+    await updateDoc(doc(db, "videoCalls", incomingCall.id), {
+      status: "rejected"
+    });
+    setShowCallModal(false);
+  };
 
-  const handleStartCall = () => setShowCall(true);
   const handleCloseCall = () => setShowCall(false);
   //Cuon xuống cuối khi có tin nhắn mới
 
@@ -119,6 +176,70 @@ const RoomChat = () => {
     }
   }, [messages]);
 
+  // Khi A bấm gọi
+  const handleCallRequest = async () => {
+    if (!peer || !myPeerId) return;
+    await addDoc(collection(db, "videoCalls"), {
+      from: userAId,
+      fromName: `${user.firstName} ${user.lastName}`,
+      to: userBId,
+      status: "ringing",
+      roomId: chatId,
+      timestamp: Date.now(),
+      peerIdA: myPeerId
+    });
+    setShowCall(true);
+  };
+
+
+  // Khi B lắng nghe cuộc gọi đến
+  useEffect(() => {
+    const q = query(
+      collection(db, "videoCalls"),
+      where("to", "==", userAId),
+      where("status", "==", "ringing")
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!snapshot.empty) {
+        const callDoc = snapshot.docs[0];
+        setIncomingCall({ ...callDoc.data(), id: callDoc.id });
+        setShowCallModal(true);
+      }
+    });
+    return () => unsubscribe();
+  }, [userAId]);
+
+
+  // Khi B bấm "Bắt máy"
+  const handleAcceptCall = async () => {
+    if (!peer || !myPeerId) return;
+    await updateDoc(doc(db, "videoCalls", incomingCall.id), {
+      status: "accepted",
+      peerIdB: myPeerId
+    });
+    setRemotePeerId(incomingCall.peerIdA);
+    setShowCall(true);
+    setShowCallModal(false);
+  };
+
+  // Khi status là "accepted", A lấy peerIdB để gọi
+  useEffect(() => {
+    if (!showCall) return;
+    // Lắng nghe document cuộc gọi
+    const q = query(
+      collection(db, "videoCalls"),
+      where("from", "==", userAId),
+      where("to", "==", userBId),
+      where("status", "==", "accepted")
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!snapshot.empty) {
+        const callDoc = snapshot.docs[0];
+        setRemotePeerId(callDoc.peerIdB); // A sẽ gọi đến peerIdB
+      }
+    });
+    return () => unsubscribe();
+  }, [showCall, userAId, userBId]);
 
   return (
     <Container fluid className="chat-container">
@@ -136,7 +257,7 @@ const RoomChat = () => {
             </h5>
           </div>
           <div className="d-flex justify-content-end">
-            <Button onClick={handleStartCall} className="call-btn" variant="success">
+            <Button onClick={handleCallRequest} className="call-btn" variant="success">
               <i className="bi bi-telephone-fill me-2"></i>
               Gọi Video
             </Button>
@@ -144,17 +265,7 @@ const RoomChat = () => {
         </Col>
 
       </Row>
-      {/* Hiển thị CallVideo nếu showCall = true */}
-      {showCall && (
-        <div className="callvideo-wrapper">
-          <CallVideo remotePeerId={remotePeerId} />
-          <div className="d-flex justify-content-end mt-2">
-            <Button variant="secondary" onClick={handleCloseCall}>
-              Đóng Video Call
-            </Button>
-          </div>
-        </div>
-      )}
+
 
 
 
@@ -272,13 +383,39 @@ const RoomChat = () => {
             variant="primary"
             title="Gửi"
           >
-            <i className="bi bi-send"></i> 
+            <i className="bi bi-send"></i>
           </Button>
         </Col>
       </Row>
 
+      {showCallModal && incomingCall && (
+        <Modal show centered>
+          <Modal.Header>
+            <Modal.Title>Có cuộc gọi đến</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>{incomingCall.fromName || incomingCall.from} đang gọi cho bạn...</p>
+            <div className="d-flex justify-content-end gap-2">
+              <Button variant="success" onClick={handleAcceptCall}>Bắt máy</Button>
+              <Button variant="secondary" onClick={handleRejectCall}>Từ chối</Button>
+            </div>
+          </Modal.Body>
+        </Modal>
+      )}
+
+      {showCall && (
+        <div className="callvideo-wrapper">
+          <CallVideo remotePeerId={remotePeerId} peer={peer} onEndCall={handleEndCallBothSides} />
+          <div className="d-flex justify-content-end mt-2">
+            <Button variant="secondary" onClick={handleEndCallBothSides}>
+              Đóng Video Call
+            </Button>
+          </div>
+        </div>
+      )}
 
     </Container>
+
   );
 };
 

@@ -9,16 +9,21 @@ export const openStream = () => {
 export const playStream = (idVideoTag, stream) => {
     const video = document.getElementById(idVideoTag);
     if (video) {
-        video.srcObject = stream;
-        video.play();
+        // Chỉ set lại srcObject nếu stream thực sự thay đổi
+        if (video.srcObject !== stream) {
+            video.srcObject = stream;
+            video.onloadedmetadata = () => {
+                video.play().catch(() => {});
+            };
+        }
     }
 };
 
 export const createPeer = () => {
     return new Peer({
-        host: '192.168.1.10', // Địa chỉ server PeerJS
+        host: 'localhost', // Địa chỉ server PeerJS
         port: 9000,
-        path: '/myapp',
+        path: '/',
         secure: false,
     });
 };

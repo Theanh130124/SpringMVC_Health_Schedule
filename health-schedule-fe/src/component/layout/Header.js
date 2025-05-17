@@ -45,9 +45,7 @@ const Header = () => {
                 read: false //tin nhắn mới đều chưa đọc
             };
 
-            const saved = localStorage.getItem('notifications');
-            const oldNotifications = saved ? JSON.parse(saved) : [];
-            const updatedNotifications = [newNotification, ...oldNotifications];
+            const updatedNotifications = [newNotification, ...notifications];
             setNotifications(updatedNotifications);
             //Thông báo mới lưu vào localStorage
             localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
@@ -56,7 +54,7 @@ const Header = () => {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [notifications]);
 
 
     //Hmà đặt tất cả
@@ -66,7 +64,6 @@ const Header = () => {
         setUnreadCount(0);
         localStorage.setItem("notifications", JSON.stringify(updated));
     };
-
 
 
     return (
