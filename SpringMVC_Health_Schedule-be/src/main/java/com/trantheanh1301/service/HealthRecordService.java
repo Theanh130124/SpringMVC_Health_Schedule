@@ -19,5 +19,6 @@ public interface HealthRecordService {
     public Healthrecord addHealthRecord(Map<String,String> params);
     public Healthrecord getHealthRecordById(int id);
     public Healthrecord updateHealthRecord(int id, Map<String,String>params, Principal principal);
-    public List<Healthrecord> getHealthRecordListByUserId(Map<String,String> params, Principal principal);
+    public Healthrecord getHealthRecordByUserId(Map<String,String> params,Principal principal);
+    public Healthrecord getHealthRecordByAppointmentId(int id,Principal principal);
 }
