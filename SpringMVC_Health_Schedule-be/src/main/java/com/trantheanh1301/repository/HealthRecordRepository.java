@@ -14,9 +14,14 @@ import java.util.Map;
  * @author Asus
  */
 public interface HealthRecordRepository {
-    public Healthrecord addHealthRecord(Healthrecord healthRecord);
-    public Healthrecord getHealthRecordById(int id);
-    public Healthrecord updateHealthRecord(Healthrecord healthrecord);
-    public List<Healthrecord> getHealthRecordListByUserId(int id, Map<String,String> params);
-}
 
+    public Healthrecord addHealthRecord(Healthrecord healthRecord);
+
+    public Healthrecord getHealthRecordById(int id);
+
+    public Healthrecord updateHealthRecord(Healthrecord healthrecord);
+
+    public Healthrecord getHealthRecordByUserId(int id);
+
+    public Healthrecord getHealthRecordByAppointmentId(int id);
+}

@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { MyUserContext } from "../../configs/MyContexts";
 import { authApis, endpoint, fbApis } from "../../configs/Apis";
-import { Alert, Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Alert, Button, Card, Col, Container, Row, Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { load } from "react-cookies";
 import MySpinner from "../layout/MySpinner";
 import MyConfigs from "../../configs/MyConfigs";
 import toast from "react-hot-toast";
 import MyConfirm from "../layout/MyConfirm";
+import cookie from 'react-cookies'
 
 const Appointment = () => {
     //Phân trang cho thằng này
@@ -30,6 +31,11 @@ const Appointment = () => {
     const [room, setRoom] = useState();
     const [reviewedAppointments, setReviewedAppointments] = useState({});
 
+    // State cho chỉnh sửa
+    const [showEdit, setShowEdit] = useState(false);
+    const [editRecord, setEditRecord] = useState({});
+    const [records, setRecords] = useState([]);
+    const [updateLoading, setUpdateLoading] = useState(false);
     //doctorId chỉ lấy 1 trong list appointment 
 
     //prev ghi lại dữ liệu -> dùng loading sẽ bị đè
@@ -229,6 +235,56 @@ const Appointment = () => {
         setShowConfirm(false);
     };
 
+    const handleEdit = async (appointment) => {
+        try {
+            setLoading(true);
+            const res = await authApis().get("/health-record", {
+                params: {
+                    appointmentId: appointment.appointmentId,
+                    userId: appointment.patientId.user.userId
+                }
+            });
+            setShowEdit(true);
+            setEditRecord(res.data);
+        } catch (ex) {
+            console.error("Lỗi khi lấy thông tin hồ sơ:", ex);
+        }
+        finally {
+            setLoading(false);
+        }
+
+
+    };
+
+    const handleEditChange = (e) => {
+        setEditRecord({ ...editRecord, [e.target.name]: e.target.value });
+    };
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
+        setUpdateLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append("symptoms", editRecord.symptoms || "");
+            formData.append("diagnosis", editRecord.diagnosis || "");
+            formData.append("prescription", editRecord.prescription || "");
+            formData.append("notes", editRecord.notes || "");
+            console.log(editRecord)
+            const res = await authApis().patch(`/health-record/${editRecord.recordId}`, formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            });
+            if (res.status === 200) {
+                setRecords(records.map(r => r.recordId === editRecord.recordId ? res.data : r));
+                setShowEdit(false);
+            }
+        } catch {
+            alert("Cập nhật thất bại!");
+        }
+        finally {
+            setUpdateLoading(false);
+        }
+    };
+
 
     return (
         <Container fluid className="p-0 container-custom">
@@ -300,20 +356,94 @@ const Appointment = () => {
                                         {loading[a.appointmentId] === true ? (
                                             <MySpinner />
                                         ) : (
-                                            <Button
-                                                variant="success"
-                                                className="d-flex align-items-center justify-content-center mb-1"
-                                                onClick={() => createRoom(a.patientId.patientId, a)}
-                                                size="sm"
-                                                disabled={
-                                                    Object.values(loading).some(v => v) && !loading[a.appointmentId]
-                                                }
-                                            >
-                                                <i className="bi bi-chat-dots me-1"></i> Chat với bệnh nhân
-                                            </Button>
+                                            <>
+                                                <Button
+                                                    variant="success"
+                                                    className="d-flex align-items-center justify-content-center mb-1"
+                                                    onClick={() => createRoom(a.patientId.patientId, a)}
+                                                    size="sm"
+                                                    disabled={
+                                                        Object.values(loading).some(v => v) && !loading[a.appointmentId]
+                                                    }
+                                                >
+                                                    <i className="bi bi-chat-dots me-1"></i> Chat với bệnh nhân
+                                                </Button>
+
+                                                {a.status === "Completed" && (
+                                                    <Button
+                                                        variant="primary"
+                                                        disabled={loading}
+                                                        onClick={() => handleEdit(a)}
+                                                        size="sm"
+                                                    >
+                                                        <i className="bi bi-journal-medical me-1"></i>
+                                                        Cập nhật hồ sơ bệnh án
+                                                    </Button>
+                                                )}
+                                            </>
                                         )}
                                     </div>
                                 )}
+
+                                <Modal show={showEdit} onHide={() => setShowEdit(false)}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Chỉnh sửa hồ sơ</Modal.Title>
+                                    </Modal.Header>
+                                    <Form onSubmit={handleEditSubmit}>
+                                        <Modal.Body>
+                                            <Form.Group className="mb-2">
+                                                <Form.Label>Triệu chứng</Form.Label>
+                                                <Form.Control
+                                                    name="symptoms"
+                                                    value={editRecord?.symptoms || ""}
+                                                    onChange={handleEditChange}
+                                                />
+                                            </Form.Group>
+                                            
+                                            <Form.Group className="mb-2">
+                                                <Form.Label>Chẩn đoán</Form.Label>
+                                                <Form.Control
+                                                    name="diagnosis"
+                                                    value={editRecord?.diagnosis || ""}
+                                                    readOnly={user.role !== "Doctor"}
+                                                    onChange={handleEditChange}
+                                                />
+                                            </Form.Group>
+                                            <Form.Group className="mb-2">
+                                                <Form.Label>Toa thuốc</Form.Label>
+                                                <Form.Control
+                                                    name="prescription"
+                                                    value={editRecord?.prescription || ""}
+                                                    readOnly={user.role !== "Doctor"}
+                                                    onChange={handleEditChange}
+                                                />
+                                            </Form.Group>
+                                            <Form.Group className="mb-2">
+                                                <Form.Label>Ghi chú</Form.Label>
+                                                <Form.Control
+                                                    name="notes"
+                                                    value={editRecord?.notes || ""}
+                                                    onChange={handleEditChange}
+                                                />
+                                            </Form.Group>
+                                        </Modal.Body>
+
+
+                                        {updateLoading ? (
+                                            <MySpinner />) :
+                                            <Modal.Footer>
+                                                <Button variant="secondary" onClick={() => setShowEdit(false)}>
+                                                    Hủy
+                                                </Button>
+                                                <Button type="submit" variant="primary">
+                                                    Lưu
+                                                </Button>
+                                            </Modal.Footer>
+                                        }
+
+
+                                    </Form>
+                                </Modal>
 
                                 {user.role === "Patient" && (
                                     <div className="d-grid gap-1 mt-2">
@@ -363,8 +493,8 @@ const Appointment = () => {
                                             </div>)}
 
                                         {a.status === "Completed" && !reviewedAppointments[a.appointmentId] ? (
-                                            <Button variant="primary"   title="Đánh giá bác sĩ"  className="d-flex align-items-center"  disabled={loading} onClick={() => handleReviewDoctorRedirect(a.doctorId, a.appointmentId, a.patientId.patientId)} size="sm">
-                                                 <i className="bi bi-star me-1"></i> Đánh giá
+                                            <Button variant="primary" title="Đánh giá bác sĩ" className="d-flex align-items-center" disabled={loading} onClick={() => handleReviewDoctorRedirect(a.doctorId, a.appointmentId, a.patientId.patientId)} size="sm">
+                                                <i className="bi bi-star me-1"></i> Đánh giá
                                             </Button>
                                         ) : (
                                             <Button variant="primary" disabled={loading} as={Link} to={`/review/?doctorId=${a.doctorId.doctorId}`} size="sm">

@@ -61,28 +61,31 @@ public class HealthRecordRepositoryImpl implements HealthRecordRepository {
     }
 
     @Override
-    public List<Healthrecord> getHealthRecordListByUserId(int id, Map<String, String> params) {
+    public Healthrecord getHealthRecordByUserId(int id) {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Healthrecord> q = b.createQuery(Healthrecord.class);
         Root<Healthrecord> root = q.from(Healthrecord.class);
 
         Predicate predicate = b.equal(root.get("userId").get("userId"), id);
-        q.where(predicate);
+        q.where(predicate).orderBy(b.desc(root.get("createdAt")));
 
         Query query = s.createQuery(q);
+        List<Healthrecord> result = query.setMaxResults(1).getResultList();
+       
+        return result.isEmpty()?null:result.get(0);
+    }
 
-        if (params != null) {
-            String page = params.get("page");
-            if (page != null && !page.isEmpty()) {
-                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
-                int p = Integer.parseInt(page);
-                int start = (p - 1) * pageSize;
-                query.setFirstResult(start);
-                query.setMaxResults(pageSize);
-            }
-        }
-        return query.getResultList();
+    @Override
+    public Healthrecord getHealthRecordByAppointmentId(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Healthrecord> q = b.createQuery(Healthrecord.class);
+        Root<Healthrecord> root = q.from(Healthrecord.class);
+        Predicate predicate = b.equal(root.get("appointmentId").get("appointmentId"), id);
+        q.where(predicate);
+        Query query = s.createQuery(q);
+        return (Healthrecord) query.getSingleResult();
     }
 
 }
