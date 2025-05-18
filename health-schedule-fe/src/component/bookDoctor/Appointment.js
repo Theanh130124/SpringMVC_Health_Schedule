@@ -13,6 +13,7 @@ import cookie from 'react-cookies'
 const Appointment = () => {
     //Phân trang cho thằng này
     const [loading, setLoading] = useState(false);
+    const [pageLoading, setPageLoading] = useState(false);
     const [appointments, setAppointments] = useState([]);
     const [page, setPage] = useState(1);
     const user = useContext(MyUserContext);
@@ -24,6 +25,7 @@ const Appointment = () => {
         doctorId: null,
         createdAt: null,
     });
+
     const nav = useNavigate();
 
     // Tạo roomchat -> làm này xem thêm
@@ -37,6 +39,25 @@ const Appointment = () => {
     const [records, setRecords] = useState([]);
     const [updateLoading, setUpdateLoading] = useState(false);
     //doctorId chỉ lấy 1 trong list appointment 
+
+    const [showCompleteConfirm, setShowCompleteConfirm] = useState(null);
+    // Hàm xác nhận hoàn thành
+    const handleCompleteAppointment = async (appointmentId) => {
+        try {
+            setLoading(prev => ({ ...prev, [appointmentId]: true }));
+            console.log(appointmentId)
+            await authApis().patch(`/appointment/${appointmentId}`, {
+                status: "Completed"
+            });
+            toast.success("Đã xác nhận khám xong!");
+            await loadAppointments();
+        } catch (err) {
+            toast.error("Xác nhận thất bại!");
+        } finally {
+            setLoading(prev => ({ ...prev, [appointmentId]: false }));
+            setShowCompleteConfirm(null);
+        }
+    };
 
     //prev ghi lại dữ liệu -> dùng loading sẽ bị đè
     const createRoom = async (doctorId, appointment) => {
@@ -103,7 +124,7 @@ const Appointment = () => {
     const loadAppointments = async () => {
         try {
 
-            setLoading(true);
+            setPageLoading(true);
             let url = `${endpoint['listAppointment']}?page=${page}`;
 
 
@@ -145,7 +166,7 @@ const Appointment = () => {
             console.error(ex);
         }
         finally {
-            setLoading(false);
+            setPageLoading(false);
         }
     }
 
@@ -369,10 +390,43 @@ const Appointment = () => {
                                                     <i className="bi bi-chat-dots me-1"></i> Chat với bệnh nhân
                                                 </Button>
 
+                                                {(a.status === "Scheduled") && (
+                                                    <Button
+                                                        variant="warning"
+                                                        className="d-flex align-items-center justify-content-center mb-1"
+                                                        onClick={() => setShowCompleteConfirm(a.appointmentId)}
+                                                        size="sm"
+                                                        disabled={Object.values(loading).some(v => v) && !loading[a.appointmentId]}
+                                                    >
+                                                        <i className="bi bi-check2-circle me-1"></i> Xác nhận đã khám xong
+                                                    </Button>
+                                                )}
+
+                                                {/* Modal xác nhận hoàn thành lịch hẹn */}
+                                                <Modal show={!!showCompleteConfirm} onHide={() => setShowCompleteConfirm(null)}>
+                                                    <Modal.Header closeButton>
+                                                        <Modal.Title>Xác nhận hoàn thành</Modal.Title>
+                                                    </Modal.Header>
+                                                    <Modal.Body>Bạn có chắc chắn muốn xác nhận đã khám xong lịch hẹn này?</Modal.Body>
+                                                    <Modal.Body>Sau khi xác nhận sẽ không thể sửa</Modal.Body>
+                                                    <Modal.Footer>
+                                                        <Button variant="secondary" onClick={() => setShowCompleteConfirm(null)}>
+                                                            Hủy
+                                                        </Button>
+                                                        <Button
+                                                            variant="warning"
+                                                            onClick={() => handleCompleteAppointment(showCompleteConfirm)}
+                                                            disabled={loading[showCompleteConfirm]}
+                                                        >
+                                                            Xác nhận
+                                                        </Button>
+                                                    </Modal.Footer>
+                                                </Modal>
+
                                                 {a.status === "Completed" && (
                                                     <Button
                                                         variant="primary"
-                                                        disabled={loading}
+                                                        disabled={loading[a.appointmentId] === true}
                                                         onClick={() => handleEdit(a)}
                                                         size="sm"
                                                     >
@@ -399,7 +453,7 @@ const Appointment = () => {
                                                     onChange={handleEditChange}
                                                 />
                                             </Form.Group>
-                                            
+
                                             <Form.Group className="mb-2">
                                                 <Form.Label>Chẩn đoán</Form.Label>
                                                 <Form.Control
@@ -547,8 +601,7 @@ const Appointment = () => {
             <Row className="mt-5 mb-4" ></Row>
 
 
-            {loading && (
-
+            {pageLoading && (
                 <div className="text-center mt-4">
                     <MySpinner />
                 </div>

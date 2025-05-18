@@ -9,6 +9,8 @@ import "../Styles/Calendar.css";
 import LoadMoreButton from "../layout/LoadMoreButton";
 import toast from "react-hot-toast";
 import MyConfigs from "../../configs/MyConfigs";
+import { authApis } from "../../configs/Apis";
+import { Modal } from "react-bootstrap";
 
 const Calendar = () => {
 
@@ -23,6 +25,7 @@ const Calendar = () => {
     const [time, setTime] = useState("");
     const [hasMore, setHasMore] = useState(true);
 
+    const [showRecordModal, setShowRecordModal] = useState(false);
     const nav = useNavigate();
     const user = useContext(MyUserContext);
 
@@ -31,6 +34,20 @@ const Calendar = () => {
     const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "";
     const formattedTime = time ? `${time}:00` : "";
 
+    //Kiem tra xem có bệnh án hay không, chưa có thì tạo mới
+    const checkHealthRecord = async () => {
+        try {
+            const res = await authApis().get("/health-record");
+            if (!res.data) {
+                setShowRecordModal(true);
+                return false;
+            }
+            return true;
+        } catch (error) {
+            console.error("Lỗi kiểm tra hồ sơ:", error);
+            return false;
+        }
+    };
     //Theo doctorId ở bên Finddoctor.js -> nút xem lịch trống
 
     const loadSlots = async () => {
@@ -94,14 +111,20 @@ const Calendar = () => {
 
 
     //Xử lý riêng k bỏ vào useEffect(() 
-    const handleBookingClick = (slot) => {
+    const handleBookingClick = async (slot) => {
         if (user === null) {
+
             toast.error("Vui lòng đăng nhập để đặt lịch khám!");
             nav("/login");
             //Đăng nhập xong thì quay về trang này
 
         } else if (user.role == 'Patient') {
-
+            // Kiểm tra hồ sơ trước khi đặt lịch
+            const hasRecord = await checkHealthRecord();
+            if (!hasRecord) {
+                setLoading(false);
+                return;
+            }
             //Truyền dữ liệu vào state
             nav("/booking", { state: { slot } });
 
@@ -219,7 +242,47 @@ const Calendar = () => {
                 )}
             </Row>
             <Row className="g-4 mb-4 mt-4"></Row>
-
+            {/* Thêm Modal thông báo */}
+            <Modal show={showRecordModal} onHide={() => setShowRecordModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Thông báo</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center p-4">
+                    <div className="mb-3">
+                        <i className="bi bi-file-medical text-primary" style={{ fontSize: "3rem" }}></i>
+                    </div>
+                    <h4 className="text-primary mb-3" style={{ fontWeight: "700" }}>
+                        CHƯA CÓ HỒ SƠ BỆNH ÁN
+                    </h4>
+                    <div className="alert alert-warning">
+                        <p className="mb-2" style={{ fontSize: "1.1rem" }}>
+                            <i className="bi bi-exclamation-circle me-2"></i>
+                            Bạn cần tạo hồ sơ bệnh án trước khi đặt lịch khám!
+                        </p>
+                    </div>
+                    <p className="text-muted mt-3">
+                        <i className="bi bi-info-circle me-2"></i>
+                        Hồ sơ bệnh án giúp bác sĩ nắm rõ tình trạng sức khỏe của bạn.
+                    </p>
+                    <p className="fw-bold mt-3" style={{ color: "#0056b3" }}>
+                        Bạn có muốn tạo hồ sơ ngay bây giờ không?
+                    </p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowRecordModal(false)}>
+                        Hủy
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={() => {
+                            setShowRecordModal(false);
+                            nav('/healthRecord');
+                        }}
+                    >
+                        Tạo hồ sơ
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
         </Container>
     );

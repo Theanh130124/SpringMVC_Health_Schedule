@@ -27,6 +27,6 @@ public interface AppointmentService {
 //Phần nhắc nhở lịch hẹn
     void sendAppoinmetReminders();
     
-    Appointment updateStatusAppointment(int id, Map<String,String> params);
+    Appointment updateStatusAppointment(int id, Map<String,String> params, Principal principal);
 
 }
