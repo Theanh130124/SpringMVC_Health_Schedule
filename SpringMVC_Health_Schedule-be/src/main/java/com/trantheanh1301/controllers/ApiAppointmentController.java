@@ -82,10 +82,10 @@ public class ApiAppointmentController {
 
     @PreAuthorize("hasAuthority('Patient')")
     @DeleteMapping("/delete_booking/{id}")
-    public ResponseEntity<?> deleteBookDoctor(@RequestBody Map<String, String> params, @PathVariable(value = "id") int id ,Principal principal
+    public ResponseEntity<?> deleteBookDoctor(@RequestBody Map<String, String> params, @PathVariable(value = "id") int id, Principal principal
     ) {
         try {
-            appointmentService.deleteAppointment(params, id ,principal);
+            appointmentService.deleteAppointment(params, id, principal);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (AccessDeniedException ex) {
             Map<String, String> error = new HashMap<>();
@@ -100,11 +100,14 @@ public class ApiAppointmentController {
 
     @PreAuthorize("hasAuthority('Doctor')")
     @PatchMapping("/appointment/{appointmentId}")
-    public ResponseEntity<?> updateStatusAppointment(@RequestBody Map<String, String> params, @PathVariable(value = "appointmentId") int id
+    public ResponseEntity<?> updateStatusAppointment(@RequestBody Map<String, String> params, @PathVariable(value = "appointmentId") int id, Principal principal
     ) {
         try {
-
-            return new ResponseEntity<>(appointmentService.updateStatusAppointment(id, params), HttpStatus.OK);
+            return new ResponseEntity<>(appointmentService.updateStatusAppointment(id, params, principal), HttpStatus.OK);
+        } catch (AccessDeniedException ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Đã xảy ra lỗi" + ex.getMessage());

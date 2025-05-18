@@ -260,13 +260,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment updateStatusAppointment(int id, Map<String, String> params) {
+    public Appointment updateStatusAppointment(int id, Map<String, String> params, Principal principal) {
         Appointment a = this.appointmentRepo.getAppointmentById(id);
-
+        User u = this.userService.getUserByUsername(principal.getName());
         if (a == null) {
             throw new RuntimeException("Không tìm thấy lịch hẹn");
         }
-
+        
+        Permission.OwnerDoctorAppointment(u, a);
         a.setStatus(params.get("status"));
 
         return this.appointmentRepo.addOrUpdate(a);

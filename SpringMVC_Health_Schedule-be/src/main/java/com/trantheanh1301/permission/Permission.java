@@ -33,7 +33,7 @@ public class Permission {
     public static void OwnerHealthRecord(User currentUser, Healthrecord healthRecord, Appointment appointment) {
 
         Integer currentUserId = currentUser.getUserId();
-        boolean isPatientorDoctor=true;
+        boolean isPatientorDoctor = true;
         // Neu la benh nhan
         if (healthRecord != null) {
             isPatientorDoctor = healthRecord.getUserId() != null
@@ -43,7 +43,7 @@ public class Permission {
         // Neu la bac si
         if (appointment != null) {
             Doctor doctor = appointment.getDoctorId() != null ? appointment.getDoctorId() : null;
-             isPatientorDoctor = doctor != null
+            isPatientorDoctor = doctor != null
                     && doctor.getUser() != null
                     && currentUserId.equals(doctor.getUser().getUserId());
         }
@@ -52,5 +52,10 @@ public class Permission {
         }
     }
 
-    
+    public static void OwnerDoctorAppointment(User currentDoctor, Appointment appointment) {
+        if (!currentDoctor.getDoctor().getDoctorId().equals(appointment.getDoctorId().getDoctorId())) {
+            throw new AccessDeniedException("Bạn không có quyền thực hiện thao tác này trên lịch hẹn này.");
+        }
+    }
+
 }

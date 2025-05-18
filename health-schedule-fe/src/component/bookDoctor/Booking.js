@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import MyToaster from "../layout/MyToaster";
 import MyConfirm from "../layout/MyConfirm";
 import { ConvertToVietnamTime } from "../../utils/ConvertToVietnamTime";
+import { useEffect } from "react";
 
 const Booking = () => {
 
@@ -19,15 +20,13 @@ const Booking = () => {
     const slot = location.state?.slot;
     const [appointment, setAppointment] = useState({});
     const nav = useNavigate();
-
-
+    
 
 
     const formattedDate = slot.slotDate ? ConvertToVietnamTime(slot.slotDate) : "";
     const formattedTime = slot.startTime || "";
     const fullTime = `${formattedDate} ${formattedTime}`;
-
-
+    
 
     //của patient
     const user = useContext(MyUserContext);
@@ -71,6 +70,7 @@ const Booking = () => {
 
         try {
             setLoading(true);
+
             let res = await authformdataApis().post(endpoint['bookdoctor'], {
 
                 patientId: user.userId,
@@ -113,7 +113,7 @@ const Booking = () => {
         setShowConfirm(false);
     };
 
-   
+
 
     return (
         <>
