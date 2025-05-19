@@ -18,11 +18,13 @@ import com.trantheanh1301.repository.DoctorRepository;
 import com.trantheanh1301.repository.PatientRepository;
 import com.trantheanh1301.repository.SpecialtyRepository;
 import com.trantheanh1301.repository.UserRepository;
+import com.trantheanh1301.service.HealthRecordService;
 import com.trantheanh1301.service.UserService;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -67,6 +69,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BCryptPasswordEncoder passswordEncoder;
+    
+    @Autowired
+    private HealthRecordService healthRecordService;
 
     @Override
     public User getUserByUsername(String username) {
@@ -179,7 +184,13 @@ public class UserServiceImpl implements UserService {
             patient.setMedicalHistorySummary(params.get("medicalHistory"));
             Patient savedPatient = this.patientRepo.register(patient); // Lưu vào bảng Patient
             u.setPatient(savedPatient);  //Cho no tra ra ca thong tin nay
-
+            
+            //Tao luon ho so benh cho benh nhan
+            Map<String,String> p = new HashMap<>();
+            p.put("symptoms", params.get("medicalHistory"));
+            p.put("notes", "Chưa có ghi chú");
+            p.put("userId", String.valueOf(u.getUserId()));           
+            healthRecordService.addHealthRecord(p);
         }
 
         return u;

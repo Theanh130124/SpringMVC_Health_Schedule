@@ -102,49 +102,7 @@ const HealthRecord = () => {
                             <Alert variant="info" className="text-center mb-3">
                                 {message || "Chưa có hồ sơ bệnh án."}
                             </Alert>
-                            <Button variant="primary" onClick={() => { setEditRecord({}); setShowEdit(true); }}>
-                                <i className="bi bi-plus-circle me-1"></i> Tạo hồ sơ bệnh án
-                            </Button>
-                            {/* Modal tạo mới */}
-                            <Modal show={showEdit} onHide={() => setShowEdit(false)}>
-                                <Modal.Header closeButton>
-                                    <Modal.Title>Tạo hồ sơ bệnh án</Modal.Title>
-                                </Modal.Header>
-                                <Form onSubmit={handleCreateSubmit}>
-                                    <Modal.Body>
-                                        <Form.Group className="mb-2">
-                                            <Form.Label>Triệu chứng</Form.Label>
-                                            <Form.Control
-                                                name="symptoms"
-                                                value={editRecord?.symptoms || ""}
-                                                onChange={handleEditChange}
-                                            />
-                                        </Form.Group>
-                                        <Form.Group className="mb-2">
-                                            <Form.Label>Ghi chú</Form.Label>
-                                            <Form.Control
-                                                name="notes"
-                                                value={editRecord?.notes || ""}
-                                                onChange={handleEditChange}
-                                            />
-                                        </Form.Group>
-                                    </Modal.Body>
-                                    {updateLoading ? (
-                                        <div className="d-flex justify-content-center my-3">
-                                            <MySpinner />
-                                        </div>
-                                    ) : (
-                                        <Modal.Footer>
-                                            <Button variant="secondary" onClick={() => setShowEdit(false)}>
-                                                Hủy
-                                            </Button>
-                                            <Button type="submit" variant="primary">
-                                                Lưu
-                                            </Button>
-                                        </Modal.Footer>
-                                    )}
-                                </Form>
-                            </Modal>
+                            
                         </div>
                     ) : (
                         <div className="d-flex justify-content-center">
