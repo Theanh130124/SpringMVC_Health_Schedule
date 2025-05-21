@@ -26,6 +26,7 @@ com\trantheanh1301\controllers\ApiDoctorLicenseController.class
 com\trantheanh1301\service\SpecialtyService.class
 com\trantheanh1301\controllers\SpecialtyController.class
 com\trantheanh1301\dto\DoctorDTO.class
+com\trantheanh1301\controllers\MomoController.class
 com\trantheanh1301\service\impl\InvoiceServiceImpl.class
 com\trantheanh1301\controllers\ApiInvoiceController.class
 com\trantheanh1301\dto\UserDTO.class
@@ -60,6 +61,7 @@ com\trantheanh1301\controllers\ApiDoctorAvailabilityController.class
 com\trantheanh1301\config\WebAppContextConfigs.class
 com\trantheanh1301\service\DoctorLicenseService.class
 com\trantheanh1301\utils\JwtUtils.class
+com\trantheanh1301\config\MomoConfigs.class
 com\trantheanh1301\config\ThymeleafConfig.class
 com\trantheanh1301\repository\impl\UserRepositoryImpl.class
 com\trantheanh1301\formatter\ErrorResponseFormatter.class
@@ -117,4 +119,5 @@ com\trantheanh1301\service\PaymentService.class
 com\trantheanh1301\repository\impl\DoctorRepositoryImpl.class
 com\trantheanh1301\service\DoctorAvailabilityService.class
 com\trantheanh1301\service\impl\EmailServiceImpl.class
+com\trantheanh1301\utils\MomoUtils.class
 com\trantheanh1301\formatter\StatsFormatter.class
