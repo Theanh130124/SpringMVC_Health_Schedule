@@ -28,6 +28,7 @@ com\trantheanh1301\controllers\SpecialtyController.class
 com\trantheanh1301\dto\DoctorDTO.class
 com\trantheanh1301\controllers\MomoController.class
 com\trantheanh1301\service\impl\InvoiceServiceImpl.class
+com\trantheanh1301\service\MomoService.class
 com\trantheanh1301\controllers\ApiInvoiceController.class
 com\trantheanh1301\dto\UserDTO.class
 com\trantheanh1301\repository\InvoiceRepository.class
@@ -97,6 +98,7 @@ com\trantheanh1301\config\VNPayConfigs.class
 com\trantheanh1301\controllers\ApiUserController.class
 com\trantheanh1301\formatter\DateFormatter.class
 com\trantheanh1301\service\impl\DoctorServiceImpl.class
+com\trantheanh1301\service\impl\MomoServiceImpl.class
 com\trantheanh1301\controllers\HealthRecordController.class
 com\trantheanh1301\service\PatientService.class
 com\trantheanh1301\config\SecurityWebApplicationInitializer.class
@@ -119,5 +121,6 @@ com\trantheanh1301\service\PaymentService.class
 com\trantheanh1301\repository\impl\DoctorRepositoryImpl.class
 com\trantheanh1301\service\DoctorAvailabilityService.class
 com\trantheanh1301\service\impl\EmailServiceImpl.class
+com\trantheanh1301\pojo\MomoRequest.class
 com\trantheanh1301\utils\MomoUtils.class
 com\trantheanh1301\formatter\StatsFormatter.class

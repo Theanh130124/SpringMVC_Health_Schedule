@@ -8,15 +8,19 @@ package com.trantheanh1301.utils;
  *
  * @author Asus
  */
+import java.nio.charset.StandardCharsets;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
+import org.apache.commons.codec.binary.Hex;
+
 public class MomoUtils {
-    public static String encode(String key, String data) throws Exception {
-        Mac hmac = Mac.getInstance("HmacSHA256");
-        SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "HmacSHA256");
-        hmac.init(secretKey);
-        byte[] hash = hmac.doFinal(data.getBytes("UTF-8"));
-        return Base64.getEncoder().encodeToString(hash);
+
+    public static String createSignature(String message, String key) throws Exception {
+        Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+        SecretKeySpec secret_key = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        sha256_HMAC.init(secret_key);
+        byte[] hash = sha256_HMAC.doFinal(message.getBytes(StandardCharsets.UTF_8));
+        return Hex.encodeHexString(hash);
     }
 }
