@@ -1,44 +1,70 @@
+/* Card styles */
 .payment-method-card {
     transition: all 0.3s ease;
-    height: 100%;
-    border: 2px solid transparent;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
     cursor: pointer;
-    min-height: 300px; /* Thêm chiều cao tối thiểu */
-    display: flex;
-    flex-direction: column;
-}
-
-.payment-logo {
-    width: 120px; /* Tăng kích thước logo */
-    height: 80px; /* Cố định chiều cao */
-    object-fit: contain;
-    margin: 20px auto;
-    display: block;
-}
-
-.cash-icon {
-    font-size: 80px !important; /* Tăng kích thước icon tiền mặt */
-    height: 80px;
-    margin: 20px auto;
-    display: block;
+    height: 350px !important; /* Fixed height for all cards */
+    margin-bottom: 20px;
 }
 
 .card-body-custom {
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
-    height: 100%;
-    padding: 20px;
+    padding: 2rem;
 }
 
+/* Logo and icon styles */
+.payment-logo,
+.cash-icon {
+    height: 80px; /* Fixed height for both logo and icon */
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.payment-logo {
+    width: 120px;
+    object-fit: contain;
+}
+
+.cash-icon {
+    font-size: 4rem;
+    color: #28a745;
+}
+
+/* Text styles */
 .payment-title {
     font-size: 1.25rem;
-    margin: 15px 0;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: center;
 }
 
 .payment-description {
-    flex-grow: 1;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    flex: 1; /* Take up remaining space */
     display: flex;
     align-items: center;
+}
+
+/* Radio button */
+.form-check {
+    margin-top: auto;
+}
+
+/* Hover and selected states */
+.payment-method-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.payment-method-card.selected {
+    border-color: #007bff;
+    background-color: #f8f9ff;
 }
