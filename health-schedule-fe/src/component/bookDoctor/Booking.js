@@ -96,7 +96,7 @@ const Booking = () => {
             // console.log(appointment.reason);
 
             // console.error(ex);
-            toast.error("Đặt lịch thất bại!");
+            console.log(ex.message);
         } finally {
             setLoading(false);
             setShowConfirm(false);

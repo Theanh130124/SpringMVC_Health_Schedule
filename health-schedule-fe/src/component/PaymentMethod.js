@@ -1,21 +1,49 @@
-
 import { useState, useEffect } from "react";
-import { Button, Form, Alert, Spinner } from "react-bootstrap";
+import { Button, Form, Alert, Spinner, Card, Row, Col } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./Styles/PaymentMethod.module.css";
+import "./Styles/PaymentMethod.css";
 import { authApis } from "../configs/Apis";
 import { v4 as uuidv4 } from "uuid";
-import { or } from "firebase/firestore";
+import momoLogo from '../assets/images/momo-logo.png';
+import vnpayLogo from '../assets/images/vnpay-logo.png';
 
 const PaymentMethod = () => {
-    const [paymentMethod, setPaymentMethod] = useState(""); // Lưu phương thức thanh toán
-    const [message, setMessage] = useState(""); // Thông báo
+    const [paymentMethod, setPaymentMethod] = useState("");
+    const [message, setMessage] = useState("");
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const location = useLocation();
-    const appointment = location.state?.appointment;//Lay cuoc hen
-    const invoiceId = location.state?.invoiceId;//Lay invoiceId
+    const appointment = location.state?.appointment;
+    const invoiceId = location.state?.invoiceId;
     const [isSuccess, setIsSuccess] = useState(false);
+
+    const paymentMethods = [
+        {
+            id: "cash",
+            name: "Tiền mặt",
+            description: "Thanh toán trực tiếp tại phòng khám",
+            icon: "fas fa-money-bill-wave",
+            color: "#28a745",
+            useIcon: true
+        },
+        {
+            id: "vnpay",
+            name: "VNPay",
+            description: "Thanh toán online qua VNPay",
+            logo: vnpayLogo,     // Thay đổi từ icon thành logo
+            color: "#005BAA",
+            useIcon: false
+        },
+        {
+            id: "momo",
+            name: "MoMo",
+            description: "Thanh toán qua ví điện tử MoMo",
+            logo: momoLogo,      // Thay đổi từ icon thành logo
+            color: "#A50064",
+            useIcon: false
+        }
+    ];
+
     useEffect(() => {
         if (!appointment) {
             navigate("/", { replace: true });
@@ -29,102 +57,95 @@ const PaymentMethod = () => {
     const isTransactionIdUnique = async (transactionId) => {
         try {
             const response = await authApis().get(`payment-transaction/${transactionId}`);
-            if (response.status === 200)
-                return false
-            else {
-                return true
-            } // API trả về true nếu mã là duy nhất
+            return response.status !== 200;
         } catch (error) {
             console.error("Lỗi khi kiểm tra mã giao dịch:", error);
-            return true // Nếu có lỗi, coi như mã là duy nhất;
+            return true;
         }
     };
 
     const generateUniqueTransactionId = async () => {
         let transactionId;
         let isUnique = false;
-
         do {
-            transactionId = generateTransactionId(); // Tạo mã giao dịch ngẫu nhiên
-            isUnique = await isTransactionIdUnique(transactionId); // Kiểm tra tính duy nhất
+            transactionId = generateTransactionId();
+            isUnique = await isTransactionIdUnique(transactionId);
         } while (!isUnique);
-        console.log(isUnique)
-
         return transactionId;
     };
 
-    //Thêm hóa đơn thanh toán
     const addPayment = async (method) => {
         setIsLoading(true);
         try {
             const transactionId = await generateUniqueTransactionId();
-            console.log("Mã giao dịch duy nhất:", transactionId);
             const formData = new FormData();
             formData.append("invoiceId", invoiceId);
             formData.append("paymentMethod", method);
-
-            let notes = "Thanh toán tiền mặt";
-            if (method === "VNPay") {
-                notes = "Thanh toán qua VNPay";
-            }
             formData.append("transactionId", transactionId);
-            formData.append("notes", notes);
+            formData.append("notes", `Thanh toán qua ${method}`);
             formData.append("amount", appointment.doctorId.consultationFee);
-            const response = await authApis().post(`payments`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data", // Đặt header cho form-data
-                },
+
+            const response = await authApis().post("payments", formData, {
+                headers: { "Content-Type": "multipart/form-data" }
             });
 
             if (response.data && response.data.paymentId) {
                 return response.data.paymentId;
-            } else {
-                console.error("Không thể thêm thanh toán. Dữ liệu trả về không hợp lệ.");
-                return null;
             }
-        }
-        catch (error) {
+            return null;
+        } catch (error) {
             console.error("Lỗi khi thêm thanh toán:", error);
             return null;
-        }
-        finally {
+        } finally {
             setIsLoading(false);
             setIsSuccess(true);
         }
-    }
-
-
+    };
 
     const handlePayment = async () => {
-        if (paymentMethod === "cash") {
-            let data = await addPayment("Cash");
-            if (!data) {
-                setMessage("Không thể tạo hóa đơn. Vui lòng thử lại.");
-                return;
-            }
-            setMessage("Bạn đã chọn thanh toán bằng tiền mặt. Thanh toán sẽ được thu và trạng thái hóa đơn sẽ cập nhật sau khi khám xong.");
-        } else if (paymentMethod === "vnpay") {
-            let data = await addPayment("VNPay");
-            if (!data) {
-                setMessage("Không thể tạo hóa đơn. Vui lòng thử lại.");
-                return;
-            } else {
-                console.log("Mã thanh toán VNPay:", data);
-                createVNPayInvoice(invoiceId, data);
-            }
-
-        } else {
+        if (!paymentMethod) {
             setMessage("Vui lòng chọn phương thức thanh toán.");
+            return;
+        }
+
+        let data;
+        switch (paymentMethod) {
+            case "cash":
+                data = await addPayment("Cash");
+                if (!data) {
+                    setMessage("Không thể tạo hóa đơn. Vui lòng thử lại.");
+                    return;
+                }
+                setMessage("Bạn đã chọn thanh toán bằng tiền mặt. Thanh toán sẽ được thu sau khi khám xong.");
+                break;
+
+            case "vnpay":
+                data = await addPayment("VNPay");
+                if (!data) {
+                    setMessage("Không thể tạo hóa đơn. Vui lòng thử lại.");
+                    return;
+                }
+                createVNPayInvoice(invoiceId, data);
+                break;
+
+            case "momo":
+                data = await addPayment("MoMo");
+                if (!data) {
+                    setMessage("Không thể tạo hóa đơn. Vui lòng thử lại.");
+                    return;
+                }
+                createMomoPayment(invoiceId, data);
+                break;
         }
     };
 
-    const createVNPayInvoice = async (invoicecID, paymentId) => {
+    const createVNPayInvoice = async (invoiceId, paymentId) => {
         try {
-            const orderInfo = `${invoicecID}-${paymentId}`; // Gộp invoiceId và paymentId
-            // Gửi yêu cầu tạo hóa đơn VNPay (API giả định)
-            const response = await authApis().get(`payment/create-vnpay-url?amount=${appointment.doctorId.consultationFee}&orderInfo=${orderInfo}`);
+            const orderInfo = `${invoiceId}-${paymentId}`;
+            const response = await authApis().get(
+                `payment/create-vnpay-url?amount=${appointment.doctorId.consultationFee}&orderInfo=${orderInfo}`
+            );
             if (response.data) {
-                // Chuyển hướng đến trang điền thông tin thẻ
                 window.location.href = response.data;
             } else {
                 setMessage("Không thể tạo hóa đơn VNPay. Vui lòng thử lại.");
@@ -135,43 +156,106 @@ const PaymentMethod = () => {
         }
     };
 
+    const createMomoPayment = async (invoiceId, paymentId) => {
+        try {
+            const orderInfo = `${invoiceId}-${paymentId}`;
+            const response = await authApis().get(
+                `payment/create-momo-payment?amount=${appointment.doctorId.consultationFee}&orderInfo=${orderInfo}`
+            );
+            if (response.data) {
+                window.location.href = response.data;
+            } else {
+                setMessage("Không thể tạo thanh toán MoMo. Vui lòng thử lại.");
+            }
+        } catch (error) {
+            console.error("Lỗi khi tạo thanh toán MoMo:", error);
+            setMessage("Đã xảy ra lỗi. Vui lòng thử lại.");
+        }
+    };
+
     return (
         <div className="container mt-5">
-            <h2 className="text-center mb-4" >CHỌN PHƯƠNG THỨC THANH TOÁN</h2>
-            <Form>
-                <Form.Group>
-                    <Form.Check
-                        type="radio"
-                        label="Tiền mặt (Pay On Cash)"
-                        name="paymentMethod"
-                        value="cash"
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
-                    <Form.Check
-                        type="radio"
-                        label="Thanh toán online qua VNPay (Pay Online)"
-                        name="paymentMethod"
-                        value="vnpay"
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
-                </Form.Group>
+            <h2 className="text-center mb-4">CHỌN PHƯƠNG THỨC THANH TOÁN</h2>
 
+            <div className="payment-amount text-center mb-4">
+                <h4>Số tiền thanh toán</h4>
+                <h3 className="text-success">
+                    {new Intl.NumberFormat('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    }).format(appointment?.doctorId?.consultationFee || 0)}
+                </h3>
+            </div>
+
+            <Row className="justify-content-center">
+                {paymentMethods.map((method) => (
+                    <Col md={4} className="mb-4" key={method.id}>
+                        <Card
+                            className={`payment-method-card ${paymentMethod === method.id ? 'selected' : ''}`}
+                            onClick={() => setPaymentMethod(method.id)}
+                        >
+                            <Card.Body className="card-body-custom">
+                                {method.useIcon ? (
+                                    <i
+                                        className={`${method.icon} cash-icon`}
+                                        style={{ color: method.color }}
+                                    />
+                                ) : (
+                                    <img
+                                        src={method.logo}
+                                        alt={`${method.name} logo`}
+                                        className="payment-logo"
+                                    />
+                                )}
+                                <Card.Title className="payment-title">{method.name}</Card.Title>
+                                <Card.Text className="payment-description">{method.description}</Card.Text>
+                                <Form.Check
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value={method.id}
+                                    checked={paymentMethod === method.id}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    className="mt-3"
+                                />
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+
+            <div className="text-center mt-4">
                 {isLoading ? (
-                    <div className="text-center mt-4">
-                        <Spinner animation="border" variant="primary" />
-                    </div>
+                    <Spinner animation="border" variant="primary" />
                 ) : !isSuccess ? (
-                        <Button className="mt-3" variant="primary" onClick={handlePayment}>
-                            Xác nhận
-                        </Button>
-                    ) : (
-                        <Button className="mt-3" variant="primary" onClick={() => navigate("/")}>
-                            <i className="fas fa-home">Về trang chủ </i>
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        onClick={handlePayment}
+                        className="px-5"
+                        disabled={!paymentMethod}
+                    >
+                        Đồng Ý
+                    </Button>
+                ) : (
+                    <Button
+                        variant="success"
+                        size="lg"
+                        onClick={() => navigate("/")}
+                    >
+                        <i className="fas fa-home me-2"></i>
+                        Về trang chủ
+                    </Button>
+                )}
+            </div>
 
-                        </Button>
-                    )}
-            </Form>
-            {message && <Alert className="mt-4" variant="info">{message}</Alert>}
+            {message && (
+                <Alert
+                    className="mt-4 text-center"
+                    variant={message.includes("thành công") ? "success" : "info"}
+                >
+                    {message}
+                </Alert>
+            )}
         </div>
     );
 };
