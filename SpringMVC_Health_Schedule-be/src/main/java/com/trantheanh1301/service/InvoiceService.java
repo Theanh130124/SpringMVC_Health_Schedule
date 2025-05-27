@@ -15,4 +15,5 @@ public interface InvoiceService {
     public Invoice addInvoice(Map<String,String> params);
     public Invoice updatePaymentStatusInvoice(int id, Map<String,String> params);
     public Invoice getInvoiceByAppointmentId(int id);
+    public Invoice getInvoiceById(int id);
 }

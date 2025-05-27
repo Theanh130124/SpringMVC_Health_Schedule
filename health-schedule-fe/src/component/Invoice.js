@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Table, Button, Spinner } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { authApis } from "../configs/Apis";
+import "./Styles/Invoice.css";
 
 const Invoice = () => {
     const location = useLocation();
@@ -10,9 +11,12 @@ const Invoice = () => {
     const [invoice, setInvoice] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [invoiceStatus,setInvoiceStatus] = useState(null);
+    const [invoiceStatus, setInvoiceStatus] = useState(null);
+    const [paymentMethod, setPaymentMethod] = useState(null);
 
-
+    const getStatusClass = (status) => {
+        return status === "Paid" ? "status-paid" : "status-pending";
+    };
     const handlePaymentRedirect = () => {
         navigate("/payment-method", {
             state: {
@@ -22,7 +26,7 @@ const Invoice = () => {
         });
     }
 
-    
+
     useEffect(() => {
         if (!appointment) {
             console.error("Không tìm thấy appointment");
@@ -42,7 +46,11 @@ const Invoice = () => {
                 throw new Error("Failed to fetch invoice data");
             }
             setInvoice(response.data);
+            const payment = await loadPaymentMethod(response.data.invoiceId);
             setInvoiceStatus(response.data.status);
+            if (payment) {
+                setPaymentMethod(payment)
+            }
         } catch (error) {
             console.error("Lỗi khi lấy hóa đơn:", error);
             setError("Không thể tải hóa đơn. Vui lòng thử lại sau.");
@@ -50,6 +58,19 @@ const Invoice = () => {
             setLoading(false);
         }
     };
+
+    const loadPaymentMethod = async (invoiceId) => {
+        try {
+            const response = await authApis().get(`payment/${invoiceId}`);
+            if (response.status === 200 && response.data) {
+                return response.data
+            }
+            return null
+        } catch (error) {
+            console.error("Lỗi khi lấy phương thức thanh toán:", error);
+            return null;
+        }
+    }
 
     const formatDate = (timestamp) => {
         if (!timestamp) return "Không xác định";
@@ -63,21 +84,21 @@ const Invoice = () => {
 
     return (
         loading ? (
-            <div className="text-center">
-                <Spinner animation="border" />
-                <p>Đang tải hóa đơn...</p>
+            <div className="loading-container">
+                <Spinner animation="border" variant="primary" />
+                <p className="loading-text">Đang tải hóa đơn...</p>
             </div>
         ) : error ? (
-            <div className="text-center">
-                <p>{error}</p>
+            <div className="loading-container">
+                <p className="text-danger">{error}</p>
             </div>
         ) : invoice ? (
-            <div className="container mt-5">
-                <h2 className="text-center mb-4">Chi Tiết Hóa Đơn</h2>
-                <Card className="shadow-sm">
+            <div className="invoice-container">
+                <h2 className="invoice-header">Chi Tiết Hóa Đơn</h2>
+                <Card className="invoice-card">
                     <Card.Body>
-                        <h4 className="mb-3">Thông Tin Hóa Đơn</h4>
-                        <Table bordered>
+                        <h4 className="invoice-title">Thông Tin Thanh Toán</h4>
+                        <Table bordered hover className="invoice-table">
                             <tbody>
                                 <tr>
                                     <th>Mã hóa đơn</th>
@@ -85,7 +106,7 @@ const Invoice = () => {
                                 </tr>
                                 <tr>
                                     <th>Số tiền</th>
-                                    <td>
+                                    <td className="invoice-amount">
                                         {invoice.amount.toLocaleString("vi-VN", {
                                             style: "currency",
                                             currency: "VND",
@@ -102,28 +123,84 @@ const Invoice = () => {
                                 </tr>
                                 <tr>
                                     <th>Trạng thái</th>
-                                    <td>{invoice.status}</td>
+                                    <td>
+                                        <span className={`invoice-status ${getStatusClass(invoice.status)}`}>
+                                            {invoice.status === "Paid" ? "Đã hoàn thành" : "Đang chờ"}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Phương thức thanh toán</th>
+                                    <td>
+                                        {paymentMethod ? (
+                                            paymentMethod.paymentMethod === "Cash" ? "Tiền Mặt" : paymentMethod.paymentMethod === "VNPay" ? "Thanh toán qua VNPay" : "Thanh toán qua Momo"
+                                        ) : (
+                                            <span className="text-muted">Chưa có phương thức thanh toán</span>
+                                        )}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Trạng thái thanh toán</th>
+                                    <td>
+                                        {paymentMethod ? (
+                                            paymentMethod.status === "Completed" ? (
+                                                <span className="text-success">Đã hoàn thành</span>
+                                            ) : paymentMethod.status === "Pending" ? (
+                                                <span className="text-warning">Đang chờ</span>
+                                            ) : (
+                                                <span className="text-danger">Không thành công</span>
+                                            )
+                                        ) : (
+                                            <span className="text-muted">Chưa có trạng thái thanh toán</span>
+                                        )}
+                                    </td>
                                 </tr>
                             </tbody>
                         </Table>
-                        {invoiceStatus && invoiceStatus === "Paid" ? (                        
-                        <div className="text-center mt-4">
-                            <Button variant="primary" onClick={() => window.print()}>
-                                In hóa đơn
-                            </Button>
+                        <div className="invoice-actions">
+                            {invoiceStatus === "Paid" && (
+                                <Button variant="primary" className="invoice-btn" onClick={() => window.print()}>
+                                    <i className="fas fa-print me-2"></i>
+                                    In hóa đơn
+                                </Button>
+                            )}
+
+                            <>
+                                {paymentMethod ? (
+                                    paymentMethod.paymentMethod === "Cash" ? (
+                                        <div className="alert alert-info">
+                                            <i className="fas fa-info-circle me-2"></i>
+                                            Vui lòng chờ nhân viên xác nhận thanh toán
+                                        </div>
+                                    ) : paymentMethod.status !== "Completed" ? (
+                                        <Button
+                                            variant="warning"
+                                            className="invoice-btn"
+                                            onClick={handlePaymentRedirect}
+                                        >
+                                            <i className="fas fa-redo me-2"></i>
+                                            Thanh toán lại
+                                        </Button>
+                                    ) : null
+                                ) : (
+                                    <Button
+                                        variant="success"
+                                        className="invoice-btn"
+                                        onClick={handlePaymentRedirect}
+                                    >
+                                        <i className="fas fa-credit-card me-2"></i>
+                                        Chọn phương thức thanh toán
+                                    </Button>
+                                )}
+                            </>
+
                         </div>
-                        ) :(
-                        <div className="text-center mt-4">
-                            <Button variant="secondary" onClick={handlePaymentRedirect}>
-                                Thanh toán
-                            </Button>
-                            </div>
-                        )}
                     </Card.Body>
                 </Card>
             </div>
         ) : (
-            <div className="text-center">
+            <div className="loading-container">
                 <p>Không tìm thấy hóa đơn.</p>
             </div>
         )

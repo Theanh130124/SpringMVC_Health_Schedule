@@ -27,7 +27,8 @@ public class JwtFilter implements Filter {
             "/api/users", // Đăng ký tài khoản bệnh nhân
             "/api/doctor/**", // Tìm kiếm bác sĩ ngoài trang chủ
             "/api/find_slot",
-            "/api/reviews/**"
+            "/api/reviews/**",
+            "/api/payment/momo/ipn"
     );
 
     @Override

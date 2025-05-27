@@ -7,6 +7,7 @@ package com.trantheanh1301.permission;
 import com.trantheanh1301.pojo.Appointment;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.pojo.Healthrecord;
+import com.trantheanh1301.pojo.Invoice;
 import com.trantheanh1301.pojo.User;
 import org.springframework.security.access.AccessDeniedException;
 
@@ -55,6 +56,12 @@ public class Permission {
     public static void OwnerDoctorAppointment(User currentDoctor, Appointment appointment) {
         if (!currentDoctor.getDoctor().getDoctorId().equals(appointment.getDoctorId().getDoctorId())) {
             throw new AccessDeniedException("Bạn không có quyền thực hiện thao tác này trên lịch hẹn này.");
+        }
+    }
+    
+    public static void OwnerInvoice( User currentUser, Invoice invoice) {
+        if (!currentUser.getUserId().equals(invoice.getAppointmentId().getPatientId().getPatientId())) {
+            throw new AccessDeniedException("Bạn không có quyền thực hiện thao tác này trên hóa đơn này.");
         }
     }
 
