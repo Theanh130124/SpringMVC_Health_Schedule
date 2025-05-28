@@ -25,7 +25,6 @@ import RoomChat from './component/RoomChat';
 import Review from './component/reviewDoctor/Review';
 import { useState } from 'react';
 import PaymentMethod from './component/PaymentMethod';
-import VNPayReturn from './component/VNPayReturn';
 import Invoice from './component/Invoice';
 import AppointmentUpdate from './component/bookDoctor/AppointmentUpdate';
 import EditProfile from './component/EditProfile';
@@ -33,7 +32,7 @@ import ChangePassword from './component/ChangePassword';
 import DoctorAvailability from './component/bookDoctor/DoctorAvailability';
 import DoctorReview from './component/DoctorReview';
 import HealthRecord from './component/HealthRecord';
-
+import PaymentReturn from './component/PaymentReturn';
 const App = () => {
   //dispatch nhận action.type bên MyUserReducer.js -> F5 sẽ không mất vì đã lưu cookie
 
@@ -77,7 +76,7 @@ const App = () => {
               <Route path="/findDoctor" element={<Finddoctor />} />
               <Route path="/review" element={<Review />} />
               <Route path="/payment-method" element={<PaymentMethod />} />
-              <Route path="/vnpay-return" element={<VNPayReturn />} />
+              <Route path="/payment-return" element={<PaymentReturn />} />
               <Route path="/invoice" element={<Invoice />} />
               <Route path="/editProfile" element={<EditProfile />} />
               <Route path="/change-password" element={<ChangePassword />} />

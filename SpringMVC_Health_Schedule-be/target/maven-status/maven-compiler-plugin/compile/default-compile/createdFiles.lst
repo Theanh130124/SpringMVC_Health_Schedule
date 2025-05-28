@@ -20,6 +20,7 @@ com\trantheanh1301\repository\DoctorRepository.class
 com\trantheanh1301\service\impl\PatientServiceImpl.class
 com\trantheanh1301\filters\JwtFilter.class
 com\trantheanh1301\repository\impl\HealthRecordRepositoryImpl.class
+com\trantheanh1301\service\VNPayService.class
 com\trantheanh1301\service\impl\HealthRecordServiceImpl.class
 com\trantheanh1301\pojo\Doctor.class
 com\trantheanh1301\controllers\ApiDoctorLicenseController.class
@@ -53,6 +54,7 @@ com\trantheanh1301\service\AvailabeslotService.class
 com\trantheanh1301\mapperdto\AvailableslotMapper.class
 com\trantheanh1301\service\impl\EmailServiceImpl$2.class
 com\trantheanh1301\controllers\ApiDoctorController.class
+com\trantheanh1301\dto\MomoIPNRequestDTO.class
 com\trantheanh1301\pojo\Healthrecord.class
 com\trantheanh1301\config\SpringSecurityConfigs.class
 com\trantheanh1301\config\HibernateConfigs.class
@@ -105,6 +107,7 @@ com\trantheanh1301\config\SecurityWebApplicationInitializer.class
 com\trantheanh1301\service\EmailService.class
 com\trantheanh1301\controllers\ApiAvailableslotControllers.class
 com\trantheanh1301\repository\impl\InvoiceRepositoryImpl.class
+com\trantheanh1301\service\impl\VNPayServiceImpl.class
 com\trantheanh1301\repository\AppointmentRepository.class
 com\trantheanh1301\mapperdto\ClinicMapper.class
 com\trantheanh1301\repository\impl\AvailabeslotRepositoryImpl.class

@@ -16,7 +16,6 @@ const PaymentMethod = () => {
     const appointment = location.state?.appointment;
     const invoiceId = location.state?.invoiceId;
     const [isSuccess, setIsSuccess] = useState(false);
-
     const paymentMethods = [
         {
             id: "cash",
@@ -48,6 +47,8 @@ const PaymentMethod = () => {
         if (!appointment) {
             navigate("/", { replace: true });
         }
+
+        
     }, [appointment, navigate]);
 
     const generateTransactionId = () => {
@@ -159,11 +160,11 @@ const PaymentMethod = () => {
     const createMomoPayment = async (invoiceId, paymentId) => {
         try {
             const orderInfo = `${invoiceId}-${paymentId}`;
-            const response = await authApis().get(
-                `payment/create-momo-payment?amount=${appointment.doctorId.consultationFee}&orderInfo=${orderInfo}`
+            const response = await authApis().post(
+                `payment/create-momo-url?amount=${appointment.doctorId.consultationFee}&orderId=${orderInfo}`
             );
             if (response.data) {
-                window.location.href = response.data;
+                window.location.href = response.data.payUrl;
             } else {
                 setMessage("Không thể tạo thanh toán MoMo. Vui lòng thử lại.");
             }
@@ -174,7 +175,8 @@ const PaymentMethod = () => {
     };
 
     return (
-        <div className="container mt-5">
+        
+        <div className="container mt-5">            
             <h2 className="text-center mb-4">CHỌN PHƯƠNG THỨC THANH TOÁN</h2>
 
             <div className="payment-amount text-center mb-4">

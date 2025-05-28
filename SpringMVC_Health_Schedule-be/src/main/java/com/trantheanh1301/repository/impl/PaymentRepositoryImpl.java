@@ -62,10 +62,10 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         Root<Payment> root = query.from(Payment.class);
 
         Predicate predicate = b.equal(root.get("invoiceId").get("invoiceId"), id);//Them dieu kien so sanh appointmentId cua invoice = id truyen vao
-        query.select(root).where(predicate);
+        query.select(root).where(predicate).orderBy(b.desc(root.get("paymentDate")));
 
         Query q = s.createQuery(query);
-
+        q.setMaxResults(1);
         return (Payment) q.getSingleResult();
     }
 
