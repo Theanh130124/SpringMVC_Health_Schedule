@@ -72,7 +72,7 @@
 
 <h2>💻System Architecture</h2>
 
-![alt text](image-3.png)
+![alt text](image-14.png)
 
 
 
