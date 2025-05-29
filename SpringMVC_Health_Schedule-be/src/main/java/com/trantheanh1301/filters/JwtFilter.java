@@ -29,8 +29,8 @@ public class JwtFilter implements Filter {
             "/api/find_slot",
             "/api/reviews/**",
             "/api/payment/momo/ipn",
-            "/api/doctor_license"//chưa có quyền dùng hệ thống nên chưa lưu token 
-            
+            "/api/doctor_license",//chưa có quyền dùng hệ thống nên chưa lưu token 
+            "/api/getDoctor_license/**" //dùng để xem 1 bác sĩ từng gửi chứng chỉ hành nghề chưa
 
     );
 

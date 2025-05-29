@@ -132,4 +132,9 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
         return licenseRepo.loadLicense(params);
     }
 
+    @Override
+    public Doctorlicense getLicenceByDoctorId(int doctorId) {
+       return licenseRepo.getLicenceByDoctorId(doctorId);
+    }
+
 }

@@ -77,16 +77,18 @@ public class ApiDoctorLicenseController {
     
     
 
-    //LAY THEO DOCTOR_ID
-    @GetMapping("/getDoctor_liccense/{id}")
-    public ResponseEntity<?> getDoctorLicense(@PathVariable int id){
-        try{
+    //LAY THEO DOCTOR_ID -> để mình ktra xem doctor đó đã gửi chứng chỉ hành nghề lần nào chưa ? 
+    @GetMapping("getDoctor_license/{doctor_id}")
+    public ResponseEntity<?> getLicense(@PathVariable(value ="doctor_id") int doctor_id){
+        try {
             
-            return new ResponseEntity<>(licenseService.getLicenseById(id), HttpStatus.OK);
-        }catch (Exception ex){
-             Map<String, String> error = new HashMap<>();
+            return new ResponseEntity<>(licenseService.getLicenceByDoctorId(doctor_id), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> error = new HashMap<>();
             error.put("error", "Đã xảy ra lỗi " + ex.getMessage());
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
+
 }
