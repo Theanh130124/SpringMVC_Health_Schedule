@@ -28,7 +28,12 @@ public class JwtFilter implements Filter {
             "/api/doctor/**", // Tìm kiếm bác sĩ ngoài trang chủ
             "/api/find_slot",
             "/api/reviews/**",
+<<<<<<< Updated upstream
             "/api/payment/momo/ipn"
+=======
+            "/api/doctor_license"//chưa có quyền dùng hệ thống nên chưa lưu token 
+            
+>>>>>>> Stashed changes
     );
 
     @Override

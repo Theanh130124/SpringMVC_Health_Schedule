@@ -5,6 +5,7 @@
 package com.trantheanh1301.service.impl;
 
 import com.trantheanh1301.formatter.DateFormatter;
+import com.trantheanh1301.permission.Permission;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.pojo.Doctorlicense;
 import com.trantheanh1301.pojo.User;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,8 +28,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DoctorLicenseServiceImpl implements DoctorLicenseService {
-    
-    
+
     @Autowired
     private UserRepository userRepo;
 
@@ -45,6 +46,9 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
         if (doctor == null) {
             throw new RuntimeException("Không tìm thấy bác sĩ!");
         }
+
+        //Permission 
+        Permission.DoctorLicense(params);
         Doctorlicense license = new Doctorlicense();
         //nó set đối tượng -> có thể đổi tên bên pojo lại (đã đổi)
         license.setDoctorId(doctor);
@@ -103,11 +107,10 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
             license.setVerificationDate(new Date());
             license.setVerifiedByAdminId(admin);
             // Sau khi duyệt thì phải trả trạng thái hoạt động cho doctor
-            
-            User doctor =  license.getDoctorId().getUser();
+
+            User doctor = license.getDoctorId().getUser();
             doctor.setIsActive(Boolean.TRUE);
             userRepo.updateUser(doctor);
-            
 
         }
         return licenseRepo.updateLicense(license);
@@ -125,7 +128,7 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
     }
 
     @Override
-    public List<Doctorlicense> loadLicense(Map<String,String> params) {
+    public List<Doctorlicense> loadLicense(Map<String, String> params) {
         return licenseRepo.loadLicense(params);
     }
 

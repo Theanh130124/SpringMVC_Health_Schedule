@@ -4,6 +4,7 @@ import { Alert, Button, Col, Container, FloatingLabel, Form, Image, Row, Spinner
 import { useNavigate } from "react-router-dom";
 import Apis, { endpoint } from "../configs/Apis";
 import MySpinner from "./layout/MySpinner";
+import toast from "react-hot-toast";
 
 const Register = () => {
 
@@ -49,42 +50,46 @@ const Register = () => {
 
     const register = async (e) => {
         e.preventDefault();
+        // Đảm bảo luôn có role trước khi submit
+        const userData = { ...user};
 
-        if (!user.role) {
-            setUser({ ...user, role: "Patient" })
+        if (!userData.role) {
+            userData.role = "Patient";
         }
 
-        if (user.password !== user.confirm) {
+        if (userData.password !== userData.confirm) {
             setMsg("Mật khẩu không khớp");
+            return;
         }
 
 
-        else {
-            let form = new FormData();
-            for (let key in user) {
-                if (key !== 'confirm')
-                    form.append(key, user[key]);
-            }
-            if (avatar.current && avatar.current.files && avatar.current.files.length > 0) {
-                form.append("avatar", avatar.current.files[0]);
-            } 
 
-            try {
-                setLoading(true);
-                await Apis.post(endpoint['register'], form, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-
-                nav("/login"); // đk thành công về đăng nhập
-            } catch (ex) {
-                console.error(ex);
-                setMsg(`Đã có lỗi xảy ra ${ex}`);
-            } finally {
-                setLoading(false);
-            }
+        let form = new FormData();
+        for (let key in userData) {
+            if (key !== 'confirm')
+                form.append(key, userData[key]);
         }
+        if (avatar.current && avatar.current.files && avatar.current.files.length > 0) {
+            form.append("avatar", avatar.current.files[0]);
+        }
+
+        try {
+            setLoading(true);
+            await Apis.post(endpoint['register'], form, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            nav("/login"); // đk thành công về đăng nhập
+            toast.success("Đăng ký tài khoản thành công")
+        } catch (ex) {
+            console.error(ex);
+            setMsg(`Đã có lỗi xảy ra ${ex}`);
+        } finally {
+            setLoading(false);
+        }
+
     }
 
     useEffect(() => {

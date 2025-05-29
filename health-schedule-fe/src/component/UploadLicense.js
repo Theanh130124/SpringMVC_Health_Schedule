@@ -51,6 +51,8 @@ const UploadLicense = () => {
         } catch (ex) {
 
             console.error(ex);
+            console.log({ ...license });
+            console.log(doctorId)
             setMsg(`Có lỗi xảy ra. Vui lòng thử lại! ${ex}`);
         }
         finally {
@@ -68,7 +70,7 @@ const UploadLicense = () => {
                     <Form onSubmit={upload}>
                         {info.map(l => <FloatingLabel key={l.field} label={l.label} className="mb-3">
 
-                            <Form.Control type={l.type} placeholder={l.label} required value={license[l.field]} 
+                            <Form.Control type={l.type} placeholder={l.label} required value={license[l.field] || ""} 
                             onChange={e => setState(e.target.value ,l.field)}/>
 
                         </FloatingLabel>)}
