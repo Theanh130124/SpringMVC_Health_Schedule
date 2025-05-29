@@ -18,6 +18,7 @@ export const CLOUDINARY_PRESET = "healthapp";
 export const endpoint = {
     'users': '/users',
     'doctor_license': '/doctor_license',
+    findLicenseByDoctorId : (doctorId) => `/getDoctor_license/${doctorId}`,
     'doctor': '/doctor',
     'register': '/users',
     'current_user': '/secure/profile',

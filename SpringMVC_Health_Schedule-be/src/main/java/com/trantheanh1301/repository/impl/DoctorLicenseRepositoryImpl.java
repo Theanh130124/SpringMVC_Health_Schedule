@@ -118,13 +118,13 @@ public class DoctorLicenseRepositoryImpl implements DoctorLicenseRepository {
         Root<Doctorlicense> rD = query.from(Doctorlicense.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(rD.get("doctorId").get("doctorId"), doctorId));
+        Predicate predicate = builder.equal(rD.get("doctorId").get("doctorId"), doctorId);
+        query.select(rD).where(predicate);
 
-        query.select(rD);
-        query.where(predicates.toArray(Predicate[]::new));
         Query q = s.createQuery(query);
+        List<Doctorlicense> result = q.getResultList();
 
-        return (Doctorlicense) q.getSingleResult();
+        return result.isEmpty() ? null : result.get(0);
     }
 
 }
