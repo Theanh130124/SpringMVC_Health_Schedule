@@ -36,7 +36,6 @@ const DoctorReview = () => {
             const data = new FormData();
             data.append("appointmentId", appointmentId);
             data.append("patientId", patientId);
-            data.append("doctorId", doctor.doctorId);
             data.append("rating", rating);
             data.append("comment", comment);
             const res = await authApis().post(`/review`,data,

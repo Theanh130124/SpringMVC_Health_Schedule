@@ -7,12 +7,14 @@ package com.trantheanh1301.repository.impl;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.pojo.Review;
 import com.trantheanh1301.repository.ReviewRepository;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.Map;
 import org.hibernate.Session;
@@ -32,7 +34,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
-    
+
     @Autowired
     private Environment env;
 
@@ -46,20 +48,26 @@ public class ReviewRepositoryImpl implements ReviewRepository {
 
     @Override
     public Review updateResponseReview(Review review) {
-       Session s = this.factory.getObject().getCurrentSession();
-       s.merge(review);
-       s.refresh(review);
-       return review;
+        Session s = this.factory.getObject().getCurrentSession();
+        s.merge(review);
+        s.refresh(review);
+        return review;
     }
 
     @Override
     public Review getReviewById(int id) {
-         Session s = this.factory.getObject().getCurrentSession();
+        Session s = this.factory.getObject().getCurrentSession();
         Query q = s.createNamedQuery("Review.findByReviewId", Review.class);
         q.setParameter("reviewId", id);
-        return (Review) q.getSingleResult();
+        
+        try{
+            return (Review) q.getSingleResult();
+        }
+        catch(NoResultException e){
+            return null;    
+        }
     }
-    
+
     @Override
     public List<Review> getReviewListOfDoctor(int doctorId, Map<String, String> params) {
 
@@ -67,14 +75,14 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Review> q = b.createQuery(Review.class);
         Root<Review> root = q.from(Review.class);//Root la bang Review
-        
+
         //Join bang doctor voi bang review
         Join<Review, Doctor> doctorJoin = root.join("doctorId");//join la bang Doctor
-        
+
         Predicate predicate = b.equal(doctorJoin.get("doctorId"), doctorId);//Them dieu kien
         q.where(predicate).orderBy(b.desc(root.get("reviewDate")));
         Query query = s.createQuery(q);
-        
+
         /*if (params != null) {
             String page = params.get("page");
             if (page != null && !page.isEmpty()) {
@@ -84,7 +92,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
                 query.setFirstResult(start);
                 query.setMaxResults(pageSize);
             }
-        }*/       
+        }*/
         query.setFirstResult(0);
         query.setMaxResults(2);
         return query.getResultList();
@@ -96,7 +104,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Review> q = b.createQuery(Review.class);
-        
+
         Root<Review> root = q.from(Review.class);
         q.orderBy(b.desc(root.get("rating")));
         Query query = s.createQuery(q);
@@ -109,7 +117,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
                 query.setFirstResult(start);
                 query.setMaxResults(pageSize);
             }
-        }        
+        }
         return query.getResultList();
     }
 
@@ -118,13 +126,19 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Review> q = b.createQuery(Review.class);
-        
+
         Root<Review> root = q.from(Review.class);
-        
+
         Predicate predicate = b.equal(root.get("appointmentId").get("appointmentId"), id);
         q.select(root).where(predicate);
-        
+
         Query query = s.createQuery(q);
-        return (Review) query.getSingleResult();
+        
+        try {
+            return (Review) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+        
     }
 }

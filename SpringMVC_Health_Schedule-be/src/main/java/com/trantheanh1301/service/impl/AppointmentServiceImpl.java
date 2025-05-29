@@ -11,6 +11,7 @@ import com.trantheanh1301.pojo.Availableslot;
 import com.trantheanh1301.pojo.Clinic;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.pojo.Patient;
+import com.trantheanh1301.pojo.Payment;
 import com.trantheanh1301.pojo.User;
 import com.trantheanh1301.repository.AppointmentRepository;
 import com.trantheanh1301.repository.AvailabeslotRepository;
@@ -18,6 +19,8 @@ import com.trantheanh1301.repository.ClinicRepository;
 import com.trantheanh1301.repository.DoctorRepository;
 import com.trantheanh1301.repository.PatientRepository;
 import com.trantheanh1301.service.AppointmentService;
+import com.trantheanh1301.service.InvoiceService;
+import com.trantheanh1301.service.PaymentService;
 import com.trantheanh1301.service.UserService;
 
 import java.security.Principal;
@@ -25,6 +28,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -62,6 +66,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     private EmailServiceImpl emailService;
+
+    @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
+    private InvoiceService invoiceService;
 
     //nữa fe cần có ds các bs,clinic,patient...
     @Override
@@ -207,8 +217,8 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new RuntimeException("Không tìm thấy bác sĩ");
         }
         //Xóa lịch cũng cần cập nhật slot trổng đó cho người khác đăt
-        
-         Permission.OwnerAppointment(current_user, a);
+
+        Permission.OwnerAppointment(current_user, a);
         if (a.getCreatedAt() != null) {
             Date date_now = new Date();
             Calendar cal = Calendar.getInstance();
@@ -266,11 +276,36 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (a == null) {
             throw new RuntimeException("Không tìm thấy lịch hẹn");
         }
-        
+
         Permission.OwnerDoctorAppointment(u, a);
         a.setStatus(params.get("status"));
 
+        Payment payment = paymentService.getPaymentByInvoiceId(a.getInvoice().getInvoiceId(), principal);
+        System.out.println(payment);
+        //Neu la bac si cua lich hen do va phuong thuc thanh toan la tien mat thi cap nhat luon hoa don va thanh toan
+        if (payment.getPaymentMethod().equals("Cash")) {
+            invoiceService.updatePaymentStatusInvoice(a.getInvoice().getInvoiceId(), Map.of("status", "Paid"));
+            
+            String transId = generateTransactionId(String.valueOf(a.getInvoice().getInvoiceId()), String.valueOf(payment.getPaymentId()));
+            paymentService.updatePayment(payment.getPaymentId(), Map.of(
+                    "status", "Completed",
+                    "transactionId", transId
+            ));
+        }
+
         return this.appointmentRepo.addOrUpdate(a);
+    }
+
+    private String generateTransactionId(String invoiceId, String paymentId) {
+        // Tạo tiền tố ngẫu nhiên gồm 10 chữ số
+        String randomPrefix = String.valueOf((long) (Math.random() * 1_000_000_0000L));
+
+        // Đảm bảo độ dài tiền tố luôn là 10 chữ số
+        while (randomPrefix.length() < 10) {
+            randomPrefix = "0" + randomPrefix;
+        }
+
+        return randomPrefix + invoiceId + paymentId;  // VD: 12345678900581
     }
 
 }

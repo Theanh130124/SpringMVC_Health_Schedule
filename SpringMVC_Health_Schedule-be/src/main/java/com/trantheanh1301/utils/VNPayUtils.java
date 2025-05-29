@@ -13,6 +13,7 @@ import org.apache.commons.codec.binary.Hex;
  * @author Asus
  */
 public class VNPayUtils {
+
     public static String hmacSHA512(String key, String data) {
         try {
             Mac hmac512 = Mac.getInstance("HmacSHA512");
@@ -21,7 +22,7 @@ public class VNPayUtils {
             byte[] bytes = hmac512.doFinal(data.getBytes("UTF-8"));
             return new String(Hex.encodeHex(bytes));
         } catch (Exception ex) {
-            return null;
+            throw new RuntimeException("Lỗi ký HMAC: " + ex.getMessage());
         }
     }
 }

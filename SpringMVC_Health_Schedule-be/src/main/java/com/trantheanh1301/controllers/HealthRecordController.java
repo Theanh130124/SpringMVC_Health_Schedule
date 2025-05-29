@@ -74,7 +74,8 @@ public class HealthRecordController {
             return new ResponseEntity<>(new ErrorResponseFormatter("Đã xảy ra lỗi: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
+    
     @GetMapping("/health-record/appointment/{appointmentId}")
     public ResponseEntity<?> getRecordByAppointmentId(@PathVariable("appointmentId") int id, Principal principal) {
         try {

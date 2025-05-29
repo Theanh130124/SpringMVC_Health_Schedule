@@ -7,6 +7,8 @@ package com.trantheanh1301.service;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
+import java.util.Map;
+import org.springframework.http.ResponseEntity;
 
 /**
  *
@@ -14,4 +16,5 @@ import java.security.Principal;
  */
 public interface VNPayService {
     public String createVnpayPayment(int amount,String orderInfo,HttpServletRequest request, Principal principal) throws UnsupportedEncodingException;
+    public Map<String, String> processReturnUrl(Map<String, String> params);
 }

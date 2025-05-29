@@ -8,6 +8,7 @@ import com.trantheanh1301.pojo.Appointment;
 import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.pojo.Healthrecord;
 import com.trantheanh1301.pojo.Invoice;
+import com.trantheanh1301.pojo.Payment;
 import com.trantheanh1301.pojo.User;
 import org.springframework.security.access.AccessDeniedException;
 
@@ -19,6 +20,12 @@ public class Permission {
 
     public static void OwnerAppointment(User currentUser, Appointment appointment) {
         if (!appointment.getPatientId().getUser().getUserId().equals(currentUser.getUserId())) {
+            throw new AccessDeniedException("Bạn không có quyền thực hiện thao tác này trên lịch hẹn này.");
+        }
+    }
+    
+    public static void OwnerAppointmentDoctor(User currentUser, Appointment appointment) {
+        if (!appointment.getDoctorId().getUser().getUserId().equals(currentUser.getUserId())) {
             throw new AccessDeniedException("Bạn không có quyền thực hiện thao tác này trên lịch hẹn này.");
         }
     }
@@ -62,6 +69,12 @@ public class Permission {
     public static void OwnerInvoice( User currentUser, Invoice invoice) {
         if (!currentUser.getUserId().equals(invoice.getAppointmentId().getPatientId().getPatientId())) {
             throw new AccessDeniedException("Bạn không có quyền thực hiện thao tác này trên hóa đơn này.");
+        }
+    }
+    
+    public static void OwnerPayment(User currentUser, Payment payment){
+        if (!currentUser.getUserId().equals(payment.getInvoiceId().getAppointmentId().getPatientId().getPatientId())) {
+            throw new AccessDeniedException("Bạn không có quyền thực hiện thao tác này trên thanh toán này.");
         }
     }
 

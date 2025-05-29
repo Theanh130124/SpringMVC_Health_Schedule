@@ -5,12 +5,16 @@
 package com.trantheanh1301.service.impl;
 
 import com.trantheanh1301.formatter.DateFormatter;
+import com.trantheanh1301.permission.Permission;
 import com.trantheanh1301.pojo.Appointment;
 import com.trantheanh1301.pojo.Invoice;
+import com.trantheanh1301.pojo.User;
 import com.trantheanh1301.repository.AppointmentRepository;
 import com.trantheanh1301.repository.InvoiceRepository;
 import com.trantheanh1301.service.InvoiceService;
+import com.trantheanh1301.service.UserService;
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,6 +34,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+    
+    @Autowired
+    private UserService userService;
 
     @Override
     public Invoice addInvoice(Map<String, String> params) {
@@ -43,7 +50,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public Invoice updatePaymentStatusInvoice(int id, Map<String, String> params) {
-
         Invoice invoice = this.invoiceRepository.getInvoiceById(id);
         String status = params.get("status");
         if (status == null || status.isEmpty()) {
@@ -54,9 +60,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public Invoice getInvoiceByAppointmentId(int id) {
-         
-        return  this.invoiceRepository.getInvoiceByAppointmentId(id);
+    public Invoice getInvoiceByAppointmentId(int id, Principal principal) {
+        User u = userService.getUserByUsername(principal.getName());        
+        Invoice invoice = this.invoiceRepository.getInvoiceByAppointmentId(id);       
+        Permission.OwnerInvoice(u, invoice);
+        return invoice;
     }
 
     @Override

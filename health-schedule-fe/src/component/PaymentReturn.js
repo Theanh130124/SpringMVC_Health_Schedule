@@ -39,13 +39,9 @@ const VNPayReturn = () => {
 
                 if (vnp_ResponseCode === "00") {
                     setPaymentStatus("success");
-                    await updateInvoiceStatus("Paid", invoiceId);
-                    await updatePaymentStatus("Completed", paymentId, vnp_TransactionNo);
-                    await sendMailSuccess(user.email, user.firstName, user.lastName, vnp_Amount, vnp_TransactionNo);
+            
                 } else {
                     setPaymentStatus("failure");
-                    await updateInvoiceStatus("Cancelled", invoiceId);
-                    await updatePaymentStatus("Failed", paymentId, vnp_TransactionNo);
                 }
             } else if (isMoMo) {
                 // ==== Xử lý MoMo ====
@@ -66,15 +62,8 @@ const VNPayReturn = () => {
 
                 if (resultCode === "0") {
                     setPaymentStatus("success");
-                    /*await updateInvoiceStatus("Paid", invoiceId);
-                    await updatePaymentStatus("Completed", paymentId, transId);
-                    await sendMailSuccess(user.email, user.firstName, user.lastName, amount, transId);               
-                */
                     } else {
                     setPaymentStatus("failure");                   
-                    /*await updateInvoiceStatus("Cancelled", invoiceId);
-                    await updatePaymentStatus("Failed", paymentId, transId);
-                    */
                 }
             } else {
                 setPaymentStatus("failure");
