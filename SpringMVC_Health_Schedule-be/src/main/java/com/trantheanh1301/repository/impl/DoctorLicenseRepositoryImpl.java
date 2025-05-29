@@ -104,6 +104,7 @@ public class DoctorLicenseRepositoryImpl implements DoctorLicenseRepository {
 
         if (license != null) {
             s.remove(license);
+            s.flush();
         }
     }
 

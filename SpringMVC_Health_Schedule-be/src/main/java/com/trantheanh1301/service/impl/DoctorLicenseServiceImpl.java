@@ -116,7 +116,7 @@ public class DoctorLicenseServiceImpl implements DoctorLicenseService {
         return licenseRepo.updateLicense(license);
     }
 
-    //Nhớ permission
+    //Nhớ permission -> chi co admin lam 
     @Override
     public void removeLicense(int id) {
         licenseRepo.removeLicense(id);

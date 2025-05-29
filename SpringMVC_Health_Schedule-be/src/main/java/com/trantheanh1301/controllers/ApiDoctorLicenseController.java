@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,15 +76,15 @@ public class ApiDoctorLicenseController {
     
     
     
-    @PreAuthorize("hasAuthority('Admin')")
-    @DeleteMapping("/doctor_license/{id}")
-    public ResponseEntity<?> removeLicense(@PathVariable int id) {
-        try {
-            licenseService.removeLicense(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);// không viết vào vì không muốn trả ra gì cả ngoài status khi xóa xong
 
-        } catch (Exception ex) {
-            Map<String, String> error = new HashMap<>();
+    //LAY THEO DOCTOR_ID
+    @GetMapping("/getDoctor_liccense/{id}")
+    public ResponseEntity<?> getDoctorLicense(@PathVariable int id){
+        try{
+            
+            return new ResponseEntity<>(licenseService.getLicenseById(id), HttpStatus.OK);
+        }catch (Exception ex){
+             Map<String, String> error = new HashMap<>();
             error.put("error", "Đã xảy ra lỗi " + ex.getMessage());
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
