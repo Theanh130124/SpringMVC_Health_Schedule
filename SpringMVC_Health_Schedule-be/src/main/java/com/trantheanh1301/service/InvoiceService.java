@@ -5,6 +5,7 @@
 package com.trantheanh1301.service;
 
 import com.trantheanh1301.pojo.Invoice;
+import java.security.Principal;
 import java.util.Map;
 
 /**
@@ -14,6 +15,6 @@ import java.util.Map;
 public interface InvoiceService {
     public Invoice addInvoice(Map<String,String> params);
     public Invoice updatePaymentStatusInvoice(int id, Map<String,String> params);
-    public Invoice getInvoiceByAppointmentId(int id);
+    public Invoice getInvoiceByAppointmentId(int id, Principal principal);
     public Invoice getInvoiceById(int id);
 }

@@ -23,4 +23,20 @@ public class MomoUtils {
         byte[] hash = sha256_HMAC.doFinal(message.getBytes(StandardCharsets.UTF_8));
         return Hex.encodeHexString(hash);
     }
+
+    public static String createSignature1(String data, String secretKey) throws Exception {
+        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(keySpec);
+        byte[] hmacBytes = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
+        return bytesToHex(hmacBytes);
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b)); // phải là chữ thường
+        }
+        return sb.toString();
+    }
 }

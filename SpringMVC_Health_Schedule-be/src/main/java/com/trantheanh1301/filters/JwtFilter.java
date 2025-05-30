@@ -26,12 +26,13 @@ public class JwtFilter implements Filter {
             "/api/login", // Đăng nhập
             "/api/users", // Đăng ký tài khoản bệnh nhân
             "/api/doctor/**", // Tìm kiếm bác sĩ ngoài trang chủ
-            "/api/find_slot",
+            "/api/find_slot",   
             "/api/reviews/**",
             "/api/payment/momo/ipn",
+            "/api/payment/vnpay/ipn",
+            "/api/payment/vnpay/return",
             "/api/doctor_license",//chưa có quyền dùng hệ thống nên chưa lưu token 
             "/api/getDoctor_license/**" //dùng để xem 1 bác sĩ từng gửi chứng chỉ hành nghề chưa
-
     );
 
     @Override
