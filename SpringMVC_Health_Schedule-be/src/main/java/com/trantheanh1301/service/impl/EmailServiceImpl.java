@@ -15,7 +15,6 @@ import java.util.Properties;
 //Gửi thêm cả lịch hẹn vào Google Calendar nếu cần.
 //
 //Thêm template HTML vào nội dung email.
-
 @org.springframework.stereotype.Service
 public class EmailServiceImpl implements EmailService {
 
@@ -55,7 +54,47 @@ public class EmailServiceImpl implements EmailService {
             message.setText(emailContent);
 
             Transport.send(message);
-            System.out.println("📧 Email xác nhận đã được gửi đến: " + toEmail);
+            System.out.println(" Email xác nhận đã được gửi đến: " + toEmail);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendAppointmentConfirmationtoDoctor(String toEmailDoctor, String subject, String patientName, String doctorName, String time) {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+                new jakarta.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username, "Phòng khám trực tuyến"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailDoctor));
+            message.setSubject(subject);
+
+            String emailContent = String.format("""
+                Bác sĩ thân mến %s,
+
+                Đã có bênh nhân đặt lịch khám %s vào lúc %s.
+                Vui lòng kiểm tra lại thông tin bệnh nhân và chuẩn bị.
+
+                Trân trọng,
+                Hệ thống quản lý khám bệnh
+            """, patientName, doctorName, time);
+
+            message.setText(emailContent);
+
+            Transport.send(message);
+            System.out.println(" Email xác nhận đã được gửi đến: " + toEmailDoctor);
 
         } catch (Exception e) {
             e.printStackTrace();

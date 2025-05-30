@@ -39,6 +39,7 @@ com\trantheanh1301\service\impl\PaymentServiceImpl.class
 com\trantheanh1301\pojo\Doctorlicense.class
 com\trantheanh1301\controllers\StatsController.class
 com\trantheanh1301\pojo\Availableslot.class
+com\trantheanh1301\service\impl\EmailServiceImpl$3.class
 com\trantheanh1301\springmvc_health_schedule\JakartaRestConfiguration.class
 com\trantheanh1301\config\DispatcherServletInit.class
 com\trantheanh1301\pojo\Doctoravailability.class
