@@ -177,7 +177,7 @@ const Finddoctor = () => {
 
                 <Row className="justify-content-center align-items-center g-4 mb-4 mt-4">
                     {hasMore && doctors.length > 0 && !loading && (
-                        <Col md={8} lg={6} xs={10}>
+                        <Col md={6} lg={1} xs={10}>
                             <Button variant="info" onClick={() => setPage(prev => prev + 1)} > Xem thêm</Button>
                         </Col>
                     )}

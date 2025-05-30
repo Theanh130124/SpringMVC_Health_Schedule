@@ -1,27 +1,26 @@
-# Spring_Health_Schedule
-Bài tập lớn PTHTWEB
 
 
-<h2>Lưu ý Tomcat11 nữa chỉ giải nén rồi qua server gọi thôi (không có run)</h2>
-<h2>Yêu cầu như sau</h2>
+<h1>TOPIC : ONLINE HEALTH CHECKUP SCHEDULING APPLICATION</h2>
 
-<h2>Features</h2>
+<h2>📁 Topic requirements:</h2>
 
-<h2>TOPIC : ONLINE HEALTH CHECKUP SCHEDULING APPLICATION</h2>
 
-<ul>Authentication and Authorization:</ul>
+
+
+<ul><b>🚀Authentication and Authorization:</b></ul>
 
 <li>Login and registration with roles: patient, doctor, and administrator.</li>
 
 <li>Doctors must be verified by the admin with a valid medical license before operating on the system.</li>
 
-<ul>Health Record Management:</ul>
+
+<ul><b>🚀Health Record Management:</b></ul>
 
 <li>Patients can create and manage personal health records (medical history, test results).</li>
 
 <li>Doctors are allowed to view and update the information after each consultation.</li>
 
-<ul>Appointment Scheduling:</ul>
+<ul><b>🚀Appointment Scheduling:</b></ul>
 
 <li>Patients can search for doctors by specialty, hospital, or doctor’s name.</li>
 
@@ -29,60 +28,81 @@ Bài tập lớn PTHTWEB
 
 <li>Allow appointment cancellations or rescheduling at least 24 hours in advance.</li>
 
-<ul>Online Consultation:</ul>
+<ul> <b>🚀Online Consultation:</b></ul>
 
 <li>Integrate video call using WebRTC or Jitsi to support remote consultations.</li>
 
 <li>Patients and doctors can chat online before the in-person visit.</li>
 
-<ul>Service Payment:</ul>
+<ul><b>🚀Service Payment:</b></ul>
 
 <li>Support online payment via VNPay, MoMo, Stripe.</li>
 
 <li>Record invoices and send payment success notifications via email.</li>
 
-<ul>Rating and Feedback:</ul>
+<ul><b>🚀Rating and Feedback:</b></ul>
 
 <li>Patients can rate doctors with stars (1-5) and leave comments.</li>
 
 <li>Doctors can respond to feedback to improve service quality.</li>
 
-<ul>Statistics and Reports:</ul>
+<ul><b>🚀Statistics and Reports:</b></ul>
 
 <li>Doctors can view the number of patients served and common diseases by month/quarter.</li>
 
 <li>Administrators monitor system activities, number of appointments, and revenue.</li>
 
-<ul>Reminders and Notifications:</ul>
+<ul><b>🚀Reminders and Notifications:</b></ul>
 
 <li>The system sends appointment reminders via email and push notifications.</li>
 
 <li>Notifications about regular health checkup programs or special offers.</li>
 
-<ul>Real-time Chat Integration:</ul>
+<ul><b>🚀Real-time Chat Integration:</b></ul>
 
 <li>Use Firebase to enable direct chat between patients and doctors.</li>
 
 <li>Allow image and rapid test result file sharing.</li>
 
 
-# ChatRealTime_HealthSchedule
-Một chức năng chat real time cho SpringMVC HealthSchedule
+<h2>📦Database Schema Diagram</h2>
 
+![alt text](image-1.png)
+
+
+<h2>💻System Architecture</h2>
+
+![alt text](image-14.png)
+
+
+
+<h2>🛠️ Settings and Run </h2>
+
+
+``` 
+npm start
+
+cd function -> npm run serve
+
+```
+
+```
 npm install -g firebase-tools
 
+npm install express cors //(setting express.js)
+
 firebase init functions
+```
 
-
-Chạy powershell
+Run powershell
 ![alt text](image-2.png)
 
-firebase login 
+firebase login :
 
 
-Sau này cấu hình bên Fe nhớ mở symbollink để truy cập đc từ ngoài src
+-Select use .... then select the project created on firebase
 
--Chọn mục use .... rồi chọn project đã tạo trên firebase
+
 
 ```text
 
@@ -109,26 +129,16 @@ Sau này cấu hình bên Fe nhớ mở symbollink để truy cập đc từ ngo
       // Các thông tin khác của người dùng
     }
   }
-}
+
 ```
+(real time chat database structure)
 ![image](https://github.com/user-attachments/assets/0b4e8af3-adb1-4e25-934a-c2a035e32a11)
 
 
 ![image](https://github.com/user-attachments/assets/ecf7de24-8de1-41fd-bbb7-8cc2a885ccac)
 
-```text
-cd function -> npm run serve
 
-npm install express cors
-
-```
-
-
-Vao trong project setting trong firebase
-
-bên service accounts chọn Node js
-
--Tải mã json về 
+-Download json :
 
 ```text
 var admin = require("firebase-admin");
@@ -142,56 +152,39 @@ admin.initializeApp({
 ```
 
 
-Phần này là FCM - Push notifications 
+This part is FCM - Push notifications 
 
 
+```
+npx create-react-app push_notifications (hoặc có dự án rồi khỏi add này) 
 
- npx create-react-app push_notifications (hoặc có dự án rồi khỏi add này) 
-
- nhưng nhớ npm install firebase 
+npm install firebase 
 
 -> Vào healthapp 
 
+```
 
 
 
-Docs 
+
+Docs firebase messaging :
 
 https://firebase.google.com/docs/cloud-messaging/js/client?_gl=1*vxzd88*_up*MQ..&gclid=Cj0KCQjw2ZfABhDBARIsAHFTxGwUn9E4QYSXOvJ_EcaO-3DWACDU15atnoBbZeFZwiD3Bt-DnccGEs0aAlF9EALw_wcB&gclsrc=aw.ds&gbraid=0AAAAADpUDOj3EwOgVkhgcSZ3s2mZW3jlh
 
 
-lấy key pair
-
-![alt text](image-1.png)
-
-
-Có quyền nếu tắt allow đi thì nó defined
-
-![alt text](image-2.png)
-
-lấy token này sau khi đã cấu hình token 
-![alt text](image-3.png)
-
-
-
-
-Bật notifications cho web allow 
-
-
-
-Tạo bên public 
-
-firebase-messaging-sw
-
-cấu hình này 
-
 ```
-import { initializeApp } from "firebase/app";
+ - Take key pair
+ - If you turn off allow then it is defined
+ - Get this token after configuring the token
+ - Turn on notifications for web allow 
+ - Create on public in fe  
+ - firebase-messaging-sw settings : import { initializeApp } from "firebase/app";
 import { getMessaging } from "firebase/messaging/sw";
 
-// Initialize the Firebase app in the service worker by passing in
-// your app's Firebase config object.
-// https://firebase.google.com/docs/web/setup#config-object
+
+
+```
+```
 const firebaseApp = initializeApp({
   apiKey: 'api-key',
   authDomain: 'project-id.firebaseapp.com',
@@ -209,7 +202,7 @@ const messaging = getMessaging(firebaseApp);
 ```
 
 
-thay bằng key này đã cấu hình 
+Key 
 
 ```
 apiKey: "AIzaSyDPLqQJ5zYHHcB0gKRPI_BCuhDQ7pSn6bo",
@@ -245,49 +238,79 @@ messaging.onBackgroundMessage((payload) => {
 ```
 
 
-Đi tạo  
-
-![alt text](image-4.png)
+Create 
 
 
 
-![alt text](image-5.png)
-
-
-chọn SendTestMessgae thử add token vào
-
-
-![alt text](image-6.png)
+Select SendTestMessgae try add token 
 
 
 
-Css cho thông báo
+
+
+
+Css notifications :
 ```
 npm install react-hot-toast
 ```
 
 
-System Architecture
-![alt text](image.png)
 
-Database Schema Diagram
 
-![alt text](image-1.png)
 
-Getting Started
-
-Our Client website deployed at 
-Admin Site: 
 
 Here are demo account:
 
 ```text
 
 Admin : tta1301 - 123456
+Doctor: doc_tuyet - 123456
+Patient: daobach - 123456
 
 ```
 
 <h2>Admin UI</h2>
+Login Admin:
+
+![alt text](image-4.png)
+
+Stats Admin : 
+
+![alt text](image-5.png)
+
+
+Approve application:
+
+![alt text](image-6.png)
+
+Create account doctor:
+
+![alt text](image-7.png)
+
+
+Stats doctor :
+
+![alt text](image-8.png)
+
+<h2>anonymous users UI</h2>
+
+Home :
+
+![alt text](image-9.png)
+
+
+Register:
+
+![alt text](image-10.png)
+
+Finddoctor:
+
+![alt text](image-11.png)
+
+
+![alt text](image-12.png)
+
+![alt text](image-13.png)
 
 <h2>Doctor UI</h2>
 
@@ -296,13 +319,6 @@ Admin : tta1301 - 123456
 
 
 -- DOCKER
-
-
-Cd ve docker file
-
-
-Cors cho phần gửi ảnh firebase và fe
-npm install cors
 
 
 docker build -t springmvc-health-tomcat11 .
@@ -339,3 +355,4 @@ TS + Tailwind
 
 npx jsrepo add https://reactbits.dev/ts/tailwind/TextAnimations/RotatingText
 
+NOTE: <h2>Lưu ý Tomcat11 nữa chỉ giải nén rồi qua server gọi thôi (không có run)</h2>
