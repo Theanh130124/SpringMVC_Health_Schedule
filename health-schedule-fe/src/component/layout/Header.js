@@ -49,11 +49,7 @@ const Header = () => {
                 setNotifications(prevNotifications => {
                     const updatedNotifications = [newNotification, ...prevNotifications];
 
-                    try {
-                        localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
-                    } catch (e) {
-                        console.error('Lỗi lưu localStorage:', e);
-                    }
+            
 
                     return updatedNotifications;
                 });
