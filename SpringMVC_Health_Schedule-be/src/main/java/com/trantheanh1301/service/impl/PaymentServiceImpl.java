@@ -70,6 +70,9 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment getPaymentByInvoiceId(int id, Principal principal) {
         User u = this.userService.getUserByUsername(principal.getName());
         Payment payment = this.paymentRepository.getPaymentByInvoiceId(id);
+        if(payment==null){
+           return null;
+        }
         
         Invoice invoice = invoiceService.getInvoiceById(payment.getInvoiceId().getInvoiceId());
         

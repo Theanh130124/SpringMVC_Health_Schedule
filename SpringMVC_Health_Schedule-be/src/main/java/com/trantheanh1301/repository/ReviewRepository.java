@@ -5,6 +5,7 @@
 package com.trantheanh1301.repository;
 
 import com.trantheanh1301.pojo.Review;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -19,4 +20,5 @@ public interface ReviewRepository {
     public List<Review> getReviewListOfDoctor(int doctorId, Map<String, String> params);
     public List<Review> getReviewLists(Map<String, String> params);
     public Review getReviewByAppointmentId(int id);
+    public Double getAVGRatingDoctorReview(int doctorId);
 }

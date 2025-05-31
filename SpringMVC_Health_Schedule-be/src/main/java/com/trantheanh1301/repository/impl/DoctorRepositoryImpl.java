@@ -103,15 +103,15 @@ public class DoctorRepositoryImpl implements DoctorRepository {
 
                 Predicate namePredicate = builder.or(
                         builder.like(builder.lower(userJoin.get("firstName")), likePattern),
-                        builder.like(builder.lower(userJoin.get("lastName")),likePattern),
-                        builder.like(builder.lower(specialtyJoin.get("name")),likePattern),
-                        builder.like(builder.lower(clinicJoin.get("name")),likePattern)
+                        builder.like(builder.lower(userJoin.get("lastName")), likePattern),
+                        builder.like(builder.lower(specialtyJoin.get("name")), likePattern),
+                        builder.like(builder.lower(clinicJoin.get("name")), likePattern)
                 );
 
                 predicates.add(namePredicate);
-                
+
             }
-          
+
         }
 
         query.select(rD).distinct(true);
@@ -137,9 +137,12 @@ public class DoctorRepositoryImpl implements DoctorRepository {
         }
         return q.getResultList();
     }
+
+    @Override
+    public Doctor updateDoctorRating(Doctor doctor) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.merge(doctor);
+        s.refresh(doctor);
+        return doctor;
     }
-
-
-
-
-
+}

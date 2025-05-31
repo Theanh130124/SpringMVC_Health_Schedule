@@ -22,10 +22,13 @@ import com.trantheanh1301.service.AppointmentService;
 import com.trantheanh1301.service.InvoiceService;
 import com.trantheanh1301.service.PaymentService;
 import com.trantheanh1301.service.UserService;
+import jakarta.persistence.NoResultException;
+import jakarta.ws.rs.NotFoundException;
 
 import java.security.Principal;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -272,20 +275,33 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Appointment updateStatusAppointment(int id, Map<String, String> params, Principal principal) {
         Appointment a = this.appointmentRepo.getAppointmentById(id);
+        System.out.println(a);
         User u = this.userService.getUserByUsername(principal.getName());
         if (a == null) {
             throw new RuntimeException("Không tìm thấy lịch hẹn");
+        }
+
+        if (a.getAppointmentTime() != null && a.getAppointmentTime().after(new Date())) {
+            throw new RuntimeException("Không thể cập nhật trạng thái trước ngày khám");
         }
 
         Permission.OwnerDoctorAppointment(u, a);
         a.setStatus(params.get("status"));
 
         Payment payment = paymentService.getPaymentByInvoiceId(a.getInvoice().getInvoiceId(), principal);
-        System.out.println(payment);
+
+        if (payment == null) {
+            throw new RuntimeException("Bệnh nhân chưa tạo thanh toán");
+        }
+
+        if (!payment.getStatus().equals("Completed")) {
+            throw new RuntimeException("Bệnh nhân chưa hoàn thành thanh toán");
+        }
+
         //Neu la bac si cua lich hen do va phuong thuc thanh toan la tien mat thi cap nhat luon hoa don va thanh toan
         if (payment.getPaymentMethod().equals("Cash")) {
             invoiceService.updatePaymentStatusInvoice(a.getInvoice().getInvoiceId(), Map.of("status", "Paid"));
-            
+
             String transId = generateTransactionId(String.valueOf(a.getInvoice().getInvoiceId()), String.valueOf(payment.getPaymentId()));
             paymentService.updatePayment(payment.getPaymentId(), Map.of(
                     "status", "Completed",

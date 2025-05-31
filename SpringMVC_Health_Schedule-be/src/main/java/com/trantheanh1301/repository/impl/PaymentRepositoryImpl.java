@@ -7,6 +7,7 @@ package com.trantheanh1301.repository.impl;
 import com.trantheanh1301.pojo.Invoice;
 import com.trantheanh1301.pojo.Payment;
 import com.trantheanh1301.repository.PaymentRepository;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -65,8 +66,13 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         query.select(root).where(predicate).orderBy(b.desc(root.get("paymentDate")));
 
         Query q = s.createQuery(query);
-        q.setMaxResults(1);
-        return (Payment) q.getSingleResult();
+
+        try {
+            q.setMaxResults(1);
+            return (Payment) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

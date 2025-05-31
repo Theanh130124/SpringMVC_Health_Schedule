@@ -17,4 +17,5 @@ public interface DoctorRepository {
     public Doctor getDoctorById(int doctorId);
 //    public void deleteDoctorbyId(int doctorId);
     public List<Doctor> getDoctor(Map<String,String> params);
+    public Doctor updateDoctorRating(Doctor doctor);
 }

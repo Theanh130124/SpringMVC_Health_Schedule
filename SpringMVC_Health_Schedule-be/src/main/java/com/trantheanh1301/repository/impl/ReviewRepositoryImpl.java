@@ -15,9 +15,11 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.ws.rs.NotFoundException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import org.hibernate.Session;
+import org.hibernate.dialect.function.AvgFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -59,12 +61,11 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         Session s = this.factory.getObject().getCurrentSession();
         Query q = s.createNamedQuery("Review.findByReviewId", Review.class);
         q.setParameter("reviewId", id);
-        
-        try{
+
+        try {
             return (Review) q.getSingleResult();
-        }
-        catch(NoResultException e){
-            return null;    
+        } catch (NoResultException e) {
+            return null;
         }
     }
 
@@ -83,7 +84,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         q.where(predicate).orderBy(b.desc(root.get("reviewDate")));
         Query query = s.createQuery(q);
 
-        /*if (params != null) {
+        if (params != null) {
             String page = params.get("page");
             if (page != null && !page.isEmpty()) {
                 int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
@@ -92,9 +93,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
                 query.setFirstResult(start);
                 query.setMaxResults(pageSize);
             }
-        }*/
-        query.setFirstResult(0);
-        query.setMaxResults(2);
+        }
         return query.getResultList();
 
     }
@@ -133,12 +132,28 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         q.select(root).where(predicate);
 
         Query query = s.createQuery(q);
-        
+
         try {
             return (Review) query.getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
-        
+
+    }
+
+    @Override
+    public Double getAVGRatingDoctorReview(int doctorId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Double> q = b.createQuery(Double.class);
+
+        Root<Review> root = q.from(Review.class);
+
+        Predicate predicate = b.equal(root.get("doctorId").get("doctorId"), doctorId);
+        q.select(b.avg(root.get("rating"))).where(predicate).groupBy(root.get("doctorId").get("doctorId"));
+
+        Query query = s.createQuery(q);
+
+        return (Double) query.getResultList().stream().findFirst().orElse(null);
     }
 }
