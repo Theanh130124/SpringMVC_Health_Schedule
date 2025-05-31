@@ -10,7 +10,7 @@ const DoctorReview = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const doctor = location.state?.doctor || {};
-    const appointmentId = location.state?.appointmentId|| null
+    const appointmentId = location.state?.appointmentId || null
     const patientId = location.state?.patientId || null
     const [rating, setRating] = useState(5);
     const [hover, setHover] = useState(null);
@@ -21,38 +21,36 @@ const DoctorReview = () => {
 
     //Chặn lại nếu người dùng paste đường dẫn vào khi không có doctor, appointment, patient
     useEffect(() => {
-        if (!doctor||!patientId||!appointmentId) {
+        if (!doctor || !patientId || !appointmentId) {
             navigate("/", { state: { message: "Không thể viết đánh giá" } });
         }
-    },[])
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage("");
         setError("");
         setLoading(true);
-        
+
         try {
             const data = new FormData();
             data.append("appointmentId", appointmentId);
-            data.append("patientId", patientId);
             data.append("rating", rating);
             data.append("comment", comment);
-            const res = await authApis().post(`/review`,data,
+            const res = await authApis().post(`/review`, data,
                 {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
                 }
             );
-            if (res.data) {
+            if (res.status === 200 || res.status === 201) {
                 setMessage("Đánh giá thành công!");
                 setTimeout(() => navigate("/appointment", { state: { message: "Đánh giá thành công!" } }), 2000);
-            } else {
-                setError(res.data.message || "Đánh giá thất bại!");
             }
         } catch (err) {
-            setError("Có lỗi xảy ra, vui lòng thử lại!");
+            const errorMessage = err.response?.data?.error || "Có lỗi xảy ra, vui lòng thử lại!";
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }

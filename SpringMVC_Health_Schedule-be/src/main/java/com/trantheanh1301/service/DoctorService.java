@@ -16,4 +16,5 @@ public interface DoctorService {
     Doctor register(Doctor u);
     Doctor getDoctorById(int doctorId);
     List<Doctor> getDoctor(Map<String,String> params);
+    public Doctor updateDoctorRating(int doctorId);
 }

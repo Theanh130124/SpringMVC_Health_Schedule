@@ -5,6 +5,8 @@
 package com.trantheanh1301.controllers;
 
 import com.trantheanh1301.service.AppointmentService;
+import jakarta.persistence.NoResultException;
+import jakarta.ws.rs.NotFoundException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -108,6 +110,10 @@ public class ApiAppointmentController {
             Map<String, String> error = new HashMap<>();
             error.put("error", ex.getMessage());
             return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+        } catch (RuntimeException ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", ex.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         } catch (Exception ex) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Đã xảy ra lỗi" + ex.getMessage());

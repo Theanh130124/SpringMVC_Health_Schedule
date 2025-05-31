@@ -52,7 +52,7 @@ const Appointment = () => {
             toast.success("Đã xác nhận khám xong!");
             await loadAppointments();
         } catch (err) {
-            toast.error("Xác nhận thất bại!");
+            toast.error(err.response.data.error);
         } finally {
             setLoading(prev => ({ ...prev, [appointmentId]: false }));
             setShowCompleteConfirm(null);

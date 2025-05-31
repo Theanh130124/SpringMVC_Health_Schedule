@@ -125,6 +125,12 @@ const Header = () => {
                             <></>
                         }
 
+                        {user !== null && user.role === "Doctor" ? <>
+                            <Link className="nav-item-with-subtext nav-link ms-4 text-center" to={`/review/?doctorId=${user.userId}`}>Xem đánh giá cá nhân
+                            <span>Đánh giá của bản thân từ bệnh nhân</span> </Link>
+                            
+                        </> : <></>}
+
 
                         {user === null || user.role === "Patient" ? <>
                             <NavDropdown
