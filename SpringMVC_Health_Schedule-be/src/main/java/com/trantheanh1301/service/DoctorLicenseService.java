@@ -18,5 +18,6 @@ public interface DoctorLicenseService {
     public Doctorlicense getLicenseById(int id);
     public void removeLicense(int id);
     public List<Doctorlicense> loadLicense(Map<String,String> params);
+    Doctorlicense getLicenceByDoctorId(int doctorId);
     
 }

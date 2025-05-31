@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,6 +71,19 @@ public class LicenseController {
             redirectAttrs.addFlashAttribute("errorMessage", "Duyệt chứng chỉ hành nghề thất bại. Vui lòng thử lại.");
         }
 
+        return "redirect:/license";
+    }
+    
+    //xóa
+    @PostMapping(value = "/license/{licenseId}", params = "_method=delete")
+    public String deleteLicense (@PathVariable(value ="licenseId") int licenseId, RedirectAttributes redirectAttributes){
+        try{
+            licenseService.removeLicense(licenseId);
+            redirectAttributes.addFlashAttribute("successMessage", "Đã xóa chứng chỉ hành nghề thành công!");
+            
+        }catch (Exception ex){
+           redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi xóa giấy phép"+ex.getMessage());
+        }
         return "redirect:/license";
     }
 

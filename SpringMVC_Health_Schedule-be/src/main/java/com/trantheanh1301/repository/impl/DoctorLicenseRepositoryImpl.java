@@ -4,11 +4,13 @@
  */
 package com.trantheanh1301.repository.impl;
 
+import com.trantheanh1301.pojo.Doctor;
 import com.trantheanh1301.pojo.Doctorlicense;
 import com.trantheanh1301.repository.DoctorLicenseRepository;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
@@ -104,7 +106,25 @@ public class DoctorLicenseRepositoryImpl implements DoctorLicenseRepository {
 
         if (license != null) {
             s.remove(license);
+            s.flush();
         }
+    }
+
+    @Override
+    public Doctorlicense getLicenceByDoctorId(int doctorId) {
+        Session s = factory.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<Doctorlicense> query = builder.createQuery(Doctorlicense.class);
+        Root<Doctorlicense> rD = query.from(Doctorlicense.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+        Predicate predicate = builder.equal(rD.get("doctorId").get("doctorId"), doctorId);
+        query.select(rD).where(predicate);
+
+        Query q = s.createQuery(query);
+        List<Doctorlicense> result = q.getResultList();
+
+        return result.isEmpty() ? null : result.get(0);
     }
 
 }

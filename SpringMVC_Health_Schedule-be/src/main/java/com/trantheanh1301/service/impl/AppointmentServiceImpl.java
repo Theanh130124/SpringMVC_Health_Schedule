@@ -124,7 +124,8 @@ public class AppointmentServiceImpl implements AppointmentService {
                 patient.getUser().getFirstName() + patient.getUser().getLastName(),
                 doctor.getUser().getFirstName() + doctor.getUser().getLastName(),
                 appointment.getAppointmentTime().toString());
-
+        emailService.sendAppointmentConfirmationtoDoctor(appointment.getDoctorId().getUser().getEmail(), "Thông báo đến bác sĩ có Bệnh nhân đặt lịch khám", appointment.getDoctorId().getUser().getFirstName() + appointment.getDoctorId().getUser().getLastName(),
+                appointment.getPatientId().getUser().getFirstName() + appointment.getPatientId().getUser().getLastName(), appointment.getAppointmentTime().toString());
         return appointment;
     }
 
@@ -204,6 +205,9 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointment.getDoctorId().getUser().getFirstName() + appointment.getDoctorId().getUser().getLastName(),
                 appointment.getAppointmentTime().toString());
 
+        emailService.sendAppointmentConfirmationtoDoctor(appointment.getDoctorId().getUser().getEmail(), "Thông báo đến bác sĩ có Bệnh nhân sửa lịch hẹn", appointment.getDoctorId().getUser().getFirstName() + appointment.getDoctorId().getUser().getLastName(),
+                appointment.getPatientId().getUser().getFirstName() + appointment.getPatientId().getUser().getLastName(), appointment.getAppointmentTime().toString());
+
         return appointment;
     }
 
@@ -240,6 +244,12 @@ public class AppointmentServiceImpl implements AppointmentService {
                 throw new RuntimeException("Không thể sữa lịch hẹn quá 24 giờ");
             }
         }
+        emailService.sendAppointmentConfirmation(a.getPatientId().getUser().getEmail(), "Xác nhận hủy lịch hẹn",
+                a.getPatientId().getUser().getFirstName() + a.getPatientId().getUser().getLastName(),
+                doctor.getUser().getFirstName() + doctor.getUser().getLastName(),
+                a.getAppointmentTime().toString());
+        emailService.sendAppointmentConfirmationtoDoctor(a.getDoctorId().getUser().getEmail(), "Thông báo đến bác sĩ có Bệnh nhân hủy lịch khám", a.getDoctorId().getUser().getFirstName() + a.getDoctorId().getUser().getLastName(),
+                a.getPatientId().getUser().getFirstName() + a.getPatientId().getUser().getLastName(), a.getAppointmentTime().toString());
         appointmentRepo.delete(a);
     }
 //Phần nhắc nhở lịch hẹn

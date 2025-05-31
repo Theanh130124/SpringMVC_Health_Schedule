@@ -10,6 +10,7 @@ import com.trantheanh1301.pojo.Healthrecord;
 import com.trantheanh1301.pojo.Invoice;
 import com.trantheanh1301.pojo.Payment;
 import com.trantheanh1301.pojo.User;
+import java.util.Map;
 import org.springframework.security.access.AccessDeniedException;
 
 /**
@@ -36,7 +37,15 @@ public class Permission {
         }
 
     }
+    
+    public static void DoctorLicense(Map<String,String>params){
+        String doctorIdStr = params.get("doctorId");
+        if (doctorIdStr == null || doctorIdStr.trim().isEmpty()) {
+            throw new AccessDeniedException("Không có quyền tạo giấy phép vì thiếu doctorId hợp lệ!");
+        }
 
+
+    }
     //Dung de cap nhat
     public static void OwnerHealthRecord(User currentUser, Healthrecord healthRecord, Appointment appointment) {
 

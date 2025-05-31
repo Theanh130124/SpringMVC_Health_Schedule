@@ -51,6 +51,12 @@
                                 <input type="hidden" name="isVerified" value="true" />
                                 <button type="submit" class="btn btn-success">Duyệt chứng chỉ hành nghề &#128296;</button>
                             </form>
+                            <form th:action="@{'/license/' + ${l.licenseId}}" method="post" style="display:inline;">
+                                <input type="hidden" name="_method" value="delete" />
+                                <button type="submit" class="btn btn-danger"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa chứng chỉ này?')">Xóa</button>
+                            </form>
+
                         </td>
                     </tr>
                 </tbody>

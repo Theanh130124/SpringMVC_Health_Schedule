@@ -35,26 +35,46 @@ const Header = () => {
     //Token notifications
     useEffect(() => {
         const unsubscribe = onMessage(messaging, (payload) => {
-            console.log(' FCM Message:', payload);
+            try {
+                console.log('FCM Message:', payload);
 
-            const newNotification = {
-                id: payload.messageId,
-                title: payload.notification?.title || 'Không có tiêu đề',
-                body: payload.notification?.body || 'Không có nội dung',
-                timestamp: new Date().toISOString(),
-                read: false //tin nhắn mới đều chưa đọc
-            };
+                const newNotification = {
+                    id: payload.messageId,
+                    title: payload.notification?.title || 'Không có tiêu đề',
+                    body: payload.notification?.body || 'Không có nội dung',
+                    timestamp: new Date().toISOString(),
+                    read: false,
+                };
 
-            const updatedNotifications = [newNotification, ...notifications];
-            setNotifications(updatedNotifications);
-            //Thông báo mới lưu vào localStorage
-            localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
-            //update dô tb chưa đọc
-            setUnreadCount(updatedNotifications.filter(n => !n.read).length);
+                setNotifications(prevNotifications => {
+                    const updatedNotifications = [newNotification, ...prevNotifications];
+
+            
+
+                    return updatedNotifications;
+                });
+            } catch (error) {
+                console.error('Lỗi xử lý notification:', error);
+            }
         });
 
         return () => unsubscribe();
+    }, []);
+
+    useEffect(() => {
+        const unread = notifications.filter(n => !n.read).length;
+        setUnreadCount(unread);
     }, [notifications]);
+    // Lưu vào localStorage mỗi khi notifications thay đổi
+    useEffect(() => {
+        try {
+            localStorage.setItem('notifications', JSON.stringify(notifications));
+        } catch (e) {
+            console.error('Lỗi lưu localStorage:', e);
+        }
+    }, [notifications]);
+
+
 
 
     //Hmà đặt tất cả
